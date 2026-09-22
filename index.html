@@ -47,7 +47,7 @@ body::after{
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--ice);outline-offset:3px}
 
-/* ---------- moldura de cartucho ---------- */
+/* ---------- moldura do jogo (a "carcaça" que envolve as telas) ---------- */
 .cart{
   max-width:1040px;margin:18px auto;padding:0 12px;
 }
@@ -115,37 +115,120 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
 .hello img{height:120px;image-rendering:pixelated;filter:drop-shadow(0 0 5px rgba(170,210,255,.6))}
 
 /* =========================================================
-   TELA 2 — galeria dos behavioristas (pedestais)
+   TELA 2 — seleção de behaviorista (estilo jogo de luta)
    ========================================================= */
-.hall{
-  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(4px,1vw,12px);
-  align-items:end;margin-top:28px;min-height:min(52vh,400px);
+.select{position:relative;isolation:isolate}
+.select::before{ /* piso em perspectiva, como na capa */
+  content:"";position:absolute;left:-6%;right:-6%;bottom:-8px;height:38%;z-index:-1;pointer-events:none;
   background:
-    radial-gradient(1px 1px at 12% 18%,#dbe9f7 50%,transparent 51%),
-    radial-gradient(1px 1px at 27% 8%,#91a9c1 50%,transparent 51%),
-    radial-gradient(1.5px 1.5px at 44% 22%,#dbe9f7 50%,transparent 51%),
-    radial-gradient(1px 1px at 63% 12%,#91a9c1 50%,transparent 51%),
-    radial-gradient(1.5px 1.5px at 78% 26%,#dbe9f7 50%,transparent 51%),
-    radial-gradient(1px 1px at 91% 9%,#dbe9f7 50%,transparent 51%),
-    radial-gradient(1px 1px at 6% 40%,#91a9c1 50%,transparent 51%),
-    radial-gradient(1px 1px at 55% 38%,#91a9c1 50%,transparent 51%),
-    linear-gradient(to top,rgba(145,169,193,.18),transparent 45%),
-    repeating-linear-gradient(90deg,rgba(145,169,193,.12) 0 1px,transparent 1px 40px);
-  border-bottom:2px solid var(--slate);padding:18px 6px 0;
+    repeating-linear-gradient(90deg,rgba(145,169,193,.22) 0 1px,transparent 1px 44px),
+    repeating-linear-gradient(0deg,rgba(145,169,193,.22) 0 1px,transparent 1px 28px);
+  transform:perspective(260px) rotateX(62deg);transform-origin:50% 100%;
+  -webkit-mask-image:linear-gradient(to top,#000 20%,transparent 95%);mask-image:linear-gradient(to top,#000 20%,transparent 95%);
 }
-.pedestal{
-  background:none;border:0;padding:0;cursor:pointer;text-align:center;
-  display:flex;flex-direction:column;align-items:center;
+.select::after{ /* estrelas */
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1px 1px at 8% 12%,#dbe9f7 50%,transparent 51%),
+    radial-gradient(1px 1px at 31% 6%,#91a9c1 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 52% 14%,#dbe9f7 50%,transparent 51%),
+    radial-gradient(1px 1px at 71% 5%,#91a9c1 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 93% 16%,#dbe9f7 50%,transparent 51%),
+    radial-gradient(1px 1px at 96% 44%,#91a9c1 50%,transparent 51%),
+    radial-gradient(1px 1px at 47% 40%,#91a9c1 50%,transparent 51%);
 }
-.pedestal canvas{width:100%;height:auto;image-rendering:pixelated;display:block}
-.pedestal .nm{font-family:var(--f-disp);font-weight:800;font-size:clamp(14px,2vw,22px);margin-top:6px}
-.pedestal .yr{font-size:13px;color:var(--steel);margin-bottom:10px}
-.pedestal.locked{cursor:default}
-.pedestal.locked .nm{color:var(--slate)}
-.pedestal.locked .yr{color:var(--slate)}
-.pedestal.hero canvas{transform:scale(1.22);transform-origin:bottom center}
-.pedestal:not(.locked):hover .nm{text-shadow:var(--glow)}
-.hall-note{color:var(--steel);margin-top:14px;font-size:16px}
+.sel-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 24px;margin-bottom:18px}
+.sel-head h2{font-size:clamp(34px,5vw,52px);text-shadow:var(--glow)}
+.sel-hint{font-family:var(--f-pix);font-size:11px;color:var(--steel);margin-left:auto}
+.sel-body{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:clamp(20px,3.4vw,40px);align-items:start}
+
+/* ----- lutador em destaque ----- */
+.f-frame{
+  --c:16px;background:var(--steel);padding:3px;
+  clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c));
+}
+.f-stage{
+  --c:14px;position:relative;height:400px;overflow:hidden;background:
+    repeating-linear-gradient(115deg,rgba(145,169,193,.13) 0 2px,transparent 2px 26px),
+    radial-gradient(70% 55% at 50% 30%,rgba(145,169,193,.28),transparent 70%),
+    var(--void);
+  clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c));
+}
+.f-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 8%;image-rendering:pixelated}
+.f-stage.sil .f-photo{object-position:center 30%}
+.f-fade{position:absolute;left:0;right:0;bottom:0;height:52%;background:linear-gradient(to top,#000 8%,rgba(0,0,0,.82) 40%,transparent);z-index:2}
+.f-ghost{
+  position:absolute;right:10px;top:46px;z-index:3;writing-mode:vertical-rl;
+  font-family:var(--f-disp);font-weight:800;line-height:1;letter-spacing:.06em;color:transparent;
+  -webkit-text-stroke:1.5px rgba(219,233,247,.7);text-shadow:none;
+  background:rgba(0,0,0,.62);padding:10px 4px;
+}
+.f-flag{position:absolute;left:12px;top:12px;z-index:4;font-family:var(--f-pix);font-size:12px;background:var(--ice);color:var(--void);padding:3px 9px;animation:pisca 1s steps(2) infinite}
+.f-status{position:absolute;right:12px;top:12px;z-index:4;font-family:var(--f-pix);font-size:11px;border:2px solid var(--ice);color:var(--ice);background:var(--void);padding:2px 8px}
+.f-status.off{border-color:var(--steel);color:var(--steel)}
+.f-name{position:absolute;left:16px;right:16px;bottom:12px;z-index:4;margin:0;line-height:.86}
+.f-name small{display:block;font-family:var(--f-body);font-weight:600;font-size:24px;line-height:1.1;color:var(--steel);margin-bottom:2px}
+.f-name span{
+  display:block;font-family:var(--f-disp);font-weight:800;text-transform:uppercase;letter-spacing:-.005em;white-space:nowrap;
+  color:var(--ice);text-shadow:0 0 14px rgba(160,205,255,.55),3px 3px 0 #000;
+}
+.f-info{padding:14px 4px 0}
+.f-school{font-family:var(--f-disp);font-weight:800;font-size:28px;line-height:1.05;display:flex;flex-wrap:wrap;gap:2px 12px;align-items:baseline}
+.f-school em{font-style:normal;font-family:var(--f-pix);font-size:12px;color:var(--steel);font-weight:400}
+.f-motto{margin:8px 0 6px;color:var(--ice);max-width:46ch}
+.f-book{margin:0 0 14px;font-size:15px;color:var(--steel);max-width:52ch}
+.f-book b{font-family:var(--f-pix);font-weight:400;font-size:11px;color:var(--ice);margin-right:8px}
+.f-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.f-actions .btn{font-size:22px;padding:8px 20px}
+.f-stage.troca .f-photo,.f-stage.troca .f-name,.f-stage.troca .f-ghost{animation:entra .32s steps(5) 1}
+@keyframes entra{0%{clip-path:inset(0 100% 0 0);opacity:.4}100%{clip-path:inset(0 0 0 0);opacity:1}}
+@keyframes pisca{50%{opacity:.45}}
+
+a.btn{text-decoration:none;display:inline-block}
+.tile:focus-visible{outline:none}
+/* capa do livro-base no lugar da foto */
+.f-stage.livro{height:auto;min-height:400px}
+.book{position:relative;z-index:2;padding:18px 18px 14px;min-height:400px;display:flex;flex-direction:column}
+.book .k{font-family:var(--f-pix);font-size:11px;color:var(--steel)}
+.book .tt{font-family:var(--f-disp);font-weight:800;font-size:44px;line-height:.9;text-transform:uppercase;color:var(--ice);text-shadow:0 0 12px rgba(160,205,255,.5);margin:10px 0 8px}
+.book .ed{font-size:15px;color:var(--steel);margin-bottom:10px}
+.book ol{list-style:none;margin:auto 0 0;padding:0;display:grid;gap:2px;font-size:15px;line-height:1.25}
+.book li{display:grid;grid-template-columns:34px 1fr auto;gap:8px;border-top:1px solid var(--slate);padding:3px 0}
+.book li b{font-family:var(--f-pix);font-weight:400;font-size:11px;color:var(--ice);align-self:center}
+.book li i{font-style:normal;color:var(--steel);font-size:14px}
+
+/* ----- elenco ----- */
+.r-group{margin-bottom:16px}
+.r-head{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap;border-bottom:2px solid var(--slate);padding-bottom:3px;margin-bottom:9px}
+.r-head h3{font-size:24px}
+.r-head span{font-size:14px;color:var(--steel)}
+.r-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tile{
+  position:relative;aspect-ratio:1/1;padding:0;cursor:pointer;overflow:hidden;background:var(--void);
+  border:3px solid var(--slate);border-radius:0;text-align:left;
+}
+.tile.larga{grid-column:span 2;aspect-ratio:2/1}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 15%;image-rendering:pixelated;display:block}
+.tile.sil img{opacity:.85}
+.tile::before{content:"";position:absolute;left:0;right:0;bottom:0;height:52%;background:linear-gradient(to top,#000,transparent);z-index:1}
+.t-name{position:absolute;left:7px;bottom:5px;z-index:2;font-family:var(--f-disp);font-weight:800;font-size:clamp(15px,1.6vw,19px);line-height:1;color:var(--ice);text-shadow:2px 2px 0 #000}
+.t-tag{position:absolute;left:5px;top:5px;z-index:2;font-family:var(--f-pix);font-size:9px;background:var(--void);color:var(--steel);padding:2px 5px;border:1px solid var(--slate)}
+.tile.locked .t-name{color:var(--steel)}
+.tile:hover:not(.sel){border-color:var(--steel)}
+.tile.sel{border-color:var(--ice);box-shadow:0 0 0 2px var(--void),0 0 0 4px var(--ice),0 0 14px rgba(190,220,255,.6);z-index:3}
+.tile.sel .t-tag{color:var(--ice);border-color:var(--ice)}
+.tile.sel::after{content:"1P";position:absolute;right:0;top:0;z-index:4;font-family:var(--f-pix);font-size:10px;background:var(--ice);color:var(--void);padding:2px 6px;animation:pisca 1s steps(2) infinite}
+.tile.novo{animation:revela 1.1s steps(2) 3}
+.tile.livro{background:var(--deep)}
+.tile.livro canvas{position:absolute;left:50%;top:38%;width:44%;transform:translate(-50%,-50%);image-rendering:pixelated}
+.tile.livro::before{display:none}
+.tile.livro.sel::after{display:none}
+.tile.livro .t-name{bottom:20px}
+.tile.livro .t-sub{position:absolute;left:7px;bottom:5px;z-index:2;font-size:11px;line-height:1;color:var(--steel)}
+.sel-ref{margin:6px 0 0;padding-top:10px;border-top:2px solid var(--slate);font-size:14px;color:var(--steel);max-width:110ch}
+.sel-ref b{font-family:var(--f-pix);font-weight:400;font-size:11px;color:var(--ice);margin-right:8px}
+.sel-ref a{color:var(--ice);word-break:break-all}
+
 
 /* =========================================================
    TELA 3 — dossiê do behaviorista
@@ -285,12 +368,33 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
 .cartridge .thumb span{display:block;font-family:var(--f-pix);font-size:10px;text-align:center;color:var(--void);background:var(--steel);padding:1px 0}
 
 
+/* ---------- Para saber mais (estímulo à leitura) ---------- */
+.saiba{position:relative;margin:26px 0 8px;max-width:64ch;border:2px solid var(--steel);background:var(--deep);padding:18px 16px 12px}
+.saiba .cab{position:absolute;left:12px;top:-11px;font-family:var(--f-pix);font-size:11px;background:var(--ice);color:var(--void);padding:2px 9px}
+.saiba h4{font-family:var(--f-disp);font-weight:800;font-size:24px;line-height:1.05;margin:0 0 2px}
+.saiba h4 span{display:block;font-family:var(--f-body);font-weight:500;font-size:15px;color:var(--steel);margin-top:3px}
+.saiba .pg{margin:6px 0 8px;font-size:14px;color:var(--steel)}
+.saiba .pg i{font-style:italic;color:var(--ice)}
+.saiba p{margin:6px 0}
+.saiba .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.saiba .cc{border:1px solid var(--slate);padding:1px 8px;font-size:13px;color:var(--steel)}
+.trecho{margin:10px 0;padding:2px 0 2px 12px;border-left:3px solid var(--ice)}
+.trecho .en{display:block;font-style:italic;color:var(--ice)}
+.trecho .pt{display:block;color:var(--steel);margin-top:2px}
+.trecho .ref{display:block;font-size:13px;color:var(--steel);margin-top:3px}
+#resReading h3{font-size:28px;margin:26px 0 4px}
+#resReading .lede{margin:0 0 6px}
+#resReading .leituras{display:grid;gap:8px}
+.thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.thumbs:empty{display:none}
+.thumbs button{padding:0;border:2px solid var(--slate);background:var(--void);cursor:pointer;aspect-ratio:1/1;overflow:hidden}
+.thumbs button:hover{border-color:var(--steel)}
+.thumbs button.on{border-color:var(--ice);box-shadow:0 0 8px rgba(190,220,255,.5)}
+.thumbs img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 20%;image-rendering:pixelated}
+
 /* ---------- personagem secreto ---------- */
 .tag{display:inline-block;font-family:var(--f-pix);font-size:12px;background:var(--ice);color:var(--void);padding:3px 9px;border-radius:4px;margin-bottom:8px;letter-spacing:.03em}
 .tag[hidden]{display:none}
-.pedestal{position:relative}
-.badge-secreto{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-family:var(--f-pix);font-size:10px;background:var(--ice);color:var(--void);padding:2px 6px;border-radius:3px;z-index:2}
-.pedestal.novo canvas{animation:revela 1.1s steps(2) 3}
 @keyframes revela{0%,100%{filter:none}50%{filter:brightness(1.7) drop-shadow(0 0 10px rgba(190,220,255,.9))}}
 .secret-card{
   display:grid;grid-template-columns:minmax(0,170px) 1fr;gap:22px;align-items:center;
@@ -303,7 +407,7 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
 .secret-card .holo{margin:0}
 @media (max-width:520px){ .secret-card{grid-template-columns:104px 1fr;gap:14px;padding:12px} .secret-card .btn{font-size:20px;padding:8px 16px} }
 
-/* ---------- abertura de cartucho ---------- */
+/* ---------- abertura de um quiz (tela de instruções) ---------- */
 .briefing{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:clamp(18px,4vw,44px);align-items:start}
 .briefing.is-land{grid-template-columns:1fr}
 .briefing.is-land .holo{max-width:560px}
@@ -370,19 +474,29 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
   .foot .keys{display:none}
   .next-row .hint{display:none}
   .charts{grid-template-columns:1fr}
+  .sel-body{grid-template-columns:1fr}
+  .f-stage{height:260px}
+  .f-stage.livro,.book{min-height:0}
+  .book ol{margin-top:14px}
+  .f-name small{font-size:19px}
+  .f-school{font-size:24px}
+  .sel-hint{display:none}
   .briefing{grid-template-columns:1fr}
   .briefing .holo.portrait-art{max-width:240px}
   .result-top{grid-template-columns:1fr}
   .result-top .holo{max-width:360px}
-  .hall{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:14px}
-  .pedestal.hero{grid-column:span 2;grid-row:1;max-width:180px;justify-self:center}
-  .pedestal.hero canvas{transform:none}
 }
 @media (max-width:520px){
   body{font-size:17px}
   .brand{font-size:19px}
+  .r-grid{gap:6px}
+  .t-tag{font-size:8px;padding:1px 3px}
+  .t-name{font-size:14px;left:5px;bottom:4px}
+  .tile{border-width:2px}
+  .book .tt{font-size:34px}
+  .tile.livro .t-sub{display:none}
+  .tile.livro .t-name{bottom:5px}
   .chip{font-size:14px;padding:3px 10px}
-  .hall{min-height:0}
   .frame{padding:14px 12px 18px;border-width:4px}
   .cartridge{grid-template-columns:auto 1fr}
   .cartridge .best{grid-column:1 / -1;text-align:left}
@@ -412,7 +526,7 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
       <div class="title-side">
         <div class="kicker">Um jogo didático de análise do comportamento</div>
         <h1 class="mega">Behaviorismo(s)</h1>
-        <p class="lede">Quem disse isso? Em que livro? Em que capítulo? Escolha um behaviorista, escolha um cartucho e responda. Cada rodada termina com o seu registro cumulativo.</p>
+        <p class="lede">Quem disse isso? Em que livro? Em que capítulo? Escolha um behaviorista, escolha uma obra ou um tema dele e responda. Cada rodada termina no seu registro cumulativo.</p>
         <div class="title-actions">
           <button class="btn" id="btnStart">Jogar</button>
           <button class="btn ghost" id="btnTrophies">Ver conquistas</button>
@@ -425,11 +539,20 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
     </div>
   </section>
 
-  <!-- TELA: galeria -->
-  <section class="screen" id="sHall" hidden>
-    <h2 style="font-size:clamp(34px,5vw,54px)">Escolha um behaviorista</h2>
-    <div class="hall" id="hall"></div>
-    <p class="hall-note">Os pedestais apagados ganham quizzes nos próximos cartuchos.</p>
+  <!-- TELA: seleção de behaviorista -->
+  <section class="screen select" id="sHall" hidden>
+    <div class="sel-head">
+      <h2>Escolha seu behaviorista</h2>
+      <span class="sel-hint">Setas movem o cursor · Enter escolhe · Esc volta</span>
+    </div>
+    <div class="sel-body">
+      <div class="fighter" aria-live="polite">
+        <div class="f-frame"><div class="f-stage" id="fStage"></div></div>
+        <div class="f-info" id="fInfo"></div>
+      </div>
+      <div class="roster" id="roster"></div>
+    </div>
+    <p class="sel-ref" id="selRef"></p>
   </section>
 
   <!-- TELA: dossiê -->
@@ -437,21 +560,22 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
     <div class="dossier">
       <div class="portrait">
         <figure class="holo" id="dosPhoto" style="margin:0"><img id="dosPhotoImg" alt=""><figcaption id="dosPhotoCap">ARQUIVO</figcaption></figure>
-        <canvas id="dosCanvas" width="240" height="300" aria-hidden="true" hidden></canvas>
+        <div class="thumbs" id="dosThumbs"></div>
       </div>
       <div>
         <span class="tag" id="dosTag" hidden>PERSONAGEM SECRETO</span>
         <h2 id="dosName"></h2>
         <div class="yrs" id="dosYears"></div>
         <p class="bio" id="dosBio"></p>
+        <p class="f-book" id="dosBook" style="margin-top:10px"></p>
         <div class="carts" id="dosCarts"></div>
         <div class="medals" id="dosMedals"></div>
-        <div class="next-row"><button class="btn ghost" id="btnBackHall">Voltar à galeria</button></div>
+        <div class="next-row"><button class="btn ghost" id="btnBackHall">Voltar à seleção</button></div>
       </div>
     </div>
   </section>
 
-  <!-- TELA: abertura do cartucho -->
+  <!-- TELA: abertura de um quiz -->
   <section class="screen" id="sBrief" hidden>
     <div class="briefing" id="briefBox">
       <figure class="holo" id="briefArt" style="margin:0"><img id="briefImg" alt=""></figure>
@@ -460,6 +584,8 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
         <h2 id="briefTitle"></h2>
         <div class="sub" id="briefSub" style="font-size:20px"></div>
         <ul class="rules" id="briefRules"></ul>
+        <aside class="saiba" id="briefLeitura" hidden></aside>
+        <p class="f-book" id="briefRef"></p>
         <div class="brief-talk">
           <img id="briefNpc" alt="Boatacon">
           <div class="bubble" style="max-width:420px"><span class="who">BOATACON</span><span id="briefTalk"></span></div>
@@ -523,11 +649,13 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
       </div>
     </div>
     <div class="unlocked" id="resUnlocked"></div>
+    <div id="resReading"></div>
     <div class="result-actions">
       <button class="btn" id="btnAgain">Nova rodada</button>
-      <button class="btn ghost" id="btnToDossier">Outros cartuchos</button>
+      <button class="btn ghost" id="btnToDossier">Outros quizzes</button>
     </div>
     <div class="review" id="resReview"></div>
+    <p class="f-book" id="resRef" style="margin-top:18px"></p>
   </section>
 
   <!-- TELA: conquistas -->
@@ -556,150 +684,207 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
    Regras:
    - Em cada pergunta, a PRIMEIRA opção é a correta (o jogo embaralha na tela).
    - tipo: 'obra' | 'quem' | 'capitulo' | 'conceito'
-   - Para abrir um behaviorista novo: ativo:true, sprite e ids dos quizzes.
+   - Elenco: cada behaviorista pertence a um grupo (raizes, nucleo, contemporaneos).
+   - Para abrir um behaviorista novo: ativo:true, foto (retrato grande), tile e ids dos quizzes.
+   - Sem foto, o personagem aparece como silhueta com "EM BREVE".
+   - É um único jogo: os behavioristas e as obras são trilhas dentro dele, não jogos separados.
    - Conquistas por behaviorista e por quiz são geradas automaticamente.
    - Imagens ficam na pasta img/ (fotos convertidas para a paleta do jogo).
    ===================================================================== */
 
-/* Retratos em pixel (24 colunas). Legenda:
-   '#' brilho alto · '=' brilho médio · '+' paletó · ':' sombra · '.' vazio */
-const SPRITE_SKINNER = [
-".........######.........",
-".......##########.......",
-"......############......",
-".....=############=.....",
-"....==############==....",
-"....=##############=....",
-"....=##############=....",
-"....=#::::::#::::::=....",
-"...=#:==::=:::==::=:=...",
-"...=#:=#==:#:=#==:#=....",
-"....#::::::#::::::##....",
-"....##############=.....",
-".....######:######......",
-".....#####::######......",
-"......####:::####.......",
-"......############......",
-".......##=====###.......",
-".......##########.......",
-"........########........",
-".........######.........",
-".....+++##=##=##+++.....",
-"...++++++#::::#++++++...",
-"..+++++++##:::##+++++++.",
-".++++++++=##:##=++++++++",
-".+++++++++#:::#+++++++++",
-"++++++++++#:::#+++++++++",
-"+++++++++=#:::#=++++++++",
-"++++++++++#:::#+++++++++",
-"+++++++++=#:::#=++++++++",
-"++++++++++=###=+++++++++"
+/* ---------------------------------------------------------------------
+   LIVRO-BASE (referência básica do Vol. 8)
+   Os sete "behaviorismos contemporâneos" do elenco vêm das sete partes deste livro.
+   --------------------------------------------------------------------- */
+const LIVRO_BASE = {
+  titulo:'Contemporary behaviorisms in debate',
+  editores:'Zilio, D., & Carrara, K. (Eds.)',
+  curta:'Zilio & Carrara (2021)',
+  ano:2021,
+  editora:'Springer',
+  doi:'https://doi.org/10.1007/978-3-030-77395-3',
+  citacao:'Zilio, D., & Carrara, K. (Eds.). (2021). Contemporary behaviorisms in debate. Springer. https://doi.org/10.1007/978-3-030-77395-3',
+  resumo:'Sete formas de behaviorismo contemporâneo, cada uma em três capítulos: o texto do proponente, um comentário de analista do comportamento brasileiro e a réplica. O Vol. 8 usa esse livro como eixo do elenco.'
+};
+
+const PARTES_LIVRO = [
+  { parte:'I',   caps:'1–3',   behaviorismo:'Teleológico',  proponente:'Howard Rachlin',       comentario:'Filipe Lazzeri' },
+  { parte:'II',  caps:'4–6',   behaviorismo:'Molar',        proponente:'William M. Baum',      comentario:'Carolina Laurenti' },
+  { parte:'III', caps:'7–9',   behaviorismo:'Teórico',      proponente:'John Staddon',         comentario:'Carlos Eduardo Lopes' },
+  { parte:'IV',  caps:'10–12', behaviorismo:'Biológico',    proponente:'John W. Donahoe',      comentario:'Marcus Bentes de Carvalho Neto' },
+  { parte:'V',   caps:'13–15', behaviorismo:'Intencional',  proponente:'Gordon R. Foxall',     comentario:'Jorge M. Oliveira-Castro' },
+  { parte:'VI',  caps:'16–18', behaviorismo:'Contextual',   proponente:'Steven C. Hayes',      comentario:'Julio C. de Rose' },
+  { parte:'VII', caps:'19–21', behaviorismo:'De campo',     proponente:'Emilio Ribes-Iñesta',  comentario:'Hernando Borges Neves Filho e Tiago de Oliveira Magalhães' }
 ];
 
-/* Fred S. Keller — sorriso e cabelo prateado */
-const SPRITE_KELLER = [
-"........========........",
-"......=##=========......",
-".....==###########=.....",
-"....=##############=....",
-"....=##############=....",
-"...=################=...",
-"...=##=====##=====##=...",
-"...=##:::#=##=#:::##=...",
-"..=##=#=########=#=##=..",
-"..=##################=..",
-"..=#######=::=#######=..",
-"..=####==========####=..",
-"..=###=====::=====#:#=..",
-"..=###:=@@@@@@@@::###=..",
-"..=####:@@@@@@@@:####=..",
-"..=#####::::::::#####=..",
-"...=################=...",
-"....=##############=....",
-".....=############=.....",
-"......:=########=:......",
-"....++++##=::=##++++....",
-"..+++++++#=::=#+++++++..",
-".+++++++++#::#+++++++++.",
-".++++++++=#::#=++++++++.",
-"+++++++++=::::=+++++++++",
-"++++++++=#::::#=++++++++",
-"+++++++++=::::=+++++++++",
-"++++++++++::::++++++++++",
-"+++++++++=::::=+++++++++",
-"++++++++++::::++++++++++"
+const GRUPOS = [
+  { id:'raizes',         nome:'Raízes',         nota:'Fundadores e neobehavioristas' },
+  { id:'nucleo',         nome:'Núcleo',         nota:'Ponto de partida do livro-base' },
+  { id:'contemporaneos', nome:'Contemporâneos', nota:'Partes I a VII do livro-base' }
 ];
 
-/* Silhueta genérica para behavioristas ainda bloqueados */
-const SPRITE_BLOQUEADO = [
-".........::::::.........",
-".......::::::::::.......",
-"......::::::::::::......",
-".....::::::::::::::.....",
-"....::::::####:::::::...",
-"....:::::##::##::::::...",
-"....:::::::::##::::::...",
-"....::::::::##:::::::...",
-"....:::::::##::::::::...",
-"....:::::::##::::::::...",
-".....::::::::::::::.....",
-".....:::::::##:::::.....",
-"......::::::##:::::.....",
-".......::::::::::.......",
-"........::::::::........",
-".........::::::.........",
-".....:::::::::::::::....",
-"...:::::::::::::::::::..",
-"..:::::::::::::::::::::.",
-".::::::::::::::::::::::.",
-"::::::::::::::::::::::::",
-"::::::::::::::::::::::::",
-"::::::::::::::::::::::::"
-];
+/* Imagens de reserva para quem ainda não tem foto */
+const IMG_SILHUETA = 'img/sel-silhueta.png';
 
+/* ---------------------------------------------------------------------
+   ELENCO
+   ordem dentro de cada grupo = ordem na tela de seleção
+   livro: { parte, caps, com } ou { texto } (quando o personagem é citado ao longo do livro)
+   --------------------------------------------------------------------- */
 const BEHAVIORISTAS = [
-  { id:'watson',  nome:'John B. Watson',   curto:'Watson',  anos:'1878–1958', ativo:false },
-  { id:'tolman',  nome:'Edward C. Tolman', curto:'Tolman',  anos:'1886–1959', ativo:false },
-  { id:'hull',    nome:'Clark L. Hull',    curto:'Hull',    anos:'1884–1952', ativo:false },
-  { id:'skinner', nome:'B. F. Skinner',    curto:'Skinner', anos:'1904–1990', ativo:true,
-    sprite: SPRITE_SKINNER,
+  /* ---------- RAÍZES ---------- */
+  { id:'watson', grupo:'raizes', nome:'John B. Watson', prenome:'John B.', sobrenome:'Watson', curto:'Watson', anos:'1878–1958', ativo:false,
+    escola:'Behaviorismo clássico', palavra:'CLÁSSICO',
+    lema:'A psicologia como ramo experimental objetivo das ciências naturais, com predição e controle do comportamento.',
+    livro:{ texto:'Aparece nos caps. 3, 7 e 11.' } },
+  { id:'tolman', grupo:'raizes', nome:'Edward C. Tolman', prenome:'Edward C.', sobrenome:'Tolman', curto:'Tolman', anos:'1886–1959', ativo:false,
+    escola:'Behaviorismo propositivo', palavra:'PROPOSITIVO',
+    lema:'Mapas cognitivos e variáveis intervenientes, estudados em ratos e labirintos.',
+    livro:{ texto:'Aparece nos caps. 2 e 5, sobre comportamento propositivo e visão molar.' } },
+  { id:'hull', grupo:'raizes', nome:'Clark L. Hull', prenome:'Clark L.', sobrenome:'Hull', curto:'Hull', anos:'1884–1952', ativo:false,
+    escola:'Neobehaviorismo hipotético-dedutivo', palavra:'HIPOTÉTICO-DEDUTIVO',
+    lema:'Uma teoria dedutiva da aprendizagem, com postulados e o reforço como redução de necessidade.',
+    livro:{ texto:'Aparece nos caps. 7 e 10, sobre teoria e biologia do reforço.' } },
+  { id:'kantor', grupo:'raizes', nome:'J. R. Kantor', prenome:'J. R.', sobrenome:'Kantor', curto:'Kantor', anos:'1888–1984', ativo:false,
+    escola:'Interbehaviorismo', palavra:'INTERBEHAVIORISMO',
+    lema:'O campo psicológico: a interação entre organismo e objeto de estímulo, com componentes interdependentes.',
+    livro:{ texto:'Base do modelo de campo de Ribes-Iñesta (caps. 19 e 21).' } },
+
+  /* ---------- NÚCLEO ---------- */
+  { id:'skinner', grupo:'nucleo', nome:'B. F. Skinner', prenome:'B. F.', sobrenome:'Skinner', curto:'Skinner', anos:'1904–1990', ativo:true, larga:true,
+    escola:'Behaviorismo radical', palavra:'RADICAL',
+    lema:'Seleção por consequências: o comportamento se explica pela história ambiental, sem agentes internos.',
+    livro:{ texto:'Figura central do Prefácio: o behaviorismo radical dele gerou os "descendentes" tratados nas sete partes.' },
+    foto:'img/sel-skinner.png', fotoAlt:'B. F. Skinner idoso, de óculos de armação grossa, em preto e azul-gelo',
+    tile:'img/sel-skinner-wide.png',
     retrato:'img/skinner-retrato.png',      // dossiê
     resultado:'img/skinner-pensando.png',   // tela de resultado
     resultadoAlt:'B. F. Skinner, pensativo, com as mãos atrás da cabeça',
     bio:'Propôs o behaviorismo radical como filosofia da análise experimental do comportamento. Distinguiu respondente e operante, estudou esquemas de reforçamento e estendeu a seleção por consequências ao comportamento verbal e à cultura.',
-    quizzes:['skinner-teoria','skinner-about'],
-    /* Cartuchos futuros (aparecem como "em breve" no dossiê) */
+    quizzes:['skinner-teoria','skinner-about','skinner-shb'],
+    /* Arquivo de fotos (dossiê). A primeira é a foto principal. */
+    galeria:[
+      { src:'img/skinner-retrato.png',        leg:'PALETÓ XADREZ',    alt:'Skinner de óculos e paletó xadrez, gesticulando' },
+      { src:'img/skinner-velho.png',          leg:'RETRATO',          alt:'Retrato de Skinner idoso, de óculos de armação grossa' },
+      { src:'img/skinner-mesa.png',           leg:'NO ESCRITÓRIO',    alt:'Skinner de óculos e camisa clara, à mesa de trabalho' },
+      { src:'img/skinner-pombos.png',         leg:'COM OS POMBOS',    alt:'Skinner segurando um pombo diante de prateleiras de gaiolas' },
+      { src:'img/skinner-lab-rato.png',       leg:'COM O RATO',       alt:'Skinner ao lado de racks de equipamento e de uma caixa com um rato' },
+      { src:'img/skinner-pensando.png',       leg:'PENSANDO',         alt:'Skinner pensativo, com as mãos atrás da cabeça' },
+      { src:'img/skinner-pombo.png',          leg:'NO LABORATÓRIO',   alt:'Skinner jovem no laboratório, ao lado de um pombo numa câmara experimental' },
+      { src:'img/skinner-jovem.png',          leg:'JOVEM',            alt:'Retrato de um Skinner jovem, de terno e gravata' },
+      { src:'img/skinner-jovem-aparelho.png', leg:'JOVEM · APARELHO', alt:'Skinner jovem escrevendo diante de um aparelho de registro' }
+    ],
+    /* Foto da tela de resultado: sorteada conforme o desempenho */
+    resultadoFotos:{
+      bom:[
+        { src:'img/skinner-pombos.png',         alt:'Skinner segurando um pombo diante de gaiolas' },
+        { src:'img/skinner-lab-rato.png',       alt:'Skinner ao lado do equipamento e de uma caixa com um rato' },
+        { src:'img/skinner-jovem-aparelho.png', alt:'Skinner jovem diante de um aparelho de registro' }
+      ],
+      ruim:[
+        { src:'img/skinner-pensando.png', alt:'B. F. Skinner, pensativo, com as mãos atrás da cabeça' },
+        { src:'img/skinner-velho.png',    alt:'Retrato de Skinner idoso' },
+        { src:'img/skinner-mesa.png',     alt:'Skinner à mesa de trabalho' }
+      ]
+    },
+    /* Livros futuros do Skinner (aparecem como "em breve" no dossiê) */
     embreve:[
       { titulo:'Walden Two', ano:1948 },
-      { titulo:'Science and Human Behavior', ano:1953 },
       { titulo:'Verbal Behavior', ano:1957 },
       { titulo:'Beyond Freedom and Dignity', ano:1971 }
     ]
   },
-  { id:'kantor',  nome:'J. R. Kantor',     curto:'Kantor',  anos:'1888–1984', ativo:false },
-  { id:'keller',  nome:'Fred S. Keller',   curto:'Keller',  anos:'1899–1996', ativo:true,
+  { id:'keller', grupo:'nucleo', nome:'Fred S. Keller', prenome:'Fred S.', sobrenome:'Keller', curto:'Keller', anos:'1899–1996', ativo:true,
+    escola:'Behaviorismo radical e ensino', palavra:'ENSINO',
+    lema:'Sistema Personalizado de Instrução e uma história dos sistemas da psicologia.',
+    livro:{ texto:'No cap. 17, De Rose cita Keller e Schoenfeld (1950) como talvez a primeira apresentação sistemática da análise do comportamento.' },
     /* PERSONAGEM SECRETO: aparece como "???" até o jogador terminar qualquer rodada do gatilho */
     secreto:{
       gatilho:'skinner',
       conquista:'g-amigo',
       texto:'Colega de turma e amigo do Skinner. A visita dele à USP, em 1961, é o marco inicial da análise do comportamento no Brasil.'
     },
-    sprite: SPRITE_KELLER,
+    foto:'img/sel-keller.png', fotoPos:'center 88%', fotoAlt:'Fred S. Keller sorrindo, de gravata, em preto e azul-gelo',
+    tile:'img/tile-keller.png',
     retrato:'img/keller-retrato.png',
     resultado:'img/keller-retrato.png',
     resultadoAlt:'Fred S. Keller sorrindo, de gravata',
     legendaResultado:{ bom:'KELLER SORRI: BOA CURVA', ruim:'KELLER SORRI: TENTE DE NOVO' },
     bio:'Fez a pós-graduação em Harvard (1926–1931), onde Skinner era colega de turma, e ensinou por mais de duas décadas em Columbia. Com William Schoenfeld escreveu Principles of Psychology (1950) e criou o Sistema Personalizado de Instrução, o "plano Keller". Em 1961 foi à USP como bolsista Fulbright e levou ao Brasil o ensino de laboratório em análise do comportamento. Depois ajudou a criar o curso de Psicologia da Universidade de Brasília, com Carolina Bori, Rodolpho Azzi e Gil Sherman.',
-    quizzes:['keller-definition'],
-    embreve:[
-      { titulo:'Principles of Psychology', ano:1950 },
-      { titulo:'Learning: Reinforcement Theory', ano:1954 },
-      { titulo:'Good-bye, teacher...', ano:1968, rotulo:'ARTIGO' },
-      { titulo:'Pedagogue\'s Progress', ano:1982 }
-    ]
+    quizzes:['keller-definition']
   },
-  { id:'hayes',   nome:'Steven C. Hayes',  curto:'Hayes',   anos:'1948–',     ativo:false }
+
+  /* ---------- CONTEMPORÂNEOS (livro-base, Partes I a VII) ---------- */
+  { id:'rachlin', grupo:'contemporaneos', nome:'Howard Rachlin', prenome:'Howard', sobrenome:'Rachlin', curto:'Rachlin', filiacao:'Stony Brook University', ativo:false,
+    escola:'Behaviorismo teleológico', palavra:'TELEOLÓGICO',
+    lema:'O comportamento como padrão de atividade estendido no tempo: a "causa final ampla" explica cada ato.',
+    livro:{ parte:'I', caps:'1–3', com:'Filipe Lazzeri' } },
+  { id:'baum', grupo:'contemporaneos', nome:'William M. Baum', prenome:'William M.', sobrenome:'Baum', curto:'Baum', filiacao:'University of California, Davis', ativo:false,
+    escola:'Behaviorismo molar', palavra:'MOLAR',
+    lema:'A visão molar multiescala: o que conta como comportamento são atividades estendidas no tempo.',
+    livro:{ parte:'II', caps:'4–6', com:'Carolina Laurenti' } },
+  { id:'staddon', grupo:'contemporaneos', nome:'John Staddon', prenome:'John', sobrenome:'Staddon', curto:'Staddon', filiacao:'Duke University', ativo:false,
+    escola:'Behaviorismo teórico', palavra:'TEÓRICO',
+    lema:'Trazer a psicologia behaviorista de volta à ciência convencional, entre o simplismo ateórico e o mentalismo cientificista.',
+    livro:{ parte:'III', caps:'7–9', com:'Carlos Eduardo Lopes' } },
+  { id:'donahoe', grupo:'contemporaneos', nome:'John W. Donahoe', prenome:'John W.', sobrenome:'Donahoe', curto:'Donahoe', filiacao:'University of Massachusetts Amherst', ativo:false,
+    escola:'Behaviorismo biológico', palavra:'BIOLÓGICO',
+    lema:'Integrar a análise do comportamento à neurociência, como a seleção natural foi integrada à hereditariedade.',
+    livro:{ parte:'IV', caps:'10–12', com:'Marcus Bentes de Carvalho Neto' } },
+  { id:'foxall', grupo:'contemporaneos', nome:'Gordon R. Foxall', prenome:'Gordon R.', sobrenome:'Foxall', curto:'Foxall', filiacao:'Cardiff University', ativo:false,
+    escola:'Behaviorismo intencional', palavra:'INTENCIONAL',
+    lema:'Um programa de pesquisa sobre escolha do consumidor: o que faz do agir uma ação, e não apenas comportamento.',
+    livro:{ parte:'V', caps:'13–15', com:'Jorge M. Oliveira-Castro' } },
+  { id:'hayes', grupo:'contemporaneos', nome:'Steven C. Hayes', prenome:'Steven C.', sobrenome:'Hayes', curto:'Hayes', filiacao:'University of Nevada, Reno', ativo:false,
+    escola:'Behaviorismo contextual', palavra:'CONTEXTUAL',
+    lema:'Ciência comportamental contextual: contextualismo funcional, teoria das molduras relacionais e ACT.',
+    livro:{ parte:'VI', caps:'16–18', com:'Julio C. de Rose' } },
+  { id:'ribes', grupo:'contemporaneos', nome:'Emilio Ribes-Iñesta', prenome:'Emilio', sobrenome:'Ribes-Iñesta', curto:'Ribes', filiacao:'Universidad Veracruzana', ativo:false,
+    escola:'Behaviorismo de campo', palavra:'CAMPO',
+    lema:'Uma teoria da psicologia, e não só do comportamento: um modelo de campo para todos os fenômenos psicológicos.',
+    livro:{ parte:'VII', caps:'19–21', com:'Hernando Borges Neves Filho e Tiago de Oliveira Magalhães' } }
 ];
+
+/* ---------------------------------------------------------------------
+   Science and Human Behavior (Extended Edition) — capítulos e referência APA
+   Páginas = paginação impressa da edição estendida (Skinner, 1953/2024).
+   --------------------------------------------------------------------- */
+const SHB_CAPS = {
+  1:['Can Science Help?','A ciência pode ajudar?','3–10'],
+  2:['A Science of Behavior','Uma ciência do comportamento','11–22'],
+  3:['Why Organisms Behave','Por que os organismos se comportam','23–44'],
+  4:['Reflexes and Conditioned Reflexes','Reflexos e reflexos condicionados','45–58'],
+  5:['Operant Behavior','Comportamento operante','59–90'],
+  6:['Shaping and Maintaining Operant Behavior','Modelagem e manutenção do comportamento operante','91–106'],
+  7:['Operant Discrimination','Discriminação operante','107–128'],
+  8:['The Controlling Environment','O ambiente controlador','129–140'],
+  9:['Deprivation and Satiation','Privação e saciação','141–159'],
+  10:['Emotion','Emoção','160–170'],
+  11:['Aversion, Avoidance, Anxiety','Aversão, esquiva, ansiedade','171–181'],
+  12:['Punishment','Punição','182–193'],
+  13:['Function Versus Aspect','Função versus aspecto','194–203'],
+  14:['The Analysis of Complex Cases','A análise de casos complexos','204–226'],
+  15:['“Self-Control”','“Autocontrole”','227–241'],
+  16:['Thinking','Pensar','242–256'],
+  17:['Private Events in a Natural Science','Eventos privados numa ciência natural','257–282'],
+  18:['The Self','O “self”','283–296'],
+  19:['Social Behavior','Comportamento social','297–312'],
+  20:['Personal Control','Controle pessoal','313–322'],
+  21:['Group Control','Controle de grupo','323–332'],
+  22:['Government and Law','Governo e lei','333–349'],
+  23:['Religion','Religião','350–358'],
+  24:['Psychotherapy','Psicoterapia','359–383'],
+  25:['Economic Control','Controle econômico','384–401'],
+  26:['Education','Educação','402–414'],
+  27:['Culture and Control','Cultura e controle','415–425'],
+  28:['Designing a Culture','Planejando uma cultura','426–436'],
+  29:['The Problem of Control','O problema do controle','437–450']
+};
+/* Cartão "Para saber mais": capítulo, seção, páginas, por que ler, conceitos e, se houver, trecho curto (en + pt). */
+function saibaShb(cap, o){
+  const c = SHB_CAPS[cap];
+  return Object.assign({ cap, tituloEn:c[0], tituloPt:c[1], capPp:c[2], ref:'Skinner (1953/2024)' }, o);
+}
 
 const QUIZZES = {
 
@@ -711,103 +896,103 @@ const QUIZZES = {
   arte:'img/skinner-pombo.png',
   arteAlt:'Skinner jovem no laboratório, ao lado de um pombo numa câmara experimental',
   rodada:10,
-  intro:'Rodada de teoria. Vou misturar obras, conceitos e alguns vizinhos do Skinner para você não confundir. Se travar, peça uma dica: custa metade dos pontos.',
+  intro:'Esta rodada mistura obras, conceitos e alguns vizinhos teóricos do Skinner, para você aprender a distinguir um do outro. Se travar, peça uma dica: ela custa metade dos pontos da pergunta.',
   conquistas:{ aprovado:'Operante emitido', perfeito:'Behaviorista radical' },
   perguntas:[
   { tipo:'obra',
     enunciado:'Um romance sobre uma comunidade experimental organizada a partir de princípios de uma ciência do comportamento.',
     opcoes:['Walden Two (1948)','Beyond Freedom and Dignity (1971)','Science and Human Behavior (1953)','About Behaviorism (1974)'],
-    explicacao:'Walden Two é a ficção utópica de Skinner: o psicólogo Frazier apresenta a visitantes céticos uma comunidade planejada. Os mesmos temas voltam, em registro ensaístico, em Beyond Freedom and Dignity.',
+    explicacao:'Walden Two é a única obra de ficção de Skinner: o psicólogo Frazier apresenta a visitantes céticos uma comunidade planejada segundo princípios de reforçamento, não de coerção. O mesmo argumento retorna, décadas depois e em registro ensaístico, em Beyond Freedom and Dignity; por isso os dois títulos costumam ser confundidos.',
     fonte:'Skinner, B. F. (1948). Walden Two. Macmillan.',
     dica:'É o único romance da lista. O título conversa com Thoreau.' },
   { tipo:'obra',
     enunciado:'Primeira sistematização experimental de Skinner: define o comportamento operante e apresenta dados de ratos pressionando uma barra.',
     opcoes:['The Behavior of Organisms (1938)','Schedules of Reinforcement (1957)','Cumulative Record (1959)','Verbal Behavior (1957)'],
-    explicacao:'Em The Behavior of Organisms, Skinner distingue respondente e operante e toma a taxa de resposta, registrada em curvas cumulativas, como dado básico.',
+    explicacao:'Em The Behavior of Organisms, Skinner separa o comportamento respondente do operante e toma a taxa de resposta (registrada em curvas cumulativas) como o dado básico da análise. É a partir desse livro que a taxa de resposta se firma como a medida central do campo que ele estava fundando.',
     fonte:'Skinner, B. F. (1938). The behavior of organisms: An experimental analysis. Appleton-Century.',
     dica:'É o mais antigo da lista. O subtítulo é "an experimental analysis".' },
   { tipo:'obra',
     enunciado:'Análise funcional da linguagem que classifica operantes verbais como mando, tato, ecoico e intraverbal.',
     opcoes:['Verbal Behavior (1957)','Science and Human Behavior (1953)','Contingencies of Reinforcement (1969)','The Technology of Teaching (1968)'],
-    explicacao:'Verbal Behavior trata a fala como operante mantido por ouvintes treinados pela comunidade verbal. A resenha de Chomsky (1959) fez do livro o centro de uma controvérsia longa.',
+    explicacao:'Verbal Behavior trata a fala como comportamento operante, mantido pelas consequências que os ouvintes, treinados pela comunidade verbal, produzem para quem fala. A resenha que Chomsky publicou em 1959 tornou o livro o centro de uma controvérsia que ainda hoje divide behavioristas e linguistas.',
     fonte:'Skinner, B. F. (1957). Verbal behavior. Appleton-Century-Crofts.',
     dica:'Chomsky escreveu uma resenha famosa, e dura, desse livro em 1959.' },
   { tipo:'obra',
     enunciado:'Escrito com Charles B. Ferster, reúne centenas de registros cumulativos de pombos sob razão fixa, razão variável, intervalo fixo e intervalo variável.',
     opcoes:['Schedules of Reinforcement (1957)','The Behavior of Organisms (1938)','Verbal Behavior (1957)','Cumulative Record (1959)'],
-    explicacao:'Schedules of Reinforcement é o grande catálogo empírico dos esquemas. Cumulative Record, apesar do nome, é uma coletânea de artigos de Skinner.',
+    explicacao:'Schedules of Reinforcement é o grande catálogo empírico dos esquemas de reforçamento, fruto de anos de registros com pombos. Cumulative Record, apesar do nome sugerir algo parecido, é antes uma coletânea de artigos e ensaios de Skinner.',
     fonte:'Ferster, C. B., & Skinner, B. F. (1957). Schedules of reinforcement. Appleton-Century-Crofts.',
     dica:'É o único livro da lista escrito em coautoria.' },
   { tipo:'obra',
     enunciado:'Argumenta que os ideais tradicionais de liberdade e dignidade atrapalham o planejamento deliberado de culturas.',
     opcoes:['Beyond Freedom and Dignity (1971)','Walden Two (1948)','About Behaviorism (1974)','Reflections on Behaviorism and Society (1978)'],
-    explicacao:'Skinner sustenta que atribuir mérito ao "homem autônomo" desvia a atenção do ambiente que controla o comportamento. O livro levou Skinner à capa da revista Time em 1971.',
+    explicacao:'Skinner sustenta que atribuir méritos e culpas a um "homem autônomo" interno desvia a atenção do que, de fato, controla o comportamento: o ambiente. A tese rendeu a Skinner a capa da revista Time em 1971, episódio que também consolidou sua fama de determinista.',
     fonte:'Skinner, B. F. (1971). Beyond freedom and dignity. Knopf.',
     dica:'O título já diz o que o livro propõe superar.' },
   { tipo:'obra',
     enunciado:'Artigo que descreve a seleção por consequências em três níveis: filogenético, ontogenético e cultural.',
     opcoes:['Selection by Consequences (1981)','Are Theories of Learning Necessary? (1950)','The Operational Analysis of Psychological Terms (1945)','"Superstition" in the Pigeon (1948)'],
-    explicacao:'Publicado na Science, o artigo trata seleção natural, condicionamento operante e evolução de práticas culturais como três instâncias de um mesmo modo causal.',
+    explicacao:'Publicado na revista Science, o artigo trata a seleção natural, o condicionamento operante e a evolução de práticas culturais como três instâncias de um mesmo modo de causação: a seleção por consequências. É o texto mais direto de Skinner sobre por que ele considerava esse princípio comum à biologia, ao comportamento individual e à cultura.',
     fonte:'Skinner, B. F. (1981). Selection by consequences. Science, 213(4507), 501–504.',
     dica:'Pense em Darwin estendido ao repertório e à cultura.' },
   { tipo:'obra',
     enunciado:'Artigo que trata termos psicológicos subjetivos como respostas verbais e pergunta como a comunidade verbal ensina alguém a relatar eventos privados.',
     opcoes:['The Operational Analysis of Psychological Terms (1945)','Selection by Consequences (1981)','Are Theories of Learning Necessary? (1950)','A Case History in Scientific Method (1956)'],
-    explicacao:'Escrito para um simpósio sobre operacionismo, o texto fixa a posição de Skinner: eventos privados entram na análise, e o problema passa a ser como respostas verbais ficam sob controle de estímulos a que só o falante tem acesso.',
+    explicacao:'Escrito para um simpósio sobre operacionismo, o texto fixa a posição que Skinner manteria pelo resto da carreira: eventos privados entram na análise, e o problema deixa de ser negá-los para se tornar outro, o de como respostas verbais ficam sob controle de estímulos a que só o próprio falante tem acesso.',
     fonte:'Skinner, B. F. (1945). The operational analysis of psychological terms. Psychological Review, 52(5), 270–277.',
     dica:'Foi escrito para um simpósio sobre operacionismo.' },
   { tipo:'obra',
     enunciado:'Pombos recebem comida a intervalos regulares, sem relação com o que fazem, e passam a repetir movimentos idiossincráticos.',
     opcoes:['"Superstition" in the Pigeon (1948)','Schedules of Reinforcement (1957)','The Behavior of Organisms (1938)','Selection by Consequences (1981)'],
-    explicacao:'A comida vinha a cada 15 s, independentemente da resposta. A contiguidade acidental bastou para fortalecer giros, balanços de cabeça e outros "rituais".',
+    explicacao:'A comida vinha a cada 15 segundos, independentemente do que o pombo estivesse fazendo. Ainda assim, a contiguidade acidental entre um movimento qualquer e a chegada do alimento bastou para fortalecer giros, balanços de cabeça e outros "rituais", o achado que dá nome ao artigo.',
     fonte:'Skinner, B. F. (1948). "Superstition" in the pigeon. Journal of Experimental Psychology, 38(2), 168–172.',
     dica:'No título original, uma palavra aparece entre aspas.' },
   { tipo:'quem',
     enunciado:'Em 1913, publicou um manifesto propondo que a psicologia fosse um ramo experimental das ciências naturais e abandonasse a introspecção.',
     opcoes:['John B. Watson','B. F. Skinner','Edward C. Tolman','Clark L. Hull'],
-    explicacao:'"Psychology as the Behaviorist Views It" é o marco fundador. Na introdução de About Behaviorism, Skinner avalia que esse programa surgiu cedo demais, com poucos fatos disponíveis.',
+    explicacao:'"Psychology as the Behaviorist Views It" é o manifesto fundador do behaviorismo, publicado por Watson em 1913. Na introdução de About Behaviorism, o próprio Skinner reconhece o mérito histórico do texto, mas pondera que o programa surgiu cedo demais, sustentado por poucos fatos disponíveis à época.',
     fonte:'Watson, J. B. (1913). Psychology as the behaviorist views it. Psychological Review, 20(2), 158–177.',
     dica:'Skinner tinha 9 anos quando esse texto saiu.' },
   { tipo:'quem',
     enunciado:'Distinguiu o comportamento respondente, eliciado por estímulos antecedentes, do operante, emitido e controlado por suas consequências.',
     opcoes:['B. F. Skinner','Ivan P. Pavlov','Edward L. Thorndike','John B. Watson'],
-    explicacao:'A distinção aparece em artigos de 1935 e 1937 e se consolida em The Behavior of Organisms (1938). Thorndike formulou a lei do efeito, mas não a distinção respondente/operante.',
+    explicacao:'A distinção entre respondente e operante aparece em artigos de 1935 e 1937 e se consolida em The Behavior of Organisms (1938). Thorndike já havia formulado a lei do efeito décadas antes, mas não chegou a propor essa distinção; ela é uma contribuição posterior, de Skinner.',
     fonte:'Skinner, B. F. (1938). The behavior of organisms. Appleton-Century.',
     dica:'Quem cunhou o termo "operante"?' },
   { tipo:'quem',
     enunciado:'Propôs "mapas cognitivos" a partir de experimentos com ratos em labirintos e defendeu um comportamento molar e propositivo.',
     opcoes:['Edward C. Tolman','B. F. Skinner','Clark L. Hull','J. R. Kantor'],
-    explicacao:'Tolman introduziu variáveis intervenientes cognitivas, como expectativas e mapas, e estudou a aprendizagem latente. É o contraponto clássico ao estímulo-resposta estrito.',
+    explicacao:'Tolman introduziu variáveis intervenientes cognitivas (expectativas, mapas) para explicar o comportamento de ratos em labirintos, e foi a partir delas que chegou ao conceito de aprendizagem latente. Na psicologia da aprendizagem, ele costuma aparecer como o contraponto clássico ao esquema estrito de estímulo e resposta.',
     fonte:'Tolman, E. C. (1948). Cognitive maps in rats and men. Psychological Review, 55(4), 189–208.',
     dica:'Aprendizagem latente, labirintos, expectativas.' },
   { tipo:'quem',
     enunciado:'Construiu um sistema hipotético-dedutivo de postulados, com variáveis intervenientes como força do hábito e impulso (drive).',
     opcoes:['Clark L. Hull','B. F. Skinner','Edward C. Tolman','John B. Watson'],
-    explicacao:'O sistema de Principles of Behavior (1943) é o tipo de teoria que Skinner criticou em "Are Theories of Learning Necessary?" (1950).',
+    explicacao:'O sistema de Hull, apresentado em Principles of Behavior (1943), parte de postulados e de variáveis intervenientes como a força do hábito e o impulso (drive) para deduzir o comportamento. É exatamente esse tipo de teoria, construída antes dos dados e não a partir deles, que Skinner criticaria alguns anos depois, em "Are Theories of Learning Necessary?" (1950).',
     fonte:'Hull, C. L. (1943). Principles of behavior. Appleton-Century.',
     dica:'Pense na notação sHr.' },
   { tipo:'conceito',
     enunciado:'Em Science and Human Behavior, Skinner analisa "agências controladoras". Qual destas NÃO recebe essa análise no livro?',
     opcoes:['Mídia e publicidade','Governo e lei','Religião','Educação'],
-    explicacao:'A seção sobre agências controladoras trata de governo e lei, religião, psicoterapia, controle econômico e educação.',
+    explicacao:'Em Science and Human Behavior, a seção sobre agências controladoras percorre cinco delas: governo e lei, religião, psicoterapia, controle econômico e educação. A mídia e a publicidade, por mais que controlem comportamento, não recebem capítulo próprio nessa seção.',
     fonte:'Skinner, B. F. (1953). Science and human behavior. Macmillan. Seção V.',
     dica:'São cinco agências. Uma delas é a psicoterapia.' },
   { tipo:'conceito',
     enunciado:'Por que Skinner rejeita a explicação "ele comeu porque estava com fome"?',
     opcoes:['O estado interno é inferido do mesmo comportamento que pretende explicar','Porque a fome não existe','Porque só o comportamento de animais pode ser explicado','Porque a fisiologia nunca terá nada a dizer'],
-    explicacao:'A "fome" é inferida do comer e depois usada para explicá-lo. A explicação é circular e encerra a busca cedo demais; a análise volta às variáveis ambientais, como a privação.',
+    explicacao:'A "fome" costuma ser inferida do próprio ato de comer e, em seguida, usada para explicá-lo: um raciocínio circular que encerra a busca cedo demais. Skinner prefere voltar às variáveis ambientais que precedem o comer, como o tempo de privação de alimento.',
     fonte:'Skinner, B. F. (1953). Science and human behavior, cap. 3; Skinner (1974), cap. 1.',
     dica:'Procure a circularidade.' },
   { tipo:'obra',
     enunciado:'Reúne textos sobre máquinas de ensinar e instrução programada.',
     opcoes:['The Technology of Teaching (1968)','Contingencies of Reinforcement (1969)','Walden Two (1948)','Verbal Behavior (1957)'],
-    explicacao:'O livro sistematiza o ensino programado: passos pequenos, resposta ativa, consequência imediata e ritmo individual.',
+    explicacao:'O livro sistematiza os princípios do ensino programado: passos pequenos, resposta ativa do aluno, consequência imediata para cada resposta e ritmo definido pelo próprio aprendiz, não pela turma. É a aplicação, à sala de aula, dos mesmos princípios que Skinner via operar na câmara experimental.',
     fonte:'Skinner, B. F. (1968). The technology of teaching. Appleton-Century-Crofts.',
     dica:'O título tem a palavra "ensino" em inglês.' },
   { tipo:'conceito',
     enunciado:'Em "Are Theories of Learning Necessary?" (1950), o que Skinner chama de "teoria" e recusa?',
     opcoes:['Explicações por eventos em outro nível de observação, medidos em outras dimensões','Toda forma de teorização em ciência','Dados obtidos com animais em laboratório','Qualquer análise estatística'],
-    explicacao:'Skinner define "teoria" como apelo a eventos em outro nível, neural, mental ou conceitual. Ele não recusa descrições formais das relações entre variáveis.',
+    explicacao:'Skinner define "teoria", nesse artigo, como o apelo a eventos situados em outro nível de observação (neural, mental ou puramente conceitual) para explicar o comportamento. O alvo da crítica é esse apelo, não a descrição formal das relações entre variáveis, que ele considera legítima.',
     fonte:'Skinner, B. F. (1950). Are theories of learning necessary? Psychological Review, 57(4), 193–216.',
     dica:'Ele usou uma definição bem estreita de "teoria".' }
   ]
@@ -821,128 +1006,128 @@ const QUIZZES = {
   arte:'img/about-behaviorism-capa.png',
   arteAlt:'Capa do livro About Behaviorism, de B. F. Skinner, com o rosto do autor',
   rodada:10,
-  referencia:'Skinner, B. F. (1974). About behaviorism. Knopf.',
-  intro:'About Behaviorism, 1974. Skinner abre o livro listando 20 afirmações sobre o behaviorismo que ele considera erradas e passa 14 capítulos respondendo. Vamos ver se você acompanha.',
+  referencia:'Skinner, B. F. (1974). <i>About behaviorism</i>. Knopf.',
+  intro:'About Behaviorism, 1974. Skinner abre o livro com vinte afirmações sobre o behaviorismo que considera equivocadas e passa catorze capítulos respondendo a elas, uma por uma. As perguntas seguem essa mesma trilha, do capítulo 1 ao 14.',
   conquistas:{ aprovado:'Leitor(a) de About Behaviorism', perfeito:'As 20 objeções respondidas' },
   perguntas:[
   { tipo:'conceito',
     enunciado:'Como Skinner define o behaviorismo na primeira frase da Introdução?',
     opcoes:['Como a filosofia da ciência do comportamento humano','Como a própria ciência do comportamento humano','Como um método de modificação de comportamento','Como a psicologia experimental animal'],
-    explicacao:'Behaviorismo é a filosofia de uma ciência, não a ciência em si. O livro defende a filosofia de uma versão específica dela: a análise experimental do comportamento.',
+    explicacao:'Behaviorismo é a filosofia de uma ciência, não a ciência em si, distinção que Skinner marca já na primeira frase do livro. O que ele defende, ao longo dos catorze capítulos seguintes, é a filosofia de uma versão específica dessa ciência: a análise experimental do comportamento.',
     fonte:'Skinner (1974), Introdução.',
     dica:'Ciência e filosofia da ciência não são a mesma coisa.' },
   { tipo:'conceito',
     enunciado:'Quantas afirmações comuns sobre o behaviorismo Skinner lista na Introdução, todas consideradas por ele equivocadas?',
     opcoes:['20','10','12','25'],
-    explicacao:'A lista vai de "ignora a consciência" até "é indiferente ao calor e à riqueza da vida humana". O capítulo 14 retoma cada uma delas.',
+    explicacao:'A lista de Skinner vai de "ignora a consciência" até "é indiferente ao calor e à riqueza da vida humana", passando por acusações tão distintas quanto "trabalha só com ratos" e "nega a criatividade". No capítulo 14, ele retoma as vinte, uma a uma, à luz do que já foi argumentado no livro.',
     fonte:'Skinner (1974), Introdução e cap. 14.',
     dica:'Número redondo, dois dígitos.' },
   { tipo:'conceito',
     enunciado:'Qual destas críticas NÃO está entre as objeções listadas na Introdução?',
     opcoes:['Depende de questionários e autorrelatos para coletar dados','Ignora a consciência, os sentimentos e os estados mentais','Não tem lugar para intenção ou propósito','Trabalha com animais, especialmente ratos, e não com pessoas'],
-    explicacao:'Ignorar a consciência é a objeção 1; não ter lugar para propósito, a 5; trabalhar com ratos, a 10. Questionários não aparecem: a análise experimental estuda organismos individuais em ambientes controlados.',
+    explicacao:'Ignorar a consciência é a objeção 1; não ter lugar para propósito, a 5; trabalhar com ratos e não com pessoas, a 10. Questionários e autorrelatos não aparecem na lista, e por um motivo simples: a análise experimental que Skinner defende estuda organismos individuais em ambientes controlados, não amostras respondendo a formulários.',
     fonte:'Skinner (1974), Introdução.',
     dica:'Três delas são críticas clássicas. Uma descreve um método que Skinner quase não usava.' },
   { tipo:'capitulo',
     enunciado:'Em qual capítulo Skinner contrapõe estruturalismo, behaviorismo metodológico e behaviorismo radical?',
     opcoes:['Cap. 1 · The Causes of Behavior','Cap. 13 · What Is Inside the Skin?','Cap. 9 · Knowing','Cap. 14 · Summing Up'],
-    explicacao:'O primeiro capítulo apresenta as alternativas ao mentalismo e fixa a posição do behaviorismo radical sobre eventos privados.',
+    explicacao:'O primeiro capítulo faz o trabalho que precisa vir antes de qualquer resposta às críticas: apresentar as alternativas ao mentalismo e fixar a posição do behaviorismo radical sobre os eventos privados. Só depois de esclarecer de que behaviorismo se fala é que as vinte objeções podem ser discutidas uma a uma.',
     fonte:'Skinner (1974), cap. 1.',
     dica:'Antes de responder críticas, é preciso dizer de que behaviorismo se fala.' },
   { tipo:'conceito',
     enunciado:'Segundo o cap. 1, como o behaviorismo radical trata os eventos privados, em contraste com o metodológico?',
     opcoes:['Inclui eventos dentro da pele, sem exigir verdade por consenso','Exclui eventos privados por falta de acordo público','Adota a introspecção como método científico principal','Trata eventos privados como substância não física'],
-    explicacao:'O metodológico descartava o privado porque observadores não podiam concordar sobre ele. O radical não exige verdade por consenso e inclui o mundo dentro da pele, sem lhe atribuir natureza especial.',
+    explicacao:'O behaviorismo metodológico descartava o mundo privado porque observadores diferentes não podiam concordar sobre ele; sem verificação pública, não haveria como tratá-lo cientificamente. O radical segue outro caminho: não exige verdade por consenso e inclui o que está dentro da pele na análise, sem atribuir a esses eventos nenhuma natureza especial.',
     fonte:'Skinner (1974), cap. 1, "Radical Behaviorism".',
     dica:'"Radical" aqui tem a ver com não deixar nada de fora.' },
   { tipo:'conceito',
     enunciado:'No cap. 2, como a comunidade verbal ensina alguém a relatar uma dor que só essa pessoa sente?',
     opcoes:['Apoiando-se em condições públicas associadas e em respostas colaterais, como o choro','Por acesso direto aos estados internos do aprendiz','Por meio de regras inatas de gramática','Não ensina: relatos de dor surgem sem comunidade'],
-    explicacao:'A comunidade contorna a privacidade usando o que é público: o objeto que feriu, a pancada vista, o choro. Por isso os relatos de eventos privados nunca ficam sob controle muito preciso.',
+    explicacao:'A comunidade verbal contorna o problema da privacidade apoiando-se no que é público: o objeto que feriu, a pancada que todos viram, o choro que se segue a ela. Justamente por depender desses sinais indiretos, o relato de um evento privado nunca fica sob controle tão preciso quanto o relato de um evento público.',
     fonte:'Skinner (1974), cap. 2, "The World Within the Skin".',
     dica:'A comunidade só pode reforçar o que consegue ver.' },
   { tipo:'conceito',
     enunciado:'No cap. 3, por que Skinner considera "pressão seletiva" uma expressão enganosa?',
     opcoes:['Porque seleção é um tipo especial de causalidade, não uma força','Porque a seleção natural não afeta o comportamento','Porque só o ambiente ontogenético seleciona','Porque o comportamento inato não tem história evolutiva'],
-    explicacao:'Contingências de sobrevivência selecionam; não empurram. A mesma lógica vale para o operante: a consequência seleciona a classe de respostas depois que ela ocorre.',
+    explicacao:'Contingências de sobrevivência selecionam; não empurram, como sugeriria a palavra "pressão". A mesma lógica vale para o operante: a consequência não impele a resposta a ocorrer, ela seleciona uma classe de respostas depois que alguma delas já ocorreu.',
     fonte:'Skinner (1974), cap. 3, "Innate Behavior".',
     dica:'Seleção age depois da variação, não antes.' },
   { tipo:'conceito',
     enunciado:'Costuma-se dizer que as pessoas apostam "pela excitação". Como Skinner interpreta essa excitação no cap. 4?',
     opcoes:['Como produto colateral de um esquema de razão variável','Como a causa do comportamento de apostar','Como traço inato de personalidade','Como sintoma de um conflito inconsciente'],
-    explicacao:'Jogos de azar pagam em razão variável. A excitação acompanha o esquema, mas quem explica o apostar é a história de reforçamento. Ao longo do livro, sentimentos aparecem como produtos colaterais das condições que produzem o comportamento.',
+    explicacao:'Jogos de azar pagam em razão variável, esquema que Skinner já havia mostrado gerar taxas de resposta altas e persistentes. A excitação acompanha esse esquema, mas quem explica o apostar é a história de reforçamento, não a excitação em si; ao longo do livro, sentimentos como esse aparecem repetidas vezes como produtos colaterais das condições que produzem o comportamento, nunca como suas causas.',
     fonte:'Skinner (1974), cap. 4, "Operant Behavior".',
     dica:'Pense no esquema de pagamento de um caça-níqueis.' },
   { tipo:'conceito',
     enunciado:'No cap. 5 (Perceiving), qual ideia Skinner critica?',
     opcoes:['A de que vemos cópias internas do mundo','A de que perceber envolve controle de estímulos','A de que a história de reforço afeta o que se vê','A de que se pode ver algo na ausência da coisa vista'],
-    explicacao:'A "teoria da cópia" supõe representações internas guardadas e consultadas. Skinner trata ver como comportamento sob controle de estímulos; ver na ausência da coisa é analisado como comportamento, não negado.',
+    explicacao:'A "teoria da cópia" supõe que percebemos guardando representações internas do mundo, consultadas depois como se fossem fotografias na memória. Skinner prefere tratar o ver como comportamento sob controle de estímulos; mesmo ver algo na ausência da coisa vista entra nessa análise como um tipo de comportamento a explicar, não como fenômeno que ele simplesmente nega.',
     fonte:'Skinner (1974), cap. 5, "The Copy Theory".',
     dica:'Uma das seções do capítulo tem "Theory" no título.' },
   { tipo:'conceito',
     enunciado:'Para Skinner (cap. 6), onde está o significado de uma resposta verbal?',
     opcoes:['Nas contingências responsáveis pela resposta','Na forma (topografia) da resposta','Numa ideia que a palavra expressa','Na situação presente, independentemente da história'],
-    explicacao:'O significado não é propriedade da resposta nem da situação, mas das contingências responsáveis por ambas. Procurá-lo na forma é, segundo ele, o erro do estruturalista.',
+    explicacao:'Para Skinner, o significado não é propriedade da resposta nem da situação isoladamente, mas das contingências responsáveis por ambas, a história que fez aquela forma ocorrer naquele contexto. Procurar o significado na forma da resposta é, segundo ele, exatamente o erro que o estruturalista comete.',
     fonte:'Skinner (1974), cap. 6, "Meaning and Reference".',
     dica:'Para um behaviorista, olhe para a história, não para o som.' },
   { tipo:'conceito',
     enunciado:'Qual é a tese central do cap. 7 (Thinking)?',
     opcoes:['Pensar é comportar-se; o erro é alocar esse comportamento na mente','Pensar é um processo cognitivo inacessível à análise','Pensar é apenas fala subvocal','Pensar é atividade neural que dispensa o ambiente'],
-    explicacao:'Skinner trata a vida mental como invenção feita por analogia com o comportamento público. A redução a fala subvocal era a hipótese de Watson, que Skinner considera apressada.',
+    explicacao:'Skinner trata a vida mental como uma invenção construída por analogia com o comportamento público: pensamos como se houvesse, lá dentro, um pequeno agente que age. Reduzir o pensar a fala subvocal, como propôs Watson, era, para Skinner, ir rápido demais: ele considera a hipótese apressada, embora reconheça o instinto certo por trás dela.',
     fonte:'Skinner (1974), cap. 7 e Introdução.',
     dica:'A resposta cabe em três palavras.' },
   { tipo:'conceito',
     enunciado:'No cap. 7, a que Skinner compara o comportamento criativo?',
     opcoes:['Ao surgimento de "mutações" que depois são selecionadas','A uma inspiração vinda de uma mente autônoma','A um talento fixado geneticamente','À cópia de modelos anteriores'],
-    explicacao:'A analogia com a evolução é explícita: variações surgem e as contingências selecionam. Escritores, artistas e cientistas usam técnicas para aumentar a chance dessas variações.',
+    explicacao:'A analogia com a evolução biológica é explícita: variações no comportamento surgem, e as contingências selecionam as que se mantêm. Escritores, artistas e cientistas, segundo Skinner, usam técnicas para aumentar a chance de que essas variações apareçam, não para garantir de antemão qual delas vai "dar certo".',
     fonte:'Skinner (1974), cap. 7, "Creative Behavior".',
     dica:'Darwin de novo.' },
   { tipo:'conceito',
     enunciado:'Um aprendiz de ferreiro opera o fole seguindo uma rima, sem nunca olhar o fogo. O caso ilustra:',
     opcoes:['Comportamento governado por regras','Comportamento modelado pelas contingências','Comportamento respondente','Imitação instintiva'],
-    explicacao:'O ferreiro ajustou o fole pelos efeitos no fogo, modelado por contingências, e depois formulou a regra. O aprendiz segue a regra porque é pago para isso.',
+    explicacao:'O comportamento do ferreiro foi modelado pelas próprias contingências: ele ajustou o fole observando o efeito no fogo, e só depois formulou a regra em versos, para ensiná-la. O aprendiz, ao contrário, nunca precisa entrar em contato com essa consequência natural; ele segue a regra porque é pago para isso.',
     fonte:'Skinner (1974), cap. 8, "Contingency-Shaped Versus Rule-Governed Behavior".',
     dica:'O aprendiz nunca teve contato com a consequência natural.' },
   { tipo:'capitulo',
     enunciado:'Em qual capítulo aparece a distinção entre comportamento modelado por contingências e governado por regras?',
     opcoes:['Cap. 8 · Causes and Reasons','Cap. 4 · Operant Behavior','Cap. 6 · Verbal Behavior','Cap. 12 · The Question of Control'],
-    explicacao:'O capítulo trata conselhos, instruções, provérbios, leis e leis científicas como estímulos verbais que descrevem contingências.',
+    explicacao:'O capítulo 8 trata conselhos, instruções, provérbios, leis e leis científicas como uma mesma categoria: estímulos verbais que descrevem contingências, poupando quem os segue da exposição direta às consequências naturais.',
     fonte:'Skinner (1974), cap. 8.',
     dica:'Regras são "razões" para agir.' },
   { tipo:'conceito',
     enunciado:'No cap. 11, como uma análise comportamental descreve uma pessoa?',
     opcoes:['Um organismo da espécie humana que adquiriu um repertório de comportamento','Um agente autônomo que inicia as próprias ações','Uma soma de traços inatos de personalidade','Uma mente que habita um corpo'],
-    explicacao:'A pessoa segue sendo organismo para o fisiologista e é "pessoa" para quem se importa com seu comportamento. Contingências diferentes podem produzir pessoas diferentes na mesma pele.',
+    explicacao:'A mesma pessoa segue sendo organismo para o fisiologista, mas é "pessoa" para quem se importa com o que ela faz; a diferença está em quem observa, não no que existe. Contingências diferentes, argumenta Skinner, podem produzir pessoas diferentes na mesma pele, o que explica por que alguém se comporta de um jeito no trabalho e de outro em casa.',
     fonte:'Skinner (1974), cap. 11, "The Self and Others".',
     dica:'Espécie + história.' },
   { tipo:'conceito',
     enunciado:'Greves, revoltas e protestos estudantis são, no cap. 12, exemplos de:',
     opcoes:['Contracontrole','Extinção','Esquiva condicionada','Comportamento supersticioso'],
-    explicacao:'Os controlados reagem ao controle fugindo dele ou atacando quem controla. Skinner chega a tratar comportamentos admirados, como a compaixão, como mantidos por formas de contracontrole.',
+    explicacao:'Quem é controlado reage de duas formas básicas: fugindo do controle ou atacando quem controla. Skinner vai além do óbvio e chega a tratar comportamentos socialmente admirados, como a compaixão, como mantidos por formas mais sutis de contracontrole.',
     fonte:'Skinner (1974), cap. 12, "Countercontrol".',
     dica:'É a seção de abertura do capítulo sobre controle.' },
   { tipo:'conceito',
     enunciado:'Por que, no cap. 13, um "sistema nervoso conceitual" não serve de explicação?',
     opcoes:['Porque é inferido do mesmo comportamento que pretende explicar','Porque o sistema nervoso não participa do comportamento','Porque a fisiologia é irrelevante para Skinner','Porque só pode ser estudado em animais'],
-    explicacao:'Os exemplos clássicos são a sinapse de Sherrington, inferida antes de ser observada, e a "atividade do córtex" de Pavlov. A fisiologia observada é bem-vinda; o que Skinner recusa é um sistema nervoso deduzido dos próprios dados comportamentais.',
+    explicacao:'Os exemplos clássicos são a sinapse de Sherrington, inferida muito antes de ser observada, e a "atividade do córtex" de Pavlov, postulada nos mesmos termos. A fisiologia efetivamente observada é bem-vinda na análise de Skinner; o que ele recusa é um sistema nervoso deduzido dos próprios dados comportamentais que deveria explicar, a mesma circularidade da "fome" que explica o comer.',
     fonte:'Skinner (1974), cap. 13, "The Conceptual Nervous System".',
     dica:'É o mesmo problema da "fome" que explica o comer.' },
   { tipo:'capitulo',
     enunciado:'Qual capítulo retoma, uma a uma, as 20 objeções da Introdução?',
     opcoes:['Cap. 14 · Summing Up','Cap. 1 · The Causes of Behavior','Cap. 12 · The Question of Control','Cap. 13 · What Is Inside the Skin?'],
-    explicacao:'Summing Up revisa as 20 afirmações à luz do livro inteiro, começando pela acusação de que o behaviorismo ignora a consciência.',
+    explicacao:'Summing Up, o último capítulo, revisa as vinte afirmações à luz de tudo o que foi argumentado nos treze capítulos anteriores, começando pela acusação de que o behaviorismo ignora a consciência.',
     fonte:'Skinner (1974), cap. 14.',
     dica:'O último.' },
   { tipo:'conceito',
     enunciado:'No cap. 14, em que sentido Skinner diz que a consciência é um produto social?',
     opcoes:['Quando a comunidade verbal faz a pessoa não só ver, mas ver que está vendo','Quando a pessoa obedece às normas do grupo','Quando o cérebro amadurece em contato com outros','Quando a cultura transmite ideias inatas'],
-    explicacao:'Estar consciente do entorno é estar sob controle de estímulos, algo que outras espécies também exibem. O sentido especial, ver que se vê, depende de contingências verbais.',
+    explicacao:'Estar consciente do entorno, para Skinner, é simplesmente estar sob controle de estímulos, algo que outras espécies também exibem, sem que ninguém as chame de conscientes nesse sentido especial. Ver que se vê depende de contingências verbais específicas, arranjadas por uma comunidade que ensina a pessoa a descrever a própria percepção.',
     fonte:'Skinner (1974), cap. 14, resposta à objeção 1.',
     dica:'Outros animais veem; o que falta a eles é uma comunidade verbal.' },
   { tipo:'conceito',
     enunciado:'Como Skinner avalia o behaviorismo de Watson na Introdução?',
     opcoes:['O programa surgiu cedo demais, com poucos fatos, e por isso pareceu simplista','Foi uma formulação completa que dispensa revisão','Ignorou por completo o comportamento instintivo','Foi o primeiro a analisar o comportamento verbal'],
-    explicacao:'Skinner reconhece Watson como um dos primeiros etólogos no espírito moderno e atribui parte das críticas ao behaviorismo às lacunas de um programa amplo com poucos dados.',
+    explicacao:'Skinner reconhece em Watson um dos primeiros etólogos no espírito moderno, mas atribui boa parte das críticas que o behaviorismo recebe até hoje às lacunas de um programa muito amplo, lançado com poucos dados disponíveis. A avaliação é gentil com o fundador e crítica com sua época.',
     fonte:'Skinner (1974), Introdução.',
     dica:'Skinner é gentil, mas aponta um problema de época.' }
   ]
@@ -956,56 +1141,56 @@ const QUIZZES = {
   arte:'img/keller-definition-capa.png', arteFit:'contain',
   arteAlt:'Folha de rosto de The Definition of Psychology, segunda edição, de Fred S. Keller',
   rodada:10,
-  referencia:'Keller, F. S. (1973). The definition of psychology (2nd ed.). Appleton-Century-Crofts. (Original de 1937.)',
+  referencia:'Keller, F. S. (1973). <i>The definition of psychology</i> (2nd ed.). Appleton-Century-Crofts. (Original work published 1937)',
   intro:'Keller escreveu este livro para mostrar como a psicologia chegou a se definir. Cada capítulo passa por uma escola: estruturalismo, funcionalismo, Watson, Gestalt. No fim, ele diz qual definição prefere, e você já a conhece.',
   conquistas:{ aprovado:'Historiador(a) da psicologia', perfeito:'Definição precisa' },
   perguntas:[
   { tipo:'quem',
     enunciado:'Keller o chama de "pai da psicologia moderna" por ter sido o primeiro grande dualista, separando mente e corpo de modo radical.',
     opcoes:['René Descartes','John Locke','Wilhelm Wundt','William James'],
-    explicacao:'Descartes era dualista interacionista: a mente pensa e não ocupa espaço, o corpo é uma máquina. Para os animais, sem mente, ele via só autômatos. Aristóteles é o "pai de toda a psicologia" e Fechner, o pai da psicologia quantitativa.',
+    explicacao:'Descartes era um dualista interacionista: a mente pensa e não ocupa espaço, o corpo é uma máquina, e as duas coisas se afetam mutuamente. Nos animais, por não terem mente, ele via apenas autômatos. É por essa separação radical entre mente e corpo que Keller o chama de pai da psicologia moderna, reservando "pai de toda a psicologia" para Aristóteles e "pai da psicologia quantitativa" para Fechner.',
     fonte:'Keller (1973), cap. 1, p. 2, e cap. 3, p. 17.',
     dica:'Pense no "penso, logo existo".' },
   { tipo:'conceito',
     enunciado:'Na metáfora do jardim, o que distingue os "fundadores" de uma ciência dos seus "pais"?',
     opcoes:['Os fundadores sabem que um jardim está sendo feito e cuidam dele até chegarem ajudantes','Os fundadores lançam as sementes, muitas vezes sem saber o que plantam','Os fundadores são sempre mais antigos que os pais','Os fundadores são os que escrevem os primeiros manuais'],
-    explicacao:'Os "pais" aram a terra e semeiam; podem ser muitos e não saber o papel que cumprem. Os "fundadores" regam, transplantam e cercam, cientes de que constroem algo. Segundo Keller, fundadores são poucos.',
+    explicacao:'Na metáfora de Keller, os "pais" aram a terra e semeiam; podem ser muitos, e com frequência não sabem o papel que estão cumprindo. Os "fundadores" regam, transplantam e cercam o jardim, cientes de que constroem algo que precisa ser cuidado até que outros cheguem para ajudar. Por isso, diz Keller, fundadores são sempre poucos.',
     fonte:'Keller (1973), cap. 3, p. 17.',
     dica:'Quem planta a semente nem sempre sabe que está fazendo um jardim.' },
   { tipo:'quem',
     enunciado:'Keller o chama de "pai da psicologia quantitativa (ou experimental)" e de fundador da psicofísica, embora ele nunca tenha pretendido ser psicólogo.',
     opcoes:['Gustav Theodor Fechner','Wilhelm Wundt','Hermann von Helmholtz','Edward B. Titchener'],
-    explicacao:'Fechner mostrou o caminho para a psicologia experimental. Coube a Wundt ser o verdadeiro fundador da psicologia experimental moderna.',
+    explicacao:'Fechner mostrou o caminho para a psicologia experimental, mas nunca pretendeu ser psicólogo: seu interesse era medir a relação entre estímulo físico e sensação, o que já basta para lhe render o título de pai da psicofísica. Coube a Wundt, ainda segundo Keller, ser o verdadeiro fundador da psicologia experimental moderna.',
     fonte:'Keller (1973), cap. 3, p. 17.',
     dica:'A psicofísica mede a relação entre estímulo e sensação.' },
   { tipo:'quem',
     enunciado:'Em 1879, na Universidade de Leipzig, criou o primeiro laboratório de psicologia do mundo e depois fundou uma revista científica para publicar os experimentos.',
     opcoes:['Wilhelm Wundt','Edward B. Titchener','William James','John B. Watson'],
-    explicacao:'Wundt publicou a Physiological Psychology, o primeiro sistema psicológico. Para ele, a psicologia era a ciência da experiência imediata, estudada por introspecção.',
+    explicacao:'Em 1879, na Universidade de Leipzig, Wundt fundou o primeiro laboratório de psicologia do mundo, e pouco depois criou também uma revista científica para publicar os experimentos feitos ali. Já tinha publicado a Physiological Psychology, o primeiro sistema psicológico completo: para ele, a psicologia era a ciência da experiência imediata, estudada pelo método da introspecção.',
     fonte:'Keller (1973), cap. 3, p. 18.',
     dica:'A cidade é Leipzig.' },
   { tipo:'conceito',
     enunciado:'Como Wundt definia a psicologia, segundo Keller?',
     opcoes:['A ciência da experiência imediata','A ciência do comportamento observável','A ciência dos processos inconscientes','A ciência da adaptação do organismo ao ambiente'],
-    explicacao:'Wundt era um paralelista psicofísico: de um lado o mundo físico, de outro o mental. A psicologia cuidava do mental (sensações, percepções, sentimentos, emoções) e seu método era a introspecção.',
+    explicacao:'Wundt era um paralelista psicofísico: de um lado estava o mundo físico, de outro o mental, sem que um interferisse causalmente no outro. À psicologia cabia cuidar do mental (sensações, percepções, sentimentos, emoções), e o método adequado a esse objeto era a introspecção, não a observação do comportamento.',
     fonte:'Keller (1973), cap. 3, p. 19.',
     dica:'Nada de comportamento aqui: a matéria-prima era o que a pessoa vivenciava.' },
   { tipo:'quem',
     enunciado:'Inglês de nascimento, alemão por temperamento e americano por residência, dirigiu o laboratório de Cornell por 35 anos sem se naturalizar.',
     opcoes:['Edward B. Titchener','James R. Angell','William McDougall','Harvey Carr'],
-    explicacao:'Titchener foi aluno de Wundt em Leipzig e levou a psicologia wundtiana aos Estados Unidos. Abria seu texto com a frase de que a psicologia é a ciência da mente. Seu sistema é o estruturalismo.',
+    explicacao:'Titchener foi aluno de Wundt em Leipzig e levou a psicologia wundtiana para os Estados Unidos, onde dirigiu o laboratório de Cornell por 35 anos sem nunca se naturalizar americano. Abria seus textos com a frase "a psicologia é a ciência da mente"; o sistema que construiu a partir dela ficou conhecido como estruturalismo.',
     fonte:'Keller (1973), cap. 7, pp. 59–60.',
     dica:'Estruturalismo.' },
   { tipo:'conceito',
     enunciado:'Como Titchener distingue o mundo da física do mundo da psicologia?',
     opcoes:['A física descreve o mundo sem o observador; a psicologia o descreve como aparece na experiência','A física estuda o corpo; a psicologia estuda uma alma imaterial','A física usa experimentos; a psicologia só usa observação natural','A física trata do passado; a psicologia trata do presente'],
-    explicacao:'Para a física, a luz é uma onda e o som é vibração, independentes de quem os percebe. A psicologia trata do mundo "com o homem incluído": cores, tons e sensações. Keller lembra que Titchener não negava que o físico também tivesse experiência.',
+    explicacao:'Para a física, diz Titchener, a luz é uma onda e o som é vibração, independentes de quem os percebe: o mundo é descrito "com o homem deixado de fora". A psicologia descreve o mesmo mundo "com o homem incluído": cores, tons, sensações. Keller lembra que Titchener não negava que o físico também tivesse experiência; apenas notava que a descrição física dele era feita em termos conceituais, como ondas eletromagnéticas.',
     fonte:'Keller (1973), cap. 7, pp. 60–61.',
     dica:'"Left out" contra "left in".' },
   { tipo:'conceito',
     enunciado:'O que caracterizava o funcionalismo de Chicago em contraste com o estruturalismo?',
     opcoes:['Interesse na função da mente (para que serve) e não na sua estrutura (o que é)','Interesse exclusivo pelas sensações elementares','Recusa de qualquer estudo de animais e crianças','Adoção da introspecção como único método'],
-    explicacao:'Os funcionalistas eram pragmáticos, vinham da tradição biológica darwiniana e queriam ampliar a psicologia para incluir animais, crianças, anormais e diferenças individuais.',
+    explicacao:'Os funcionalistas eram pragmáticos e vinham da tradição biológica darwiniana, não da fisiológica de Leipzig; por isso perguntavam para que serve a mente, e não apenas o que ela é. Essa pergunta os levou a querer ampliar a psicologia para incluir animais, crianças, quadros anormais e diferenças individuais, territórios que o estruturalismo mal tocava.',
     fonte:'Keller (1973), cap. 8, pp. 73–75.',
     dica:'Darwin e a sobrevivência do mais apto.' },
   { tipo:'quem',
@@ -1017,49 +1202,49 @@ const QUIZZES = {
   { tipo:'conceito',
     enunciado:'No texto de Watson que Keller comenta, qual é o objeto, o método e o problema central da psicologia?',
     opcoes:['Objeto: comportamento; método: inteiramente objetivo; problema: predição e controle','Objeto: consciência; método: introspecção treinada; problema: descrever a experiência','Objeto: mente; método: questionários; problema: compreender o sujeito','Objeto: comportamento; método: introspecção; problema: explicar pela fisiologia'],
-    explicacao:'Watson abre o texto de 1914 dizendo que a psicologia, vista pelo behaviorista, é um ramo experimental puramente objetivo das ciências naturais.',
+    explicacao:'Watson abre o texto de 1914 com uma frase que funciona quase como manifesto: a psicologia, vista pelo behaviorista, é um ramo experimental puramente objetivo das ciências naturais. Objeto, método e problema central decorrem diretamente dela.',
     fonte:'Keller (1973), cap. 9, p. 86.',
     dica:'A primeira frase fala em "ramo experimental puramente objetivo".' },
   { tipo:'obra',
     enunciado:'Qual livro de Watson, publicado em 1919, Keller destaca como o mais conhecido e dedicado à psicologia humana?',
     opcoes:['Psychology from the Standpoint of a Behaviorist (1919)','Behavior: An Introduction to Comparative Psychology (1914)','Behaviorism (1924)','Psychology as the Behaviorist Views It (1913)'],
-    explicacao:'Behavior (1914) foi seu primeiro livro, dedicado a Angell e Donaldson. Behaviorism (1924) é a versão popular. "Psychology as the Behaviorist Views It" é o artigo de 1913 da Psychological Review.',
+    explicacao:'Behavior (1914) foi o primeiro livro de Watson, dedicado a Angell e Donaldson e ainda centrado em psicologia animal. Behaviorism (1924) é a versão popular, escrita para um público maior. "Psychology as the Behaviorist Views It" nem é livro: é o artigo de 1913 na Psychological Review que deu início a tudo.',
     fonte:'Keller (1973), cap. 9, p. 86.',
     dica:'O título tem "from the standpoint".' },
   { tipo:'quem',
     enunciado:'Um relatório de 1912 sobre movimento aparente inaugurou um novo sistema. Quem Keller aponta como o fundador dele?',
     opcoes:['Max Wertheimer','Wolfgang Köhler','Kurt Koffka','Franz Brentano'],
-    explicacao:'Wertheimer foi o fundador da Gestalt; Köhler e Koffka, os principais expoentes. Keller adota o termo alemão porque nenhuma tradução (forma, padrão, configuração) o substitui bem.',
+    explicacao:'Wertheimer foi o fundador da Gestalt, a partir de um relatório de 1912 sobre movimento aparente; Köhler e Koffka, que haviam sido os observadores do experimento, tornaram-se os principais expoentes do sistema. Keller prefere manter o termo alemão porque nenhuma tradução (forma, padrão, configuração) o substitui bem.',
     fonte:'Keller (1973), cap. 10, p. 105.',
     dica:'Köhler e Koffka foram os observadores do experimento.' },
   { tipo:'conceito',
     enunciado:'Qual foi o primeiro grande protesto da Gestalt, segundo Keller?',
     opcoes:['Contra o elementarismo: mente ou comportamento como um mosaico de unidades elementares','Contra o uso de animais em experimentos','Contra qualquer estudo da percepção','Contra a ideia de que o cérebro tem função psicológica'],
-    explicacao:'O segundo protesto foi contra o associacionismo, a "cola mental" que ligava os elementos. A crítica valia para Titchener (sensações), Watson (reflexos) e até para o princípio do condicionamento.',
+    explicacao:'O primeiro protesto da Gestalt foi contra o elementarismo: a ideia de que a mente, ou o comportamento, é um mosaico de unidades elementares. O segundo veio contra o associacionismo, a "cola mental" que prendia esses elementos uns aos outros, crítica que valia para Titchener (as sensações), para Watson (os reflexos) e até para o próprio princípio do condicionamento.',
     fonte:'Keller (1973), cap. 10, pp. 106–107.',
     dica:'A Gestalt valoriza o todo.' },
   { tipo:'quem',
     enunciado:'Sua psicologia "hórmica" (do grego hormao, impelir) punha o peso na conação: o esforço propositivo de organismos para alcançar seus objetivos.',
     opcoes:['William McDougall','Sigmund Freud','Franz Brentano','Harvey Carr'],
-    explicacao:'McDougall apresentou o sistema em Outline of Psychology (1923). Keller vê nele elementos em comum com o funcionalismo, também pela influência de William James.',
+    explicacao:'McDougall apresentou esse sistema em Outline of Psychology (1923), com peso especial na conação: o esforço propositivo dos organismos para alcançar seus objetivos. Keller vê nele elementos em comum com o funcionalismo, herdados em parte da mesma influência de William James.',
     fonte:'Keller (1973), cap. 11, p. 124.',
     dica:'O nome do sistema também aparece como psicologia "propositiva".' },
   { tipo:'conceito',
     enunciado:'Por que Keller diz que a psicanálise nunca foi uma "escola" no sentido usado no livro?',
     opcoes:['Freud e seus seguidores não pretendiam reunir todos os fatos da psicologia num sistema coordenado','Porque Freud rejeitava qualquer forma de método científico','Porque a psicanálise só existiu na Europa','Porque nunca teve seguidores'],
-    explicacao:'Segundo Keller, a psicanálise vale como método de terapia e teoria da personalidade. Não cobre a psicologia como um todo, como fizeram estruturalismo, funcionalismo, behaviorismo e Gestalt.',
+    explicacao:'Segundo Keller, a psicanálise vale como método de terapia e como teoria da personalidade, e nisso seu valor é real. O que lhe falta, para contar como "escola" no sentido do livro, é a pretensão de cobrir a psicologia como um todo, algo que estruturalismo, funcionalismo, behaviorismo e Gestalt, cada um a seu modo, tentaram fazer.',
     fonte:'Keller (1973), cap. 11.',
     dica:'A palavra-chave é "sistema" de toda a psicologia.' },
   { tipo:'quem',
     enunciado:'Partindo do princípio pavloviano, enfatizou a contiguidade entre estímulo e resposta, e não entre estímulos. Suas fotos de gatos escapando de caixas-problema sustentavam a teoria.',
     opcoes:['E. R. Guthrie','E. C. Tolman','C. L. Hull','B. F. Skinner'],
-    explicacao:'A teoria da contiguidade de Guthrie (The Psychology of Learning, 1932) foi bem argumentada, mas gerou pouca pesquisa e pouca aceitação, segundo Keller. Não foi refutada: seu apelo era menor que o das rivais.',
+    explicacao:'Partindo do princípio pavloviano, Guthrie enfatizava a contiguidade entre estímulo e resposta, não entre estímulos, e sustentava a teoria com fotografias de gatos escapando de caixas-problema. A teoria, exposta em The Psychology of Learning (1932), foi bem argumentada, mas gerou pouca pesquisa e pouca aceitação, segundo Keller; não chegou a ser refutada, apenas perdeu para rivais de maior apelo.',
     fonte:'Keller (1973), cap. 12, pp. 131–132.',
     dica:'Contiguidade.' },
   { tipo:'obra',
     enunciado:'Qual obra de 1932 descreve um "behaviorismo propositivo-gestáltico", com mapas cognitivos de ratos em labirintos e variáveis intervenientes?',
     opcoes:['Purposive Behavior in Animals and Men, de Tolman','The Psychology of Learning, de Guthrie','Principles of Behavior, de Hull','The Behavior of Organisms, de Skinner'],
-    explicacao:'Tolman aceitava variáveis intervenientes (cognições, propósitos, expectativas) tratadas como conceituais, nem mentais nem fisiológicas. Os críticos diziam que eram causas mentais disfarçadas. Principles of Behavior é de 1943, e The Behavior of Organisms, de 1938.',
+    explicacao:'Em Purposive Behavior in Animals and Men (1932), Tolman descreve um "behaviorismo propositivo-gestáltico" apoiado em mapas cognitivos de ratos em labirintos. Ele aceitava variáveis intervenientes (cognições, propósitos, expectativas) tratadas como conceituais, nem mentais nem fisiológicas; os críticos diziam que eram causas mentais disfarçadas. Principles of Behavior, de Hull, é de 1943; The Behavior of Organisms, de Skinner, é de 1938.',
     fonte:'Keller (1973), cap. 12, p. 132.',
     dica:'"Purposive" no título.' },
   { tipo:'conceito',
@@ -1071,75 +1256,336 @@ const QUIZZES = {
   { tipo:'conceito',
     enunciado:'Onde Skinner busca a explicação do comportamento, na síntese de Keller sobre The Behavior of Organisms (1938)?',
     opcoes:['Em situações ambientais, passadas e presentes','No sistema nervoso','Na vida mental','Em variáveis intervenientes cognitivas'],
-    explicacao:'Sem referência fisiológica e sem "agente interno", o sistema ficou apoiado em relações observáveis. Os critérios de mente, discutidos de Darwin a Watson, não tinham lugar ali, nem as variáveis intervenientes.',
+    explicacao:'Sem referência fisiológica e sem qualquer "agente interno", o sistema de Skinner ficou apoiado inteiramente em relações observáveis entre situações ambientais, passadas e presentes. Os critérios de mente que atravessam o livro, discutidos de Darwin a Watson, não tinham lugar ali, e tampouco as variáveis intervenientes que Tolman e Hull aceitavam.',
     fonte:'Keller (1973), cap. 12, p. 137.',
     dica:'Compare com o que Skinner diz em About Behaviorism.' },
   { tipo:'conceito',
     enunciado:'Keller diz que ao menos 15 das 24 "leis" de The Behavior of Organisms já tinham sido tratadas, em outro contexto, em qual obra clássica?',
     opcoes:['The Integrative Action of the Nervous System, de Sherrington','Conditioned Reflexes, de Pavlov','Animal Intelligence, de Thorndike','Behavior, de Watson'],
-    explicacao:'A Sherrington (1906) remontam leis como limiar, latência, pós-descarga e somação temporal. Quatro vieram de Pavlov: condicionamento tipo S, extinção, indução (generalização) e discriminação.',
+    explicacao:'Keller remonta a Sherrington (1906), vencedor do prêmio Nobel, leis como limiar, latência, pós-descarga e somação temporal; quatro outras vieram de Pavlov: condicionamento tipo S, extinção, indução (generalização) e discriminação. Das 24 leis do livro de 1938, portanto, a maioria já existia, o que não diminui o mérito de reuni-las num sistema único.',
     fonte:'Keller (1973), cap. 12, pp. 135–136.',
     dica:'Prêmio Nobel, 1906.' },
   { tipo:'conceito',
     enunciado:'Na terminologia de 1938, o que a expressão "Type R" sugeria?',
     opcoes:['Dependência do reforço em relação à resposta','Dependência da resposta em relação ao estímulo antecedente','Uma resposta de tipo reflexo','Uma resposta sempre reforçada em razão fixa'],
-    explicacao:'"Type S" sugeria a dependência do estímulo, como no pareamento pavloviano de sino e comida. Keller nota que os termos não pegaram: hoje se diz operante e respondente.',
+    explicacao:'"Type S" sugeria a dependência do estímulo, como no pareamento pavloviano de sino e comida. Keller nota que nenhum dos dois termos pegou: hoje se diz operante e respondente.',
     fonte:'Keller (1973), cap. 12, p. 137, nota 6.',
     dica:'R de resposta.' },
   { tipo:'conceito',
     enunciado:'Qual é, para Keller, a definição de psicologia mais satisfatória hoje?',
     opcoes:['A do behaviorismo radical','A da ciência da experiência imediata','A da ciência da mente','A da ciência das configurações (gestalten)'],
-    explicacao:'Keller admite seu "viés sistemático" e chama o behaviorismo radical de o único sistema vigoroso, sustentado por número apreciável de cientistas naturais. Ressalva que o sistema é incompleto e pode dar lugar a outro.',
+    explicacao:'Keller admite, sem rodeios, seu "viés sistemático": para ele, o behaviorismo radical é o único sistema de fato vigoroso, sustentado por um número apreciável de cientistas naturais. A ressalva vem logo em seguida: o sistema está incompleto e pode, um dia, dar lugar a outro. Isso, porém, não muda a conclusão do livro.',
     fonte:'Keller (1973), cap. 13, p. 143.',
     dica:'É a conclusão do livro e o tema do Skinner.' },
   { tipo:'conceito',
     enunciado:'Segundo Keller, a distinção de Descartes entre reflexo e comportamento ditado pela alma só ganha interesse por qual ideia atual?',
     opcoes:['A divisão do comportamento em respondente e operante','A divisão entre inato e aprendido','A divisão entre consciente e inconsciente','A divisão entre sensação e percepção'],
-    explicacao:'Keller diz que o presente seleciona seu passado: nem Titchener nem Watson dariam atenção ao ponto. Só interessa a quem aceita duas classes de comportamento.',
+    explicacao:'Keller diz que o presente seleciona seu passado: nem Titchener nem Watson dariam atenção a essa distinção de Descartes. Ela só interessa, no fim, a quem já aceita duas classes de comportamento, respondente e operante, como Skinner aceita.',
     fonte:'Keller (1973), cap. 13, p. 143.',
     dica:'Olhe para o vocabulário do Skinner.' },
   { tipo:'conceito',
     enunciado:'Qual novidade da 2ª edição (1973) Keller descreve como uma espécie de "penitência"?',
     opcoes:['Um capítulo sobre Freud e McDougall','Um capítulo sobre o behaviorismo radical','A inclusão de Hobbes e Helmholtz','O índice remissivo'],
-    explicacao:'A segunda edição acrescentou um capítulo sobre teorias da aprendizagem e behaviorismo radical, supriu a omissão de Hobbes e Helmholtz e ganhou o índice, feito pelo filho de Keller, John V. Keller.',
+    explicacao:'Entre a primeira edição e a segunda se passaram 36 anos, e Keller aproveitou a revisão para três coisas: acrescentar um capítulo sobre teorias da aprendizagem e behaviorismo radical, suprir a omissão de Hobbes e Helmholtz (sua "penitência", nas palavras dele) e incluir um índice remissivo, feito pelo filho dele, John V. Keller.',
     fonte:'Keller (1973), Prefácio da 2ª edição.',
     dica:'Ele acha que faltou espaço para dois autores de "fora" do behaviorismo.' },
   { tipo:'quem',
     enunciado:'No prefácio da 1ª edição (1937), Keller agradece pelo apoio na redação a Clarence Young, à esposa Frances e a quem mais, então na Universidade de Minnesota?',
     opcoes:['B. F. Skinner','John B. Watson','Edward L. Thorndike','Edwin G. Boring'],
-    explicacao:'Skinner e Keller foram colegas de turma em Harvard. No prefácio, Keller agradece a Skinner, a Clarence Young e à esposa pelo encorajamento e pela ajuda durante a composição dos capítulos.',
+    explicacao:'Skinner e Keller foram colegas de turma em Harvard entre 1926 e 1931. No prefácio da primeira edição, Keller agradece a Skinner, então na Universidade de Minnesota, a Clarence Young e à esposa Frances pelo encorajamento e pela ajuda durante a composição dos capítulos.',
     fonte:'Keller (1973), Prefácio da 1ª edição.',
     dica:'Pense em quem é o "amigo" desta seção.' },
   { tipo:'quem',
     enunciado:'Fisiólogo russo, autor de Os Reflexos do Cérebro (1863), afirmou que todos os atos da vida consciente ou inconsciente são reflexos. Quase foi levado aos tribunais por "imoralidade".',
     opcoes:['Ivan Sechenov','Ivan Pavlov','Vladimir Bekhterev','Charles Sherrington'],
-    explicacao:'Sechenov é chamado de pai da "reflexologia". Pavlov e Bekhterev vieram depois, e Sherrington era britânico.',
+    explicacao:'Sechenov é chamado, no livro, de pai da "reflexologia": foi ele quem primeiro ousou afirmar, em 1863, que todos os atos da vida consciente ou inconsciente são reflexos, afirmação que quase o levou aos tribunais por imoralidade. Pavlov e Bekhterev vieram depois dele, e Sherrington, de quem Keller também trata no mesmo capítulo, era britânico.',
     fonte:'Keller (1973), cap. 4, pp. 29–30.',
     dica:'Foi anterior a Pavlov e o influenciou.' },
   { tipo:'conceito',
     enunciado:'O que diz o "cânone de Lloyd Morgan" sobre a mente dos animais?',
     opcoes:['Não se deve atribuir uma ação a uma faculdade psíquica superior se uma inferior puder explicá-la','Todos os animais têm consciência equivalente à humana','Só os mamíferos podem aprender por tentativa e erro','Toda ação animal deve ser explicada por instinto'],
-    explicacao:'Morgan queria evitar a "humanização do bruto", em contraste com o exagero de Romanes, que atribuía até "curiosidade" à mariposa que voa para a vela.',
+    explicacao:'O cânone é, antes de tudo, um princípio de parcimônia: Morgan queria evitar a "humanização do bruto", em contraste explícito com o exagero de Romanes, que chegava a atribuir "curiosidade" à mariposa que voa para a vela.',
     fonte:'Keller (1973), cap. 6.',
     dica:'É um princípio de parcimônia.' },
   { tipo:'conceito',
     enunciado:'Keller diz que Thorndike não se apegava às suas "leis", que ia mudando conforme os dados, exceto talvez a uma. Qual?',
     opcoes:['A lei do efeito','A lei do deslocamento associativo','A lei da assimilação','A lei da contiguidade'],
-    explicacao:'Keller descreve Thorndike como alguém de abordagens novas e boas intuições, mas não um teórico no sentido usual. No cap. 12, compara a lei do efeito ao "Type R" de Skinner, o que mais se aproxima dela no sistema de 1938.',
+    explicacao:'Keller descreve Thorndike como alguém de abordagens novas e boas intuições, mas não como um teórico no sentido usual, disposto a defender um sistema fechado. No cap. 12, é a lei do efeito que ele compara ao "Type R" de Skinner, por ser o que mais se aproxima dela no sistema de 1938.',
     fonte:'Keller (1973), cap. 5, p. 45.',
     dica:'É a que Keller compara ao "Type R" de Skinner.' },
   { tipo:'capitulo',
     enunciado:'Em qual capítulo Keller conta a história do reflexo, de Descartes a Pavlov e Sherrington?',
     opcoes:['Cap. 4 · The Story of the Reflex','Cap. 2 · Sensory Physiology','Cap. 6 · The Animal and Its Mind','Cap. 12 · Learning Theories and the New Behaviorism'],
-    explicacao:'O capítulo 4 retoma Descartes e passa por Marshall Hall, Sechenov, Sherrington, Pavlov e Bekhterev. O capítulo 5 trata do comportamento voluntário e da lei do efeito.',
+    explicacao:'O capítulo 4 retoma Descartes e passa por Marshall Hall, Sechenov, Sherrington, Pavlov e Bekhterev, na ordem em que cada um herdou e ampliou o problema do reflexo. O capítulo seguinte, o 5, trata do comportamento voluntário e da lei do efeito.',
     fonte:'Keller (1973), cap. 4.',
     dica:'"Story" no título.' },
   { tipo:'capitulo',
     enunciado:'Qual capítulo, acrescentado à 2ª edição, trata da aprendizagem em Guthrie, Tolman, Hull e Skinner?',
     opcoes:['Cap. 12 · Learning Theories and the New Behaviorism','Cap. 9 · Watson and Behaviorism','Cap. 10 · Germany and Gestalt','Cap. 13 · The Problem of Definition'],
-    explicacao:'É o penúltimo capítulo. O último, "The Problem of Definition", volta ao ponto de partida e apresenta a posição de Keller sobre a definição de psicologia.',
+    explicacao:'É o penúltimo capítulo do livro. O último, "The Problem of Definition", volta ao ponto de partida da obra inteira e apresenta, finalmente, a posição de Keller sobre a definição de psicologia.',
     fonte:'Keller (1973), Prefácio da 2ª edição e cap. 12.',
     dica:'O capítulo tem "new behaviorism" no título.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'skinner-shb': {
+  autor:'skinner', tipo:'livro',
+  titulo:'Science and Human Behavior', ano:1953, edicao:'Extended ed., 2024',
+  subtitulo:'Perguntas para pensar sobre conceitos básicos, do reflexo à cultura',
+  arte:'img/shb-capa.png', arteFit:'contain',
+  arteAlt:'Capa da edição estendida de Science and Human Behavior, de B. F. Skinner: título em letras claras sobre painel escuro',
+  rodada:10,
+  referencia:'Skinner, B. F. (2024). <i>Science and human behavior</i> (Extended ed.). B. F. Skinner Foundation. (Original work published 1953)',
+  leituraInicial:'O livro tem 29 capítulos em seis seções. Para ler pouco antes de jogar, comece pelos capítulos 2 e 3, que dizem o que Skinner entende por ciência e criticam as explicações por causas internas, e pelo capítulo 5, que apresenta o operante. A edição estendida traz também uma introdução pessoal de F. S. Keller (p. xxix). As páginas citadas são as desta edição.',
+  intro:'Science and Human Behavior aplica a análise do comportamento a quase tudo: aprendizagem, emoção, autocontrole, grupos, governo, cultura. As perguntas daqui são de pensar, não de decorar. Depois de algumas respostas aparece um “Para saber mais”, com o trecho do livro que vale a leitura.',
+  conquistas:{ aprovado:'Leitor(a) de Science and Human Behavior', perfeito:'Análise funcional' },
+  perguntas:[
+  { tipo:'conceito',
+    enunciado:'Uma equipe diz que sua pesquisa sobre comportamento é científica porque usa equipamentos caros e modelos matemáticos sofisticados. O que Skinner diria que essa justificativa deixa de fora?',
+    opcoes:['Que a ciência é, antes de tudo, um conjunto de atitudes: lidar com os fatos e aceitar resultados mesmo quando contrariam o que se esperava','Que só é ciência o que já tem uma teoria completa antes de coletar dados','Que instrumentos e cálculos devem ser evitados, porque atrapalham a observação','Que ciência é o conjunto de informações acumuladas em livros e laboratórios'],
+    explicacao:'No cap. 2, Skinner concede que instrumentos e medida precisa são ajudas valiosas, mas insiste que não são a ciência em si: pode-se medir e calcular sem ser científico, assim como se pode ser científico sem esses recursos. O que ele descreve como ciência são atitudes (preferir os fatos ao que se diz sobre eles, aceitar fatos incômodos, praticar honestidade intelectual, esperar por uma resposta satisfatória em vez de inventar uma) somadas à busca por relações regulares entre eventos. A informação acumulada em livros e laboratórios é produto da ciência; não é a ciência propriamente dita.',
+    fonte:'Skinner (1953/2024, cap. 2, pp. 11–14).',
+    dica:'Pense no que sobra da ciência quando se tiram os aparelhos.',
+    saibaMais:saibaShb(2,{ secao:'Some important characteristics of science', pp:'12–14',
+      porque:'Define o que Skinner chama de ciência antes de aplicá-la ao comportamento humano. Mostra por que os métodos científicos podem ser estendidos a um novo objeto de estudo mesmo sem instrumentos conhecidos.',
+      conceitos:['atitudes científicas','honestidade intelectual','lei científica'] }) },
+  { tipo:'conceito',
+    enunciado:'Skinner propõe trocar “causa e efeito” por “relação funcional entre variáveis”. O que essa troca permite?',
+    opcoes:['Afirmar que eventos ocorrem juntos numa certa ordem (mudou a variável independente, mudou a dependente) sem dizer como a causa produz o efeito','Concluir que o comportamento não tem causas, apenas correlações','Restringir a ciência ao que acontece dentro do organismo','Dispensar a manipulação experimental, bastando observar o cotidiano'],
+    explicacao:'No cap. 3, "causa" vira mudança numa variável independente, e "efeito", mudança numa variável dependente. Os termos novos dizem apenas que os eventos ocorrem numa certa ordem; não sugerem como uma causa causa o efeito, e é por isso que Skinner os prefere aos antigos. Demonstrar a relação (agindo sobre uma variável e observando o que muda na outra) é, para ele, o coração da ciência experimental (cap. 15).',
+    fonte:'Skinner (1953/2024, cap. 3, p. 23; cap. 15, p. 227).',
+    dica:'A palavra-chave é “ordem”, não “força”.' },
+  { tipo:'caso',
+    enunciado:'Um jornal explica que um homem roubou pão “porque estava com fome”. Skinner descreve explicações assim como uma cadeia de três elos: operação externa, condição interna, comportamento. Onde está o problema?',
+    opcoes:['A “fome” costuma ser inferida do próprio comportamento a explicar; quando não é, é inferida da privação externa, e então essa condição externa bastaria para explicar o roubo','A fome não existe, então o roubo fica sem explicação possível','Falta um exame fisiológico que meça a fome antes de qualquer análise do roubo','O problema é ético: explicar o roubo pela fome equivale a justificá-lo'],
+    explicacao:'O elo interno raramente é observado de forma independente dos outros dois. Quando é inferido do próprio comportamento, a explicação é circular; quando é inferido da privação, volta-se ao primeiro elo, que já bastava para explicar o roubo. De qualquer forma, o elo interno só ajudaria a controlar o comportamento se pudesse ser manipulado diretamente, o que em geral não se consegue fazer com "fome" ou "ansiedade".',
+    fonte:'Skinner (1953/2024, cap. 3, pp. 33–35).',
+    dica:'Se a fome só aparece quando ele rouba, ela explica o roubo?',
+    saibaMais:saibaShb(3,{ secao:'Inner “causes”', pp:'27–35',
+      porque:'Concentra a crítica de Skinner às explicações por causas internas (neurais, psíquicas e conceituais). É um bom capítulo para reler sempre que uma explicação começar com “ele fez isso porque sentia…”.',
+      conceitos:['causas internas','explicação circular','variáveis externas'] }) },
+  { tipo:'conceito',
+    enunciado:'Ao criticar explicações por estados internos, como fome ou ansiedade, Skinner está dizendo que esses estados não existem?',
+    opcoes:['Não. Ele diz que não são relevantes numa análise funcional, porque é preciso, de qualquer modo, voltar às condições externas que os produzem','Sim. Para ele, só existe comportamento observável e mais nada','Sim, mas apenas os psíquicos; os fisiológicos ele aceita como causa suficiente','Não, e por isso recomenda medir esses estados antes de analisar o ambiente'],
+    explicacao:'A objeção de Skinner não é à existência desses estados, e sim ao papel que lhes é atribuído como explicação. Não se explica um sistema ficando inteiramente dentro dele; é preciso, mais cedo ou mais tarde, chegar às forças que atuam sobre o organismo a partir de fora. Ficar parado no elo interno também deixa a pergunta seguinte sem resposta: o que produziu a "fome", a "ansiedade"?',
+    fonte:'Skinner (1953/2024, cap. 3, p. 35).',
+    dica:'Há diferença entre “não existe” e “não explica”.',
+    saibaMais:saibaShb(3,{ secao:'A functional analysis', pp:'35–39',
+      porque:'É a passagem em que Skinner separa explicar de descrever estados internos e apresenta a análise funcional como alternativa: relacionar comportamento a condições externas que podem ser identificadas e manipuladas.',
+      conceitos:['análise funcional','variável independente','estados internos'],
+      trecho:{ en:'“…they are not relevant in a functional analysis.”', pt:'“…não são relevantes numa análise funcional.” (tradução livre)', ref:'(Skinner, 1953/2024, p. 35)' } }) },
+  { tipo:'caso',
+    enunciado:'Depois de várias consultas dolorosas, uma criança passa a chorar e a suar ao sentir o cheiro do consultório. Como a análise do reflexo condicionado descreve isso?',
+    opcoes:['Um estímulo antes neutro (o cheiro), seguido pelo estímulo que já eliciava a resposta, passou a eliciá-la: houve substituição de estímulo','A criança chora porque o choro foi seguido de alívio em consultas anteriores (reforço da resposta)','A criança antecipa a dor por raciocínio e decide chorar','O cheiro tornou-se um reforçador positivo para o choro'],
+    explicacao:'No cap. 4, o condicionamento descrito por Pavlov é tratado como um processo de substituição de estímulo: um estímulo antes neutro passa a eliciar a resposta depois de ser seguido, repetidas vezes, pelo estímulo que já a eliciava. O que muda é o estímulo, e a resposta continua vindo depois dele, não antes. Quando o que importa deixa de ser o estímulo antecedente e passa a ser o efeito da resposta sobre o ambiente, já se trata de outro processo: o operante, apresentado no capítulo seguinte.',
+    fonte:'Skinner (1953/2024, cap. 4, p. 53).',
+    dica:'Repare em quem vem primeiro: o cheiro ou o choro?',
+    saibaMais:saibaShb(4,{ secao:'Conditioned reflexes', pp:'50–58',
+      porque:'Mostra o que Skinner conserva do estudo do reflexo e por que ele não basta: o reflexo lida sobretudo com a fisiologia interna, enquanto o que mais interessa nos assuntos humanos é o comportamento que age sobre o mundo.',
+      conceitos:['reflexo','estímulo eliciador','condicionamento respondente','substituição de estímulo'] }) },
+  { tipo:'caso',
+    enunciado:'Uma criança chora ao ouvir um estrondo. Outra chora no mercado e recebe a atenção do pai. Qual é a diferença central entre os dois casos no que determina a probabilidade do choro?',
+    opcoes:['No primeiro, o choro é eliciado pelo estímulo que o antecede; no segundo, a probabilidade do choro depende das consequências que ele produziu no passado','O primeiro é involuntário e o segundo é livre de causas, decidido pela criança','No primeiro o choro é aprendido; no segundo é inato','Não há diferença: em ambos o choro é resposta a um estímulo imediato'],
+    explicacao:'Segundo o cap. 5, o reflexo lida sobretudo com a fisiologia interna do organismo, e a resposta é eliciada por um estímulo que a precede. No operante, são as consequências que "retroalimentam" o organismo e mudam a probabilidade de a resposta ocorrer de novo. Isso não torna o choro no mercado "livre de causas", pois não é essa a posição de Skinner: o operante também tem variáveis, só que localizadas na história de consequências, não no estímulo imediato.',
+    fonte:'Skinner (1953/2024, cap. 5, p. 59).',
+    dica:'Pergunte o que mudou a probabilidade: o que veio antes ou o que aconteceu depois em outras ocasiões?' },
+  { tipo:'conceito',
+    enunciado:'Teorias antigas explicavam o comportamento por “tendências”, “força do hábito” ou “potencial excitatório”. Skinner usa “probabilidade de resposta”. Qual é a vantagem?',
+    opcoes:['A probabilidade se observa na frequência da resposta e varia continuamente, o que permite estudar o efeito de várias variáveis sem supor entidades internas','Ela permite prever exatamente cada resposta individual','Ela dispensa definir o que conta como a resposta','Ela mostra que o organismo tem um mecanismo interno de decisão'],
+    explicacao:'O cap. 5 parte de uma pergunta simples: como se observa e se mede uma "tendência"? A resposta de Skinner é a frequência da resposta: a probabilidade varia continuamente entre "nunca" e "sempre", o que permite lidar com variáveis que não eliciam a resposta, apenas tornam sua ocorrência mais ou menos provável.',
+    fonte:'Skinner (1953/2024, cap. 5, pp. 62–63).',
+    dica:'O que dá para contar num registro de respostas?',
+    saibaMais:saibaShb(5,{ secao:'Operant conditioning', pp:'62–66',
+      porque:'Apresenta o conceito de probabilidade de resposta e reformula a lei do efeito. É o ponto em que Skinner troca “tendências” internas por uma medida observável.',
+      conceitos:['probabilidade de resposta','lei do efeito','condicionamento operante'] }) },
+  { tipo:'caso',
+    enunciado:'Uma professora elogia em público um aluno tímido e, nas semanas seguintes, ele participa menos. Como Skinner analisaria o elogio?',
+    opcoes:['Reforçador se define pelo efeito: como a participação não aumentou, o elogio não funcionou como reforçador para esse aluno (e talvez tenha sido aversivo)','O elogio é reforçador por natureza, então o problema está no aluno','Só consequências materiais, como notas ou prêmios, podem reforçar o comportamento','A queda mostra que a participação está em extinção, pois todo estímulo social extingue a resposta'],
+    explicacao:'Segundo o cap. 5, a única forma de saber se um evento reforça, para um dado organismo e em certas condições, é um teste direto: observar a frequência de uma resposta, tornar o evento contingente a ela e ver se a frequência muda. Julgar pelo que "parece agradável" pode falhar, porque projetamos nos outros o que nos reforça a nós mesmos.',
+    fonte:'Skinner (1953/2024, cap. 5, pp. 72–73).',
+    dica:'Reforço se conhece pelo que acontece depois com a resposta.',
+    saibaMais:saibaShb(5,{ secao:'What events are reinforcing?', pp:'72–76',
+      porque:'Ensina a identificar reforçadores sem projetar as próprias preferências e distingue reforço positivo de negativo. É útil em ensino e em clínica, onde “o que deveria funcionar” nem sempre funciona.',
+      conceitos:['reforçador positivo e negativo','teste direto','definição pelo efeito'] }) },
+  { tipo:'caso',
+    enunciado:'No mercado, uma criança faz birra e o pai compra o doce; ela para de gritar. Nas semanas seguintes, as birras ficam mais frequentes e o pai cede cada vez mais rápido. Que processos explicam os dois comportamentos?',
+    opcoes:['A birra foi reforçada positivamente (o doce); o ato de ceder foi reforçado negativamente (o fim do barulho aversivo)','Só a birra foi reforçada; o pai age por decisão própria e não por consequências','A birra foi punida e por isso ficou mais frequente','O ato de ceder foi reforçado positivamente pelo doce que o pai mesmo comprou'],
+    explicacao:'Reforço positivo adiciona um estímulo; reforço negativo remove um estímulo aversivo. Nos dois casos, a probabilidade da resposta aumenta (cap. 5); o que muda é a operação, não o efeito. O episódio inteiro mostra dois operantes mantidos ao mesmo tempo: cada pessoa fornece a consequência do comportamento da outra, num ciclo que se retroalimenta.',
+    fonte:'Skinner (1953/2024, cap. 5, p. 73).',
+    dica:'Cada um obteve ou removeu alguma coisa. Quem obteve? Quem removeu?' },
+  { tipo:'caso',
+    enunciado:'Uma pessoa recém-jantada trabalha por dinheiro, mas não trabalharia por um prato de comida. Como a análise operante explica que o dinheiro seja eficaz nesse momento?',
+    opcoes:['O dinheiro é um reforçador condicionado generalizado: foi pareado com muitos reforçadores, então quase sempre há alguma privação em vigor para a qual ele funciona','O dinheiro tem valor intrínseco e reforça independentemente da história da pessoa','O dinheiro reduz diretamente a fome e a sede, mesmo depois do jantar','O trabalho passa a ser um reflexo eliciado pela visão do dinheiro'],
+    explicacao:'Um reforçador condicionado é generalizado quando foi pareado com mais de um reforçador primário ao longo da história do indivíduo. A eficácia da comida como reforçador depende da privação do momento; já o reforçador generalizado quase sempre encontra alguma privação apropriada em vigor, e por isso o estado momentâneo do organismo pesa menos.',
+    fonte:'Skinner (1953/2024, cap. 5, p. 77).',
+    dica:'Comida perde força depois do jantar. E o que foi pareado com muitas coisas diferentes?' },
+  { tipo:'caso',
+    enunciado:'Você quer que um pombo (ou uma criança) emita um comportamento que quase nunca ocorre. Esperar que apareça sozinho para reforçá-lo levaria muito tempo. Que procedimento a análise operante propõe?',
+    opcoes:['Reforçar aproximações sucessivas, exigindo aos poucos respostas mais parecidas com a final','Aumentar a privação até que a resposta ocorra por necessidade','Punir todas as respostas que não sejam a final','Reforçar qualquer resposta com a mesma frequência, para não desanimar o organismo'],
+    explicacao:'O cap. 6 trata o comportamento como contínuo, não como um repertório fixo de atos prontos: um ato complexo se constrói por reforçamento diferencial de variações sucessivas da resposta. É assim que uma resposta rara chega a alta probabilidade em pouco tempo. Punir todas as respostas que não sejam a final não constrói a resposta desejada, e reforçar tudo por igual, sem diferenciar, não constrói nada.',
+    fonte:'Skinner (1953/2024, cap. 6, pp. 91–97).',
+    dica:'Passo a passo, cada passo um pouco mais perto do alvo.',
+    saibaMais:saibaShb(6,{ secao:'The continuity of behavior; Differential reinforcement', pp:'91–98',
+      porque:'Mostra como se constrói uma resposta nova e por que professores, treinadores e terapeutas usam esse procedimento mesmo sem nomeá-lo. Ajuda a entender o que é “ensinar” em termos comportamentais.',
+      conceitos:['modelagem','reforçamento diferencial','aproximações sucessivas'] }) },
+  { tipo:'caso',
+    enunciado:'Um jogador continua apostando numa máquina que raramente paga. Uma explicação comum é que ele “tem gosto pelo risco”. Que análise Skinner oferece para o padrão de respostas em jogos de azar?',
+    opcoes:['Esquemas de razão variável geram taxas altas e persistentes de resposta, e os jogos de azar pagam nesse tipo de esquema','Um traço interno de gosto pelo risco, que o esquema apenas revela','Reforço contínuo, pois cada aposta é seguida de prêmio','Razão fixa, que mantém taxas mais altas que a variável'],
+    explicacao:'No cap. 6, o reforçamento em razão variável é descrito como muito mais potente que a razão fixa de mesma média: a probabilidade de reforço em cada momento é praticamente constante, e o organismo mantém um ritmo de resposta alto por horas a fio. Skinner observa que os donos de jogos de azar conhecem essa eficácia há muito tempo, ainda que não a descrevam nesses termos. O que se explica, em qualquer dos casos, é o padrão de respostas; não é preciso recorrer a um traço de personalidade.',
+    fonte:'Skinner (1953/2024, cap. 6, p. 104).',
+    dica:'Nem toda aposta paga, e ninguém sabe qual vai pagar.' },
+  { tipo:'caso',
+    enunciado:'Um pai que atendia a criança ao primeiro grito decide parar. Nos primeiros dias, a criança demonstra raiva. Que relação a análise de Skinner estabelece?',
+    opcoes:['Suspender um reforço habitual reduz a resposta ao longo do tempo (extinção), mas também gera uma predisposição emocional, a “frustração”, que pode acompanhar o processo','A raiva prova que a extinção não funciona','A raiva é a causa do grito, que passa a depender só de estados internos','A raiva é o comportamento que foi reforçado antes'],
+    explicacao:'No cap. 5, quando o reforço deixa de vir, a resposta se torna, aos poucos, menos frequente: é o processo de extinção. No cap. 10, deixar de receber um reforço habitual é tratado como um caso especial de interferência no comportamento, que gera um tipo de raiva chamada frustração. As duas coisas ocorrem juntas, no mesmo episódio, sem que uma seja causa da outra: a raiva não explica o grito, nem o grito explica a raiva.',
+    fonte:'Skinner (1953/2024, cap. 5, p. 69; cap. 10, p. 164).',
+    dica:'Dois efeitos ao mesmo tempo: a resposta diminui e o clima emocional muda.',
+    saibaMais:saibaShb(10,{ secao:'Emotional operations; Emotions are not causes', pp:'164–169',
+      porque:'Mostra como Skinner trata emoção sem torná-la causa: como predisposições que variam com operações identificáveis, como frustração, restrição ou ruído súbito.',
+      conceitos:['predisposição emocional','frustração','operações emocionais'] }) },
+  { tipo:'caso',
+    enunciado:'Ao ver o semáforo verde, o motorista acelera; no vermelho, freia. Isso significa que o sinal “força” a resposta, como um reflexo?',
+    opcoes:['Não. O sinal é a ocasião em que a resposta foi reforçada (ou não); ele altera a probabilidade da resposta, mas não a elicia','Sim. Qualquer estímulo antecedente é eliciador; a diferença é só de velocidade','Não, porque o motorista decide livremente e o sinal é irrelevante','Sim, mas só quando a luz é muito intensa'],
+    explicacao:'No cap. 7, um estímulo discriminativo passa a controlar a resposta porque, na presença dele, a resposta já foi reforçada antes. Com a discriminação estabelecida, é possível alterar a probabilidade da resposta quase instantaneamente, apresentando ou removendo o estímulo. O controle existe, mas a resposta continua sendo operante, não reflexa.',
+    fonte:'Skinner (1953/2024, cap. 7, pp. 107–108).',
+    dica:'O sinal indica em que ocasião a resposta tem consequência. Isso é o mesmo que produzi-la?',
+    saibaMais:saibaShb(7,{ secao:'Discriminative stimuli; Voluntary and involuntary behavior', pp:'107–116',
+      porque:'Explica como o ambiente controla o comportamento sem ser causa mecânica e retoma a antiga distinção entre comportamento voluntário e involuntário. Ajuda a entender o que significa “controle de estímulo”.',
+      conceitos:['estímulo discriminativo','controle de estímulo','voluntário e involuntário'] }) },
+  { tipo:'conceito',
+    enunciado:'Ao usar o termo “drive” (impulso), como Skinner propõe tratá-lo?',
+    opcoes:['Como uma forma prática de se referir aos efeitos de privação, saciação e operações semelhantes sobre a probabilidade de um conjunto de respostas, sem supor um estado mental ou fisiológico','Como uma energia interna que se acumula até produzir o comportamento','Como um estado psíquico acessível apenas por introspecção','Como um reflexo herdado que dispensa qualquer operação ambiental'],
+    explicacao:'No cap. 9, o que o senso comum chama de necessidade ou vontade é redefinido como uma condição resultante da privação, caracterizada por certa probabilidade de resposta e nada mais. "Drive" funciona como uma forma conveniente de tratar vários casos desse tipo de uma vez só, sem as conotações mentais ou fisiológicas que termos como "vontade" carregam.',
+    fonte:'Skinner (1953/2024, cap. 9, p. 144).',
+    dica:'O termo resume o que se faz com o organismo, ou o que há dentro dele?',
+    saibaMais:saibaShb(9,{ secao:'Needs and drives', pp:'143–148',
+      porque:'Ajuda a entender operações motivadoras: como privação e saciação alteram a probabilidade do comportamento e por que é possível falar de motivação sem apelar a estados internos.',
+      conceitos:['privação','saciação','drive'] }) },
+  { tipo:'conceito',
+    enunciado:'Chamamos alguém de “irritado” quando é mais provável que insulte ou fira e menos provável que ajude ou console. Nessa leitura, o que é uma emoção?',
+    opcoes:['Uma predisposição: a probabilidade de um conjunto de respostas varia em conjunto, conforme operações como frustração, restrição ou ameaça','Uma sensação interna que causa os insultos e a menor ajuda','O conjunto de reflexos autonômicos, como coração e suor, e nada mais','Uma ilusão de linguagem, sem relação com o comportamento observável'],
+    explicacao:'No cap. 10, quando dizemos que alguém está com medo ou com raiva, falamos, na maioria das vezes, de predisposições a agir de certos modos, não de um sentimento que empurra a ação. A emoção não é tratada como causa; as variáveis de que ela depende são operações que se podem identificar, como um ruído súbito, uma restrição física ou a falha em receber um reforço habitual.',
+    fonte:'Skinner (1953/2024, cap. 10, pp. 162–164).',
+    dica:'Uma emoção descreve mudanças de probabilidade, não um motor interno.' },
+  { tipo:'caso',
+    enunciado:'Um estudante sai da sala quando o ar-condicionado emite um zumbido fraco; outro ignora um barulho muito mais forte. O que, para Skinner, define um estímulo como aversivo?',
+    opcoes:['O fato de sua remoção reforçar respostas: só se sabe que é aversivo pelo efeito da remoção','Uma intensidade física acima de certo limiar','Causar dano ao tecido','O relato de desagrado da pessoa'],
+    explicacao:'No cap. 11, estímulos aversivos não se distinguem uns dos outros por propriedades físicas, fortes ou fracos, dolorosos ou não. Um estímulo é aversivo se sua remoção reforça o comportamento, isto é, se ele funciona como reforçador negativo, na definição já dada no cap. 5. Por isso o mesmo barulho pode ser aversivo para um estudante e indiferente para outro, sem que a intensidade física mude.',
+    fonte:'Skinner (1953/2024, cap. 11, p. 171).',
+    dica:'A definição vem do efeito, como no reforço.' },
+  { tipo:'caso',
+    enunciado:'Um diretor conclui: “a punição funcionou, o aluno parou de xingar”. Que cuidado a análise de Skinner recomenda?',
+    opcoes:['O efeito imediato pode enganar: a redução muitas vezes não é permanente, e a punição gera subprodutos emocionais (fuga, contra-ataque, ansiedade); convém considerar alternativas','A punição sempre elimina o comportamento de forma definitiva','A punição só falha quando é fraca; punindo mais forte se resolve','Punição e extinção são o mesmo processo com outro nome'],
+    explicacao:'No cap. 12, Skinner observa que o efeito imediato de reduzir um comportamento é claro, mas pode enganar: a redução nem sempre é permanente. Além disso, os estímulos aversivos usados na punição geram emoções (predisposições a escapar ou a retaliar, e ansiedade), o que o leva a discutir alternativas ao seu uso.',
+    fonte:'Skinner (1953/2024, cap. 12, pp. 182–183).',
+    dica:'Reduzir agora não é o mesmo que eliminar.',
+    saibaMais:saibaShb(12,{ secao:'Does punishment work?; Alternatives to punishment', pp:'183–193',
+      porque:'Traz o argumento central sobre a técnica de controle mais usada na vida cotidiana. Mostra por que reduzir uma resposta a curto prazo não é o mesmo que eliminá-la e o que se pode fazer em vez de punir.',
+      conceitos:['punição','subprodutos emocionais','alternativas à punição'] }) },
+  { tipo:'caso',
+    enunciado:'Um relatório diz: “Ele era descontraído; depois ficou hesitante e arrogante”. Skinner observa que, em descrições assim, nenhum comportamento foi descrito. Por quê?',
+    opcoes:['Adjetivos de traço se referem a aspectos ou características da ação sem dizer quais ações ocorreram; servem como descrição resumida, não como explicação','Adjetivos são sempre falsos e devem ser substituídos por números','O relatório trata de um único caso e precisaria ser replicado','Porque comportamento só pode ser descrito por quem o executa'],
+    explicacao:'No cap. 13, adjetivos como "cordial" ou "hesitante" pertencem a uma lista enorme de nomes de traços. Eles dizem algo útil sobre o estilo de alguém, mas a mesma passagem poderia descrever cartas de um colega ou uma cena de balé: nenhuma ação chega a ser mencionada. Traços descrevem aspectos do comportamento; não explicam o comportamento do qual foram derivados.',
+    fonte:'Skinner (1953/2024, cap. 13, pp. 194–195).',
+    dica:'Procure, no relatório, um verbo que diga o que a pessoa fez.',
+    saibaMais:saibaShb(13,{ secao:'What are traits?; Traits are not causes', pp:'195–203',
+      porque:'Ajuda a distinguir descrever de explicar. Termos como “agressivo” ou “tímido” resumem aspectos do comportamento, mas não dizem que ações ocorreram nem por quê.',
+      conceitos:['traços','aspecto e função','descrição e explicação'] }) },
+  { tipo:'caso',
+    enunciado:'Para não checar o celular enquanto estuda, Ana o deixa em outro cômodo. Como Skinner analisa essa “força de vontade”?',
+    opcoes:['Como dois comportamentos da mesma pessoa: uma resposta controladora (guardar o celular) altera variáveis das quais a resposta controlada (checar) é função','Como a vitória de um “eu” racional sobre um “eu” impulsivo','Como algo impossível, pois todo comportamento é controlado de fora e a pessoa nada pode fazer','Como autocontrole apenas se Ana sentir, ao guardar o celular, vontade de estudar'],
+    explicacao:'No cap. 15, uma resposta controladora afeta variáveis de modo a mudar a probabilidade de outra resposta, a controlada; a forma que isso toma varia conforme a variável manipulada. Não é um segundo "eu" vencendo o primeiro, mas também não significa que a pessoa nada faça: a própria resposta controladora tem suas variáveis, e é aí que entra o comportamento dela.',
+    fonte:'Skinner (1953/2024, cap. 15, pp. 230–231).',
+    dica:'Quem alterou o ambiente? E o que, por sua vez, levou Ana a fazer isso?',
+    saibaMais:saibaShb(15,{ secao:'Techniques of control', pp:'231–240',
+      porque:'Responde à objeção mais comum: se o ambiente controla, onde fica a pessoa? Skinner mostra técnicas em que a própria pessoa altera as variáveis do seu comportamento.',
+      conceitos:['resposta controladora e resposta controlada','manipulação de variáveis do próprio comportamento'] }) },
+  { tipo:'conceito',
+    enunciado:'Quando alguém diz que “tomou uma decisão”, o que a análise de Skinner destaca?',
+    opcoes:['Decidir é um comportamento: a pessoa manipula variáveis, públicas ou privadas, das quais a resposta é função, para resolver qual alternativa vai ocorrer','Um ato de vontade independente de qualquer variável','Um cálculo interno que precede toda influência do ambiente','Algo que só ocorre quando há uma única alternativa e basta persuadir'],
+    explicacao:'No cap. 16, ao decidir, o indivíduo manipula variáveis de que seu próprio comportamento é função, como já fazia no autocontrole; a diferença é que, ao decidir, o resultado não pode ser especificado de antemão. Essas variáveis costumam ser eventos privados, mas o processo parece o mesmo quando são públicas. Persuadir alguém a uma única alternativa, por isso, não é ajudá-lo a decidir; é decidir por ele.',
+    fonte:'Skinner (1953/2024, cap. 16, pp. 242–243).',
+    dica:'“Decidir” também é algo que a pessoa faz.' },
+  { tipo:'conceito',
+    enunciado:'A dor de dente é um evento “privado”. O que torna privado um evento, na análise de Skinner?',
+    opcoes:['A acessibilidade limitada: só quem sente entra em contato com ele; não há razão para supor natureza ou estrutura especiais','Uma natureza imaterial, diferente da dos eventos físicos','O fato de não ter nenhum efeito sobre o comportamento','A impossibilidade de ser estudado por qualquer método'],
+    explicacao:'Uma pequena parte do universo está dentro da pele de cada pessoa, e é dessa parte que trata o cap. 17. Skinner diz que um evento privado se distingue por acessibilidade limitada, não por estrutura ou natureza especiais: a estimulação de um dente inflamado não é, em princípio, diferente da de um fogão quente. O que muda, de um caso para o outro, é apenas quem tem acesso a ela.',
+    fonte:'Skinner (1953/2024, cap. 17, p. 257).',
+    dica:'A diferença está em quem consegue “ver”, não no que o evento é.',
+    saibaMais:saibaShb(17,{ secao:'The world within one’s skin; Verbal responses to private events', pp:'257–263',
+      porque:'É a resposta de Skinner à acusação de que ele ignora sentimentos e pensamentos: eventos privados fazem parte do ambiente do organismo, e a questão passa a ser como a comunidade verbal ensina a descrevê-los.',
+      conceitos:['eventos privados','comunidade verbal','acessibilidade'] }) },
+  { tipo:'conceito',
+    enunciado:'Quando dizemos que “ele se controlou” ou que “outro eu falou mais alto”, a explicação recorre a um “self”. Como Skinner analisa esse recurso?',
+    opcoes:['O “self” costuma ser invocado como causa hipotética quando as variáveis externas passam despercebidas; ao identificá-las, o agente interno se torna dispensável','O “self” é o organismo físico, e por isso é a origem real do comportamento','Como há vários comportamentos simultâneos, é preciso postular vários “selves”','O “self” é uma ilusão que deve ser eliminada da linguagem cotidiana'],
+    explicacao:'O cap. 18 observa que, quando não se consegue mostrar o que é responsável pela conduta de alguém, diz-se que ele mesmo é o responsável. A prática é antiga: ventos e chuvas já foram atribuídos a deuses, pelo mesmo tipo de raciocínio. Skinner propõe tratar o "self" como um sistema organizado de respostas, sem nenhum agente que as origine.',
+    fonte:'Skinner (1953/2024, cap. 18, pp. 283–285).',
+    dica:'Onde se coloca a causa quando não se vê a causa?',
+    saibaMais:saibaShb(18,{ secao:'The self as an organized system of responses', pp:'285–294',
+      porque:'Complementa o capítulo sobre autocontrole ao perguntar quem é o “eu” que controla e que se conhece. Útil para quem quer entender como uma análise comportamental trata identidade e personalidade.',
+      conceitos:['self','personalidades múltiplas','sistema organizado de respostas'] }) },
+  { tipo:'caso',
+    enunciado:'Sociólogos falam em “leis sociais”, como a ideia de que a moeda ruim expulsa a boa da circulação. Isso exige uma ciência com leis diferentes das do comportamento individual?',
+    opcoes:['Não: uma lei social é gerada pelo comportamento de indivíduos, que se comportam com o mesmo corpo e pelos mesmos processos que em situações não sociais','Sim, porque o grupo tem propriedades que não se reduzem a nenhum indivíduo','Não, porque o comportamento em grupo não pode ser estudado cientificamente','Sim, mas só quando o grupo tem mais de dez pessoas'],
+    explicacao:'O cap. 19 admite generalizações no nível do grupo, como a lei de Gresham, que podem ser enunciadas sem citar nenhum indivíduo em particular. Mas uma lei social precisa, ainda assim, ser gerada pelo comportamento de indivíduos, pois é sempre um indivíduo que se comporta. A pergunta que resta é até onde os métodos das ciências naturais alcançam o comportamento de grupos, e não se esses métodos se aplicam.',
+    fonte:'Skinner (1953/2024, cap. 19, pp. 297–298).',
+    dica:'Quem, de fato, gasta a moeda?' },
+  { tipo:'conceito',
+    enunciado:'Por que grupos costumam chamar de “bom” o comportamento de alguns membros e de “mau” o de outros? Que critério a análise de Skinner sugere?',
+    opcoes:['Em geral, “bom” ou “certo” é o comportamento que reforça os demais membros do grupo, e “mau” ou “errado”, o que lhes é aversivo','“Bom” e “mau” refletem propriedades morais dos atos, que o grupo apenas reconhece','O grupo classifica ao acaso e depois justifica com regras','“Bom” é o que o próprio indivíduo considera agradável'],
+    explicacao:'No cap. 21, a técnica principal de controle exercida por um grupo é classificar o comportamento como bom ou mau, e então reforçá-lo ou puni-lo de acordo. Skinner nota que as práticas reais de um grupo podem não ser totalmente coerentes com essa definição; ainda assim, o critério que a sustenta é o efeito do comportamento sobre os outros membros.',
+    fonte:'Skinner (1953/2024, cap. 21, p. 324).',
+    dica:'Pergunte para quem o comportamento é reforçador ou aversivo.',
+    saibaMais:saibaShb(21,{ secao:'Why the group exerts control', pp:'325–327',
+      porque:'Traz uma análise comportamental de “certo” e “errado”: o grupo classifica e reforça ou pune. Útil para quem estuda ética, cultura e educação moral.',
+      conceitos:['controle de grupo','bom e mau como classificação','contracontrole'] }) },
+  { tipo:'caso',
+    enunciado:'Sob controle excessivo e inconsistente da chefia, um funcionário passa a faltar, a criticar o chefe em público e a trabalhar em ritmo lento de propósito. Que fenômenos descritos no cap. 24 correspondem a isso?',
+    opcoes:['Escape (faltar), revolta (contra-atacar) e resistência passiva (“fazer corpo mole”), subprodutos do controle','Extinção, discriminação e generalização, processos básicos do operante','Sintomas de traços de personalidade que a chefia não conseguiu corrigir','Reflexos condicionados eliciados pela imagem da chefia'],
+    explicacao:'O cap. 24 lista subprodutos que aparecem sobretudo quando o controle é excessivo ou inconsistente: escape, revolta e resistência passiva. Skinner ilustra a última com o funcionário que, sem conseguir escapar nem se revoltar abertamente, reduz o ritmo de trabalho como forma de protesto. Faltar, criticar e fazer corpo mole são, nessa leitura, operantes com consequências próprias; não sintomas de um traço de personalidade.',
+    fonte:'Skinner (1953/2024, cap. 24, pp. 359–360).',
+    dica:'Três reações possíveis: sair, contra-atacar, não corresponder.',
+    saibaMais:saibaShb(24,{ secao:'Certain by-products of control', pp:'359–367',
+      porque:'Ajuda a reconhecer sinais de controle excessivo ou inconsistente em famílias, escolas e empresas: fuga, revolta e resistência passiva. Também prepara a discussão sobre o que faz a psicoterapia.',
+      conceitos:['escape','revolta','resistência passiva','subprodutos do controle'] }) },
+  { tipo:'caso',
+    enunciado:'Numa aula, pedir o sal em francês correto rende nota máxima; na França, rende o sal. Que diferença isso revela sobre o controle educacional?',
+    opcoes:['A consequência escolar (a nota) é artificial, arranjada pela agência educacional para estabelecer o comportamento; a consequência natural só ocorre depois, em situações reais','A nota é a consequência natural e o sal é a artificial','A escola ensina comportamentos irrelevantes e deveria abolir as notas','O aluno aprende igualmente bem com a nota ou com o sal, porque o reforçador é o mesmo'],
+    explicacao:'Segundo o cap. 26, educar é estabelecer um comportamento que só será vantajoso no futuro; nesse meio-tempo, cabe à agência educacional arranjar reforçadores artificiais, como treino, exercício e notas. Se as consequências não educacionais (o emprego, a viagem, a conversa real em francês) nunca chegassem depois, a educação perderia o sentido.',
+    fonte:'Skinner (1953/2024, cap. 26, p. 402).',
+    dica:'Quem entrega a consequência em cada caso: a escola ou a situação?',
+    saibaMais:saibaShb(26,{ secao:'Educational reinforcement', pp:'405–411',
+      porque:'Mostra como escolas usam reforçadores artificiais (notas, diplomas, aprovação) e por que educação pressupõe consequências naturais posteriores. Convida a pensar o que falta a uma sala de aula em que só há notas.',
+      conceitos:['reforçadores artificiais','reforçador generalizado','educação como estabelecimento de comportamento'] }) },
+  { tipo:'conceito',
+    enunciado:'Skinner observa que muitas práticas culturais surgiram por acidente e nem por isso deixam de agir sobre o comportamento do grupo. Que pergunta ele faz a partir disso?',
+    opcoes:['Por que deixar o desenho de uma cultura tão nas mãos do acaso, se é possível modificar deliberadamente o ambiente social?','Por que estudar culturas, se todas as práticas são acidentais?','Como impedir que qualquer prática cultural mude?','Como provar que as práticas acidentais eram, na origem, planejadas?'],
+    explicacao:'No cap. 28, a origem acidental de uma prática não a torna menos eficaz sobre o comportamento do grupo; mas, uma vez observado esse efeito, a origem acidental pode ser examinada de perto, e não apenas aceita como dada. Daí a pergunta que fecha o capítulo: por que não modificar o ambiente social de forma deliberada, para que o produto dessas práticas atenda a especificações mais aceitáveis?',
+    fonte:'Skinner (1953/2024, cap. 28, pp. 426–427).',
+    dica:'A passagem é de “acaso” para “planejamento”.',
+    saibaMais:saibaShb(28,{ secao:'Value judgments; The survival of a culture', pp:'428–436',
+      porque:'Nesta parte Skinner propõe a sobrevivência da cultura como critério para avaliar práticas culturais e discute o que significa “valor” em termos de consequências.',
+      conceitos:['prática cultural','valor','sobrevivência da cultura'] }) },
+  { tipo:'conceito',
+    enunciado:'Uma preocupação recorrente: a ciência do comportamento poderia ser usada por controladores mal-intencionados. Que salvaguarda Skinner considera possível, ainda que sem garantia?',
+    opcoes:['O poder de um controlador depende da força de quem ele controla, e controles coercitivos que geram comportamento ineficiente tendem a se derrotar','Restringir o conhecimento científico a comitês de ética','Negar que o comportamento possa ser controlado, afirmando a liberdade pessoal','Confiar na boa vontade dos cientistas, que usariam o poder de forma justa'],
+    explicacao:'Skinner começa reconhecendo, sem rodeios, que não há garantia de que o poder gerado pela ciência será usado pelos melhores interesses. Ainda assim, no cap. 29, sugere que a força de um governante depende da produtividade e da inventividade dos governados, e que uma cultura que não permite experimentar paga, mais cedo ou mais tarde, com a própria extinção. Apresenta isso como possibilidade, não como certeza; negar que o comportamento possa ser controlado é uma das "soluções" que examina, e que considera cada vez menos sustentável.',
+    fonte:'Skinner (1953/2024, cap. 29, pp. 437–438, 443–444).',
+    dica:'Um governante precisa de governados capazes.',
+    saibaMais:saibaShb(29,{ secao:'A possible safeguard against despotism; Who will control?', pp:'443–446',
+      porque:'Fecha o livro com o dilema do controle. É um bom ponto de partida para discutir a ética da análise do comportamento e as respostas que Skinner dá à pergunta sobre quem controla os controladores.',
+      conceitos:['contracontrole','controle coercitivo','sobrevivência da cultura'] }) },
+  { tipo:'caso',
+    enunciado:'Um jogador sopra os dados antes de cada lance e, algumas vezes, ganha. Passa a soprar sempre. Como Skinner explica esse tipo de “superstição”?',
+    opcoes:['Ver a conexão entre resposta e consequência não é essencial: uma resposta seguida de reforçador, mesmo sem produzi-lo, tende a se repetir','O jogador infere uma relação causal e a testa mentalmente antes de agir','A resposta é um reflexo condicionado eliciado pelos dados','Isso só ocorre em humanos, por causa da linguagem'],
+    explicacao:'No cap. 5, Skinner responde a uma objeção antiga: a de que o gato de Thorndike não "via a conexão" entre acionar o trinco e escapar da caixa. Para ele, ver a conexão não é essencial ao condicionamento operante. A pessoa até pode descrever seu comportamento depois de agir, mas o processo básico não exige essa descrição; a mesma seção recorre também a pombos, o que basta para mostrar que a linguagem não é necessária.',
+    fonte:'Skinner (1953/2024, cap. 5, pp. 84–85).',
+    dica:'O reforço fortalece o que aconteceu imediatamente antes, seja ou não a causa.',
+    saibaMais:saibaShb(5,{ secao:'Accidental contingencies and “superstitious” behavior', pp:'84–86',
+      porque:'Desfaz a ideia de que aprender exige “enxergar” a relação entre resposta e consequência. É um bom texto para discutir rituais, manias e explicações supersticiosas.',
+      conceitos:['contingência acidental','comportamento supersticioso','reforço sem “compreensão”'] }) }
   ]
 }
 
@@ -1211,61 +1657,6 @@ function el(tag, attrs={}, html=''){ const e=document.createElement(tag); for(co
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 const B_POR_ID = Object.fromEntries(BEHAVIORISTAS.map(b=>[b.id,b]));
 
-/* ---------- retratos holográficos em pixel ---------- */
-const COR = { '#':'#dbe9f7', '=':'#91a9c1', '+':'#4d6583', ':':'#16263d', '@':'#ffffff' };
-const COR_APAGADA = { '#':'#3b4f69', '=':'#26364c', '+':'#1a283b', ':':'#121d2d', '@':'#3b4f69' };
-
-/* Desenha busto + pedestal de cubos, como as figuras da capa */
-function desenharRetrato(cv, grid, {apagado=false, seed=7, varredura=-1}={}){
-  const ctx = cv.getContext('2d');
-  const cols = 24, rows = grid.length;
-  const base = 9;                        // linhas do pedestal
-  const px = Math.floor(Math.min(cv.width/cols, cv.height/(rows+base)));
-  const ox = Math.floor((cv.width - cols*px)/2);
-  const oy = cv.height - (rows+base)*px;
-  const pal = apagado ? COR_APAGADA : COR;
-  let r = seed; const rnd = ()=>{ r = (r*9301+49297)%233280; return r/233280; };
-  const gap = Math.max(1, Math.round(px*0.16));
-  ctx.clearRect(0,0,cv.width,cv.height);
-  ctx.save();
-  if(!apagado){ ctx.shadowColor='rgba(170,210,255,.5)'; ctx.shadowBlur=px*0.8; }
-  // busto: as últimas linhas viram colunas de dados
-  const inicioDissolve = rows-5;
-  grid.forEach((ln,y)=>{
-    for(let x=0;x<ln.length;x++){
-      const c = ln[x]; if(c==='.') continue;
-      if (y>=inicioDissolve && (x+y)%2===1 && c==='+') continue;
-      ctx.fillStyle = pal[c] || pal['#'];
-      ctx.fillRect(ox+x*px, oy+y*px, px-gap, px-gap);
-    }
-  });
-  // pedestal: degraus de cubos contornados, alargando para baixo
-  for(let k=0;k<base;k++){
-    const w = 10 + 2*Math.floor(k/2)*2;
-    const x0 = Math.round((cols-w)/2);
-    for(let x=0;x<w;x++){
-      const xx = x0+x; if(xx<0||xx>=cols) continue;
-      const X = ox+xx*px, Y = oy+(rows+k)*px, s = px-gap;
-      const borda = (k===0 || x===0 || x===w-1);
-      ctx.fillStyle = apagado ? '#0d1624' : (borda ? '#223752' : '#0f1b2c');
-      ctx.fillRect(X,Y,s,s);
-      ctx.strokeStyle = apagado ? '#1f2d40' : (borda ? '#91a9c1' : '#3b4f69');
-      ctx.lineWidth = 1;
-      ctx.strokeRect(X+.5,Y+.5,s-1,s-1);
-      if(!apagado && rnd()<0.05){ ctx.fillStyle='#dbe9f7'; ctx.fillRect(X+s/3,Y+s/3,s/3,s/3); }
-    }
-  }
-  ctx.restore();
-  // linha de varredura (animação no dossiê)
-  if(varredura>=0 && !apagado){
-    const y = oy + varredura*rows*px;
-    ctx.globalCompositeOperation='source-atop';
-    ctx.fillStyle='rgba(255,255,255,.35)';
-    ctx.fillRect(0, y, cv.width, Math.max(2,px*0.6));
-    ctx.globalCompositeOperation='source-over';
-  }
-}
-
 /* Medalhas em pixel: forma varia com o grupo */
 const MEDALHAS = {
   global:  ["..#####..",".#######.","##.###.##","###...###","##.....##","###...###","##.###.##",".#######.","..#####.."],
@@ -1287,8 +1678,8 @@ function listaConquistas(){
   BEHAVIORISTAS.filter(b=>b.ativo).forEach(b=>{
     const sec = b.secreto ? { secreta:true, dono:b.id } : {};   // some da lista até o personagem ser descoberto
     L.push({ id:`${b.id}-contato`, grupo:b.nome, forma:'autor', nome:`Primeiro contato com ${b.curto}`, desc:`Complete qualquer rodada de ${b.curto}.`, ...sec });
-    L.push({ id:`${b.id}-repertorio`, grupo:b.nome, forma:'autor', nome:`Repertório ${b.curto.toLowerCase()}iano`, desc:`Faça 70% ou mais em todos os cartuchos de ${b.curto}.`, ...sec });
-    L.push({ id:`${b.id}-mestre`, grupo:b.nome, forma:'autor', nome:`Mestre ${b.curto}`, desc:`Faça 100% em todos os cartuchos de ${b.curto}.`, ...sec });
+    L.push({ id:`${b.id}-repertorio`, grupo:b.nome, forma:'autor', nome:`Repertório ${b.curto.toLowerCase()}iano`, desc:`Faça 70% ou mais em todos os quizzes de ${b.curto}.`, ...sec });
+    L.push({ id:`${b.id}-mestre`, grupo:b.nome, forma:'autor', nome:`Mestre ${b.curto}`, desc:`Faça 100% em todos os quizzes de ${b.curto}.`, ...sec });
     b.quizzes.forEach(qid=>{
       const q = QUIZZES[qid]; const nomeQ = q.tipo==='livro' ? `${q.titulo} (${q.ano})` : q.titulo;
       const grupo = q.tipo==='livro' ? `Livro: ${nomeQ}` : b.nome;
@@ -1341,19 +1732,17 @@ function verificarSecretos(autorId, novas){
 /* ---------- navegação ---------- */
 const TELAS = ['sTitle','sHall','sDossier','sBrief','sQuiz','sResult','sTrophies'];
 let telaAnterior = 'sTitle';
-let animDossie = null;
 function ir(id){
   const atual = TELAS.find(t=>!$('#'+t).hidden);
   if (id==='sTrophies' && atual!=='sTrophies') telaAnterior = atual;
   TELAS.forEach(t=>$('#'+t).hidden = (t!==id));
-  if (animDossie && id!=='sDossier'){ cancelAnimationFrame(animDossie); animDossie=null; }
   window.scrollTo(0,0);
 }
 
 /* ---------- Boatacon ---------- */
 const FALAS = {
   certo:['Reforço entregue!','Isso. Resposta selecionada pelas consequências.','Na mosca. Anotei no registro cumulativo.','Correto. O Skinner aprovaria, sem elogios exagerados.','Boa! Esse repertório está em forma.'],
-  errado:['Hmm... não foi dessa vez.','Hmm. Vamos ver o que o texto diz.','Quase. Lê a explicação aí embaixo.','Erro também é dado. Olha a explicação.','Hmm, essa pega muita gente.'],
+  errado:['Hmm... não foi dessa vez.','Hmm. Essa é sutil, vale reler as opções.','Quase. Lê a explicação aí embaixo.','Erro também é dado. Olha a explicação.','Hmm, essa pega muita gente.'],
   seq3:'Três seguidas! Já parece um esquema contínuo.',
   seq5:'Cinco seguidas! Taxa de acerto de laboratório.',
   espera:['Sem pressa. Latência também é dado, mas não é nota.','Leia com calma as quatro opções.','Pensando... isso também é comportamento.']
@@ -1369,28 +1758,144 @@ function falar(txt, humor='ok'){
   digitando = setInterval(()=>{ i+=2; alvo.textContent = txt.slice(0,i); if(i>=txt.length) clearInterval(digitando); }, 16);
 }
 
-/* ---------- galeria ---------- */
+/* ---------- seleção de behaviorista (estilo jogo de luta) ---------- */
+let selAtual = 'skinner';
+const LIVRO_ID = '__livro__';
+
+function textoLivro(b){
+  const l = b.livro; if (!l) return '';
+  return l.texto ? l.texto : `Parte ${l.parte}, caps. ${l.caps}. Comentário de ${l.com}.`;
+}
+function statusDe(b){
+  if (secretoTrancado(b)) return { txt:'SECRETO', off:true };
+  return b.ativo ? { txt:'JOGÁVEL', off:false } : { txt:'EM BREVE', off:true };
+}
+function abrirSelecao(){ ir('sHall'); montarGaleria(); }
+
 function montarGaleria(){
-  const hall = $('#hall'); hall.innerHTML='';
-  BEHAVIORISTAS.forEach((b,i)=>{
-    const trancadoSecreto = secretoTrancado(b);
-    const bloqueado = !b.ativo || trancadoSecreto;
-    const novo = !!(b.secreto && !trancadoSecreto && !ST.vistos[b.id]);
-    const btn = el('button',{class:'pedestal'+(bloqueado?' locked':'')+(b.id==='skinner'?' hero':'')+(novo?' novo':'')});
-    if (bloqueado){ btn.setAttribute('aria-disabled','true'); btn.title = trancadoSecreto ? 'Personagem secreto ainda não descoberto' : `${b.nome}: em breve`; }
-    const cv = el('canvas',{width:192,height:312,'aria-hidden':'true'});
-    desenharRetrato(cv, bloqueado? SPRITE_BLOQUEADO : b.sprite, {apagado:bloqueado, seed:i*13+5});
-    btn.appendChild(cv);
-    if (b.secreto && !trancadoSecreto) btn.appendChild(el('span',{class:'badge-secreto'},'SECRETO'));
-    btn.appendChild(el('span',{class:'nm'}, trancadoSecreto ? '???' : esc(b.curto)));
-    btn.appendChild(el('span',{class:'yr'}, trancadoSecreto ? 'secreto' : (b.ativo ? esc(b.anos) : 'em breve')));
-    btn.addEventListener('click',()=>{
-      if (trancadoSecreto){ SOM.errado(); enfileirarToast({ rotulo:'PERSONAGEM SECRETO', nome:'Ainda não descoberto', forma:'autor', som:'dica' }); return; }
-      if (!b.ativo){ SOM.errado(); return; }
-      SOM.clique(); abrirDossie(b.id);
-    });
-    hall.appendChild(btn);
+  const box = $('#roster'); box.innerHTML='';
+  GRUPOS.forEach(g=>{
+    const sec = el('div',{class:'r-group'});
+    sec.appendChild(el('div',{class:'r-head'},`<h3>${esc(g.nome)}</h3><span>${esc(g.nota)}</span>`));
+    const grid = el('div',{class:'r-grid'});
+    BEHAVIORISTAS.filter(b=>b.grupo===g.id).forEach(b=>grid.appendChild(criarTile(b)));
+    if (g.id==='nucleo') grid.appendChild(criarTileLivro());
+    sec.appendChild(grid); box.appendChild(sec);
   });
+  $('#selRef').innerHTML = `<b>REFERÊNCIA BÁSICA</b>Zilio, D., &amp; Carrara, K. (Eds.). (${LIVRO_BASE.ano}). <i>${esc(LIVRO_BASE.titulo)}</i>. ${esc(LIVRO_BASE.editora)}. <a href="${LIVRO_BASE.doi}" target="_blank" rel="noopener">${LIVRO_BASE.doi}</a>`;
+  if (selAtual!==LIVRO_ID && !B_POR_ID[selAtual]) selAtual = 'skinner';
+  selecionar(selAtual,{som:false, anima:false});
+}
+
+function ligarTile(t, id){
+  t.addEventListener('pointerdown',e=>{ t._prev = selAtual; t._tipo = e.pointerType; });
+  t.addEventListener('pointermove',e=>{ if (e.pointerType==='mouse' && selAtual!==id) selecionar(id,{som:false}); });  // só com movimento real do mouse
+  t.addEventListener('focus',()=>selecionar(id,{som:false}));
+  t.addEventListener('click',()=>{
+    const toqueNovo = t._tipo==='touch' && t._prev!==id;     // no celular, o primeiro toque só mostra o personagem
+    if (id===LIVRO_ID || toqueNovo || selAtual!==id){ selecionar(id); }
+    else jogar();
+    t._tipo = null;
+    if (matchMedia('(max-width:820px)').matches) $('#fStage').scrollIntoView({block:'nearest'});
+  });
+}
+function criarTile(b){
+  const trancado = secretoTrancado(b), bloq = !b.ativo || trancado;
+  const novo = !!(b.secreto && !trancado && !ST.vistos[b.id]);
+  const t = el('button',{class:'tile'+(b.larga?' larga':'')+(bloq?' locked sil':'')+(novo?' novo':''),'data-id':b.id,type:'button'});
+  t.appendChild(el('img',{src:(bloq||!b.tile)?IMG_SILHUETA:b.tile, alt:''}));
+  if (bloq) t.appendChild(el('span',{class:'t-tag'}, trancado ? 'SECRETO' : 'EM BREVE'));
+  t.appendChild(el('span',{class:'t-name'}, trancado ? '???' : esc(b.curto)));
+  t.setAttribute('aria-label', trancado ? 'Personagem secreto' : `${b.nome}, ${b.escola}${b.ativo?'':', em breve'}`);
+  ligarTile(t,b.id);
+  return t;
+}
+function criarTileLivro(){
+  const t = el('button',{class:'tile livro','data-id':LIVRO_ID,type:'button','aria-label':'Livro-base: '+LIVRO_BASE.curta});
+  const cv = el('canvas'); desenharMedalha(cv,'livro',true); t.appendChild(cv);
+  t.appendChild(el('span',{class:'t-name'},'Livro-base'));
+  t.appendChild(el('span',{class:'t-sub'}, esc(LIVRO_BASE.curta)));
+  ligarTile(t,LIVRO_ID);
+  return t;
+}
+
+function selecionar(id,{som=true,anima=true}={}){
+  const mudou = id!==selAtual;
+  selAtual = id;
+  document.querySelectorAll('#roster .tile').forEach(t=>t.classList.toggle('sel', t.dataset.id===id));
+  desenharLutador(id, mudou && anima && !REDUZIR);
+  if (som && mudou) SOM.clique();
+}
+
+function capaLivro(){
+  const linhas = PARTES_LIVRO.map(p=>`<li><b>${p.parte}</b><span>${esc(p.behaviorismo)}</span><i>${esc(p.proponente.split(' ').pop())}</i></li>`).join('');
+  return `<div class="book"><span class="k">REFERÊNCIA BÁSICA</span>
+    <div class="tt">Contemporary<br>behaviorisms<br>in debate</div>
+    <div class="ed">Diego Zilio e Kester Carrara (eds.) · ${esc(LIVRO_BASE.editora)}, ${LIVRO_BASE.ano}</div>
+    <ol>${linhas}</ol></div>`;
+}
+
+function desenharLutador(id, anima){
+  const stage = $('#fStage'), info = $('#fInfo');
+  const W = stage.clientWidth || 380, H = stage.clientHeight || 400;
+  if (id===LIVRO_ID){
+    stage.className = 'f-stage livro'+(anima?' troca':'');
+    stage.innerHTML = capaLivro();
+    info.innerHTML = `<div class="f-school">${esc(LIVRO_BASE.curta)}</div>
+      <p class="f-motto">${esc(LIVRO_BASE.resumo)}</p>
+      <p class="f-book"><b>CITAÇÃO</b>Zilio, D., &amp; Carrara, K. (Eds.). (${LIVRO_BASE.ano}). <i>${esc(LIVRO_BASE.titulo)}</i>. ${esc(LIVRO_BASE.editora)}.</p>
+      <div class="f-actions"><a class="btn ghost" href="${LIVRO_BASE.doi}" target="_blank" rel="noopener">Abrir pelo DOI</a></div>`;
+    return;
+  }
+  const b = B_POR_ID[id], trancado = secretoTrancado(b), bloq = !b.ativo || trancado, st = statusDe(b);
+  stage.className = 'f-stage'+(bloq?' sil':'')+(anima?' troca':'');
+  const foto = (!bloq && b.foto) ? b.foto : IMG_SILHUETA;
+  const sobre = trancado ? '???' : b.sobrenome;
+  stage.innerHTML = `<img class="f-photo" src="${foto}" alt="${bloq?'':esc(b.fotoAlt||'')}"${(!bloq&&b.fotoPos)?` style="object-position:${b.fotoPos}"`:''}>
+    <div class="f-fade"></div>
+    ${trancado ? '' : `<span class="f-ghost" aria-hidden="true">${esc(b.palavra)}</span>`}
+    <span class="f-flag">1P</span><span class="f-status${st.off?' off':''}">${st.txt}</span>
+    <h3 class="f-name">${trancado?'':`<small>${esc(b.prenome)}</small>`}<span>${esc(sobre)}</span></h3>`;
+  // tamanhos que dependem do comprimento do texto
+  const nome = stage.querySelector('.f-name span');
+  nome.style.fontSize = Math.min(H<300?64:96, Math.floor((W-32)/(sobre.length*0.5))) + 'px';
+  const gh = stage.querySelector('.f-ghost');
+  if (gh) gh.style.fontSize = Math.max(20, Math.min(56, Math.floor((H-120)/(b.palavra.length*0.56)))) + 'px';
+
+  const sub = trancado ? '' : (b.anos || b.filiacao || '');
+  let acao;
+  if (trancado)      acao = `<button class="btn" disabled>Secreto</button>`;
+  else if (!b.ativo) acao = `<button class="btn" disabled>Em breve</button><span class="s" style="color:var(--steel);font-size:15px">Quizzes em produção</span>`;
+  else               acao = `<button class="btn" id="btnPlay">Escolher ${esc(b.curto)}</button>`;
+  info.innerHTML = `<div class="f-school">${esc(trancado?'Personagem secreto':b.escola)}${sub?`<em>${esc(sub)}</em>`:''}</div>
+    <p class="f-motto">${esc(trancado?'Alguém aparece quando o jogo estiver aquecido. Continue jogando para descobrir quem é.':b.lema)}</p>
+    ${trancado?'':`<p class="f-book"><b>NO LIVRO-BASE</b>${esc(textoLivro(b))}</p>`}
+    <div class="f-actions">${acao}</div>`;
+  const play = $('#btnPlay'); if (play) play.addEventListener('click',jogar);
+}
+
+function jogar(){
+  if (selAtual===LIVRO_ID) return;
+  const b = B_POR_ID[selAtual];
+  if (secretoTrancado(b)){ SOM.errado(); enfileirarToast({ rotulo:'PERSONAGEM SECRETO', nome:'Ainda não descoberto', forma:'autor', som:'dica' }); return; }
+  if (!b.ativo){ SOM.errado(); return; }
+  SOM.clique(); abrirDossie(b.id);
+}
+
+function moverCursor(dx,dy){
+  const tiles = [...document.querySelectorAll('#roster .tile')];
+  const cur = tiles.find(t=>t.dataset.id===selAtual) || tiles[0];
+  const rc = cur.getBoundingClientRect(), cx = rc.left+rc.width/2, cy = rc.top+rc.height/2;
+  let melhor = null, dmin = Infinity;
+  tiles.forEach(t=>{
+    if (t===cur) return;
+    const r = t.getBoundingClientRect(), ddx = r.left+r.width/2-cx, ddy = r.top+r.height/2-cy;
+    if ((dx>0&&ddx<=8)||(dx<0&&ddx>=-8)||(dy>0&&ddy<=8)||(dy<0&&ddy>=-8)) return;
+    const d = (dx?Math.abs(ddx):Math.abs(ddy)) + (dx?Math.abs(ddy):Math.abs(ddx))*2.2;
+    if (d<dmin){ dmin=d; melhor=t; }
+  });
+  if (melhor){ selecionar(melhor.dataset.id); melhor.focus({preventScroll:true}); }
+  else SOM.errado();
 }
 
 /* ---------- dossiê ---------- */
@@ -1412,12 +1917,12 @@ function abrirDossie(id){
     c.innerHTML = `${slot}
       <span><span class="t">${esc(q.titulo)}</span><br><span class="s">${esc(q.subtitulo)} · ${q.rodada} de ${q.perguntas.length} perguntas por rodada</span></span>
       <span class="best">${r? 'MELHOR '+r.melhor+'%<br>'+r.concluidas+' RODADA'+(r.concluidas>1?'S':'') : 'NÃO JOGADO'}</span>`;
-    c.addEventListener('click',()=>{ SOM.clique(); abrirCartucho(qid); });
+    c.addEventListener('click',()=>{ SOM.clique(); abrirIntroducaoQuiz(qid); });
     box.appendChild(c);
   });
   (b.embreve||[]).forEach(l=>{
     const c = el('div',{class:'cartridge off','aria-disabled':'true'});
-    c.innerHTML = `<span class="slot">${l.rotulo||'LIVRO'}<br>${l.ano}</span><span><span class="t">${esc(l.titulo)}</span><br><span class="s">Cartucho em produção</span></span><span class="best">EM BREVE</span>`;
+    c.innerHTML = `<span class="slot">${l.rotulo||'LIVRO'}<br>${l.ano}</span><span><span class="t">${esc(l.titulo)}</span><br><span class="s">Quiz em produção</span></span><span class="best">EM BREVE</span>`;
     box.appendChild(c);
   });
   // medalhas do behaviorista
@@ -1427,25 +1932,29 @@ function abrirDossie(id){
     desenharMedalha(cv, c.forma, !!ST.conquistas[c.id]);
     md.appendChild(cv);
   });
+  const lb = textoLivro(b);
+  $('#dosBook').innerHTML = lb ? `<b>NO LIVRO-BASE</b>${esc(lb)}` : '';
   ir('sDossier');
-  const cv = $('#dosCanvas');
-  if (b.retrato){
-    $('#dosPhoto').hidden = false; cv.hidden = true;
-    $('#dosPhotoImg').src = b.retrato; $('#dosPhotoImg').alt = 'Retrato de '+b.nome;
-    $('#dosPhotoCap').textContent = 'ARQUIVO · '+b.curto.toUpperCase();
-    return;
+  $('#dosPhotoImg').src = b.retrato; $('#dosPhotoImg').alt = 'Retrato de '+b.nome;
+  $('#dosPhotoCap').textContent = 'ARQUIVO · '+b.curto.toUpperCase();
+  const th = $('#dosThumbs'); th.innerHTML = '';
+  const gal = b.galeria || [];
+  if (gal.length > 1){
+    const mostrar = (f,btn)=>{ $('#dosPhotoImg').src = f.src; $('#dosPhotoImg').alt = f.alt; $('#dosPhotoCap').textContent = 'ARQUIVO · '+f.leg; [...th.children].forEach(x=>x.classList.toggle('on',x===btn)); };
+    gal.forEach(f=>{
+      const btn = el('button',{type:'button','aria-label':f.leg,title:f.leg});
+      btn.innerHTML = `<img src="${f.src}" alt="">`;
+      btn.addEventListener('click',()=>{ SOM.clique(); mostrar(f,btn); });
+      th.appendChild(btn);
+    });
+    mostrar(gal[0], th.children[0]);
   }
-  $('#dosPhoto').hidden = true; cv.hidden = false;
-  if (REDUZIR){ desenharRetrato(cv, b.sprite, {seed:3}); return; }
-  const t0 = performance.now();
-  const loop = now=>{ const p = ((now-t0)/2600)%1; desenharRetrato(cv, b.sprite, {seed:3, varredura:p}); animDossie=requestAnimationFrame(loop); };
-  animDossie = requestAnimationFrame(loop);
 }
 
-/* ---------- abertura do cartucho ---------- */
-let cartuchoAtual = null;
-function abrirCartucho(qid){
-  cartuchoAtual = qid;
+/* ---------- abertura de um quiz (tela de instruções) ---------- */
+let quizEscolhido = null;
+function abrirIntroducaoQuiz(qid){
+  quizEscolhido = qid;
   const q = QUIZZES[qid], b = B_POR_ID[q.autor], r = ST.quizzes[qid];
   const img = $('#briefImg'), fig = $('#briefArt');
   fig.hidden = !q.arte;
@@ -1463,6 +1972,9 @@ function abrirCartucho(qid){
     r ? `Seu melhor resultado aqui: ${r.melhor}% em ${r.concluidas} rodada${r.concluidas>1?'s':''}.` : 'No fim, você vê seu registro cumulativo e a latência de cada resposta.'
   ];
   $('#briefRules').innerHTML = regras.map(t=>`<li>${esc(t)}</li>`).join('');
+  $('#briefRef').innerHTML = q.referencia ? `<b>REFERÊNCIA</b>${q.referencia}` : '';
+  const li = $('#briefLeitura'); li.hidden = !q.leituraInicial;
+  li.innerHTML = q.leituraInicial ? `<span class="cab">ANTES DE JOGAR</span><p>${esc(q.leituraInicial)}</p>` : '';
   $('#briefNpc').src = IMG.boatOk;
   $('#briefTalk').textContent = q.intro;
   ir('sBrief');
@@ -1470,7 +1982,19 @@ function abrirCartucho(qid){
 }
 
 /* ---------- quiz ---------- */
-const ROTULO_TIPO = { obra:'QUAL OBRA?', quem:'QUEM DISSE?', capitulo:'QUAL CAPÍTULO?', conceito:'CONCEITO' };
+const ROTULO_TIPO = { obra:'QUAL OBRA?', quem:'QUEM DISSE?', capitulo:'QUAL CAPÍTULO?', conceito:'CONCEITO', caso:'PARA PENSAR' };
+
+/* cartão "Para saber mais" */
+function ppLabel(pp){ return (/[–-]/.test(pp) ? 'pp. ' : 'p. ') + pp; }
+function htmlSaiba(s){
+  const trecho = s.trecho ? `<blockquote class="trecho"><span class="en" lang="en">${esc(s.trecho.en)}</span><span class="pt">${esc(s.trecho.pt)}</span><span class="ref">${esc(s.trecho.ref)}</span></blockquote>` : '';
+  const chips = (s.conceitos||[]).map(c=>`<span class="cc">${esc(c)}</span>`).join('');
+  const onde = [s.secao ? `seção <i>${esc(s.secao)}</i>` : '', s.pp ? ppLabel(s.pp) : ''].filter(Boolean).join(', ');
+  return `<aside class="saiba"><span class="cab">PARA SABER MAIS</span>
+    <h4>Cap. ${s.cap} · ${esc(s.tituloEn)}<span>${esc(s.tituloPt)}</span></h4>
+    <p class="pg">Onde ler, em ${esc(s.ref)}: ${onde}.</p>
+    <p>${esc(s.porque)}</p>${trecho}<div class="chips">${chips}</div></aside>`;
+}
 let R = null;   // rodada em andamento
 
 function iniciarQuiz(qid){
@@ -1480,7 +2004,7 @@ function iniciarQuiz(qid){
     return {...p, ops:embaralhar(p.opcoes), certa};
   });
   $('#resSecret').innerHTML='';
-  R = { qid, q, pergs, i:0, pts:0, seq:0, maxSeq:0, errosSeg:0, maxErrosSeg:0, dicas:0, t0:performance.now(), log:[], respondida:false };
+  R = { leituras:[], qid, q, pergs, i:0, pts:0, seq:0, maxSeq:0, errosSeg:0, maxErrosSeg:0, dicas:0, t0:performance.now(), log:[], respondida:false };
   $('#hudWhere').textContent = q.tipo==='livro' ? `${q.titulo} (${q.ano})` : `${B_POR_ID[q.autor].curto}: ${q.titulo}`;
   $('#hudArt').hidden = !q.arte; if (q.arte) $('#hudArt').src = q.arte;
   const pr = $('#progress'); pr.innerHTML=''; pergs.forEach(()=>pr.appendChild(el('i')));
@@ -1555,6 +2079,7 @@ function responder(k){
   R.log.push({ ok, lat, t:(performance.now()-R.t0)/1000, dica:R.dicaUsada, enunciado:p.enunciado, certa:p.certa, escolhida:p.ops[k], fonte:p.fonte });
   const bar = $('#progress').children[R.i]; bar.classList.add(ok?'ok':'no');
   $('#hudPts').textContent = R.pts; $('#hudStreak').textContent = R.seq;
+  if (p.saibaMais){ const key = p.saibaMais.cap+'|'+(p.saibaMais.secao||''); if (!R.leituras.some(l=>l.key===key)) R.leituras.push({ key, s:p.saibaMais }); }
   const ultima = R.i === R.pergs.length-1;
   $('#qFeedback').innerHTML = `
     <div class="feedback ${ok?'':'bad'}">
@@ -1564,6 +2089,7 @@ function responder(k){
       <p class="src">Fonte: ${esc(p.fonte)}</p>
       <p class="pts">${ok? '+'+ganho+' PONTOS'+(R.dicaUsada?' (COM DICA)':'') : '+0 PONTOS'} · ${lat.toFixed(1)} s</p>
     </div>
+    ${p.saibaMais ? htmlSaiba(p.saibaMais) : ''}
     <div class="next-row"><button class="btn" id="btnNext">${ultima?'Ver resultado':'Próxima'}</button><span class="hint">ou Enter</span></div>`;
   $('#btnNext').addEventListener('click', avancar);
   $('#btnNext').focus({preventScroll:true});
@@ -1606,18 +2132,27 @@ function finalizar(){
     : pct>=70 ? 'Bom repertório. Veja no gráfico onde a curva ficou plana: é ali que vale reler.'
     : 'Dá para modelar isso. Abra a revisão dos erros aqui embaixo e tente outra rodada; as perguntas mudam a cada vez.';
   $('#resTalk').textContent = liberados.length
-    ? 'Espere. Tem alguém no fundo do laboratório, sorrindo para você: é o Fred Keller, amigo do Skinner. Ele trouxe um cartucho.'
+    ? 'Espere. Tem alguém no fundo do laboratório, sorrindo para você: é o Fred Keller, amigo do Skinner. Ele quer te mostrar um livro que escreveu.'
     : fala;
-  $('#resPhoto').hidden = !b.resultado;
-  if (b.resultado){
+  let foto = b.resultado ? { src:b.resultado, alt:b.resultadoAlt } : null;
+  if (b.resultadoFotos) foto = pick(pct>=70 ? b.resultadoFotos.bom : b.resultadoFotos.ruim);
+  $('#resPhoto').hidden = !foto;
+  if (foto){
     const leg = b.legendaResultado || { bom:`${b.curto.toUpperCase()} ANALISA: BOA CURVA`, ruim:`${b.curto.toUpperCase()} ANALISA: MAIS UMA RODADA` };
-    $('#resPhotoImg').src = b.resultado; $('#resPhotoImg').alt = b.resultadoAlt || `Retrato de ${b.nome}`;
+    $('#resPhotoImg').src = foto.src; $('#resPhotoImg').alt = foto.alt || `Retrato de ${b.nome}`;
     $('#resPhotoCap').textContent = pct>=70 ? leg.bom : leg.ruim;
   }
   mostrarSecreto(liberados);
   const un = $('#resUnlocked');
   un.innerHTML = novas.length ? `<h3>Conquistas nesta rodada</h3><div class="trophies"></div>` : '';
   if (novas.length){ const g = un.querySelector('.trophies'); novas.forEach(id=>g.appendChild(cartaoMedalha(CONQ_POR_ID[id],true))); }
+  // leituras indicadas
+  const lei = $('#resReading');
+  if (R.leituras.length){
+    const ord = R.leituras.slice().sort((a,b)=>a.s.cap-b.s.cap);
+    lei.innerHTML = `<h3>Para continuar lendo</h3><p class="lede">Estes trechos apareceram nas perguntas desta rodada, em ordem de capítulo. Cada cartão indica seção e páginas em ${esc(ord[0].s.ref)}.</p><div class="leituras">${ord.map(l=>htmlSaiba(l.s)).join('')}</div>`;
+  } else lei.innerHTML = '';
+  $('#resRef').innerHTML = R.q.referencia ? `<b>REFERÊNCIA</b>${R.q.referencia}` : '';
   // revisão
   const erros = R.log.filter(l=>!l.ok);
   $('#resReview').innerHTML = erros.length ? `<details><summary>Rever ${erros.length} erro${erros.length>1?'s':''}</summary><ol>${erros.map(l=>`<li>${esc(l.enunciado)}<br><strong>${esc(l.certa)}</strong> <span style="color:var(--steel)">(você marcou: ${esc(l.escolhida)})</span></li>`).join('')}</ol></details>` : '';
@@ -1725,13 +2260,13 @@ document.querySelector('.foot a').href = HUB_URL;
 function atualizarSom(){ $('#navSound').setAttribute('aria-pressed', ST.som?'true':'false'); $('#navSound').textContent = ST.som?'Som':'Mudo'; }
 atualizarSom();
 $('#navSound').addEventListener('click',()=>{ ST.som=!ST.som; salvar(); atualizarSom(); SOM.clique(); });
-$('#btnStart').addEventListener('click',()=>{ SOM.clique(); montarGaleria(); ir('sHall'); });
+$('#btnStart').addEventListener('click',()=>{ SOM.clique(); abrirSelecao(); });
 $('#btnTrophies').addEventListener('click',()=>{ SOM.clique(); montarConquistas(); });
 $('#navTrophies').addEventListener('click',()=>{ SOM.clique(); if(R && !$('#sQuiz').hidden && !confirm('Sair da rodada em andamento?')) return; montarConquistas(); });
-$('#btnTrophyBack').addEventListener('click',()=>{ SOM.clique(); if(telaAnterior==='sQuiz'||telaAnterior==='sResult'){ abrirDossie(autorAtual); } else if(telaAnterior==='sDossier'){ abrirDossie(autorAtual); } else if(telaAnterior==='sHall'){ montarGaleria(); ir('sHall'); } else ir('sTitle'); });
-$('#btnBackHall').addEventListener('click',()=>{ SOM.clique(); montarGaleria(); ir('sHall'); });
+$('#btnTrophyBack').addEventListener('click',()=>{ SOM.clique(); if(telaAnterior==='sQuiz'||telaAnterior==='sResult'){ abrirDossie(autorAtual); } else if(telaAnterior==='sDossier'){ abrirDossie(autorAtual); } else if(telaAnterior==='sHall'){ abrirSelecao(); } else ir('sTitle'); });
+$('#btnBackHall').addEventListener('click',()=>{ SOM.clique(); abrirSelecao(); });
 $('#btnHint').addEventListener('click',pedirDica);
-$('#btnGo').addEventListener('click',()=>{ SOM.clique(); iniciarQuiz(cartuchoAtual); });
+$('#btnGo').addEventListener('click',()=>{ SOM.clique(); iniciarQuiz(quizEscolhido); });
 $('#btnBriefBack').addEventListener('click',()=>{ SOM.clique(); abrirDossie(autorAtual); });
 $('#btnAgain').addEventListener('click',()=>{ SOM.clique(); iniciarQuiz(R.qid); });
 $('#btnToDossier').addEventListener('click',()=>{ SOM.clique(); abrirDossie(autorAtual); });
@@ -1745,7 +2280,17 @@ document.addEventListener('keydown',e=>{
   else if (e.key==='d' || e.key==='D') pedirDica();
   else if (e.key==='Enter' && R && R.respondida){ e.preventDefault(); avancar(); }
 });
-window.addEventListener('resize',()=>{ if(!$('#sResult').hidden && R){ desenharCumulativo(); desenharLatencias(); } });
+window.addEventListener('resize',()=>{
+  if(!$('#sResult').hidden && R){ desenharCumulativo(); desenharLatencias(); }
+  if(!$('#sHall').hidden) desenharLutador(selAtual,false);
+});
+document.addEventListener('keydown',e=>{
+  if ($('#sHall').hidden || e.ctrlKey || e.metaKey || e.altKey) return;
+  const setas = { ArrowRight:[1,0], ArrowLeft:[-1,0], ArrowDown:[0,1], ArrowUp:[0,-1] };
+  if (setas[e.key]){ e.preventDefault(); moverCursor(...setas[e.key]); }
+  else if (e.key==='Escape'){ SOM.clique(); ir('sTitle'); }
+  else if (e.key==='Enter' && !(document.activeElement && document.activeElement.classList.contains('tile'))){ e.preventDefault(); jogar(); }
+});
 
 </script>
 </body>
