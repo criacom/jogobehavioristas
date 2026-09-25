@@ -178,6 +178,8 @@ h1,h2,h3{font-family:var(--f-disp);font-weight:800;line-height:.95;margin:0}
 .f-motto{margin:8px 0 6px;color:var(--ice);max-width:46ch}
 .f-book{margin:0 0 14px;font-size:15px;color:var(--steel);max-width:52ch}
 .f-book b{font-family:var(--f-pix);font-weight:400;font-size:11px;color:var(--ice);margin-right:8px}
+.f-book a{color:var(--ice);text-decoration:underline;text-underline-offset:3px}
+.f-book a:hover{color:#fff}
 .f-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .f-actions .btn{font-size:22px;padding:8px 20px}
 .f-stage.troca .f-photo,.f-stage.troca .f-name,.f-stage.troca .f-ghost{animation:entra .32s steps(5) 1}
@@ -901,10 +903,24 @@ const BEHAVIORISTAS = [
       { titulo:'Uma biografia de Hull', ano:'', rotulo:'LIVRO' }
     ]
   },
-  { id:'kantor', grupo:'raizes', nome:'J. R. Kantor', prenome:'J. R.', sobrenome:'Kantor', curto:'Kantor', anos:'1888–1984', ativo:false,
+  { id:'kantor', grupo:'raizes', nome:'J. R. Kantor', prenome:'J. R.', sobrenome:'Kantor', curto:'Kantor', anos:'1888–1984', ativo:true,
     escola:'Interbehaviorismo', palavra:'INTERBEHAVIORISMO',
     lema:'O campo psicológico: a interação entre organismo e objeto de estímulo, com componentes interdependentes.',
-    livro:{ texto:'Base do modelo de campo de Ribes-Iñesta (caps. 19 e 21).' } },
+    livro:{ texto:'Base do modelo de campo de Ribes-Iñesta (caps. 19 e 21).' },
+    foto:'img/sel-kantor.png', fotoPos:'center 18%', fotoAlt:'J. R. Kantor idoso, de óculos redondos, perfil pensativo, em preto e azul-gelo',
+    tile:'img/tile-kantor.png',
+    retrato:'img/kantor-retrato.png',
+    resultadoFotos:{
+      bom:[ { src:'img/kantor-retrato.png', alt:'J. R. Kantor em traços holográficos azul-gelo' } ],
+      ruim:[ { src:'img/kantor-aula.png',   alt:'Kantor diante de uma turma, em traços holográficos azul-gelo' } ]
+    },
+    galeria:[
+      { src:'img/kantor-retrato.png', leg:'RETRATO',   alt:'J. R. Kantor, fundador do interbehaviorismo, em perfil' },
+      { src:'img/kantor-aula.png',    leg:'LECIONA',   alt:'Kantor diante de uma turma, gesticulando' }
+    ],
+    bio:'Jacob Robert Kantor (1888–1984) estudou em Chicago e passou a maior parte de sua carreira em Indiana. Propôs o interbehaviorismo: toda explicação psicológica deve descrever um campo que inclui o organismo, o objeto-estímulo, a história de interação, o meio e os fatores de configuração — sem recorrer a agentes mentais internos. Seu trabalho influenciou diretamente o modelo de campo de Ribes-Iñesta.',
+    quizzes:['kantor-interbehaviorismo']
+  },
 
   /* ---------- NÚCLEO ---------- */
   { id:'skinner', grupo:'nucleo', nome:'B. F. Skinner', prenome:'B. F.', sobrenome:'Skinner', curto:'Skinner', anos:'1904–1990', ativo:true, larga:true,
@@ -968,6 +984,24 @@ const BEHAVIORISTAS = [
     legendaResultado:{ bom:'KELLER SORRI: BOA CURVA', ruim:'KELLER SORRI: TENTE DE NOVO' },
     bio:'Fez a pós-graduação em Harvard (1926–1931), onde Skinner era colega de turma, e ensinou por mais de duas décadas em Columbia. Com William Schoenfeld escreveu Principles of Psychology (1950) e criou o Sistema Personalizado de Instrução, o "plano Keller". Em 1961 foi à USP como bolsista Fulbright e levou ao Brasil o ensino de laboratório em análise do comportamento. Depois ajudou a criar o curso de Psicologia da Universidade de Brasília, com Carolina Bori, Rodolpho Azzi e Gil Sherman.',
     quizzes:['keller-definition']
+  },
+  {
+    id:'bori', grupo:'nucleo', nome:'Carolina Martuscelli Bori', prenome:'Carolina', sobrenome:'Bori', curto:'Bori', anos:'1924–2004', ativo:true,
+    escola:'Programação de ensino', palavra:'CONTINGÊNCIAS',
+    lema:'Programar contingências de ensino para que as pessoas aprendam a lidar com seus problemas cotidianos, e fazer da ciência um caminho para o desenvolvimento do país.',
+    foto:'img/sel-bori.png', fotoPos:'center 42%', fotoAlt:'Carolina Bori, de óculos e jaleco claro, diante de estantes de livros, em preto e azul-gelo',
+    tile:'img/tile-bori.png',
+    retrato:'img/bori-retrato.png',
+    resultadoFotos:{
+      bom:[ { src:'img/bori-biblioteca.png', alt:'Carolina Bori diante de estantes de livros' } ],
+      ruim:[ { src:'img/bori-retrato.png', alt:'Carolina Bori, de óculos, olhando para o lado' } ]
+    },
+    galeria:[
+      { src:'img/bori-retrato.png',    leg:'RETRATO',    alt:'Carolina Bori, de óculos e jaleco claro' },
+      { src:'img/bori-biblioteca.png', leg:'BIBLIOTECA', alt:'Carolina Bori diante de estantes de livros' }
+    ],
+    bio:'Nasceu em São Paulo em 1924, formou-se em Pedagogia na USP (1947) e fez o mestrado na New School for Social Research, em Nova York, com Tamara Dembo, ex-aluna de Lewin. Foi assistente de Keller no curso de 1961 na USP, criou e coordenou o Departamento de Psicologia da UnB (1964), onde nasceu o Sistema Personalizado de Ensino, e depois formou gerações de pesquisadores na pós-graduação em Psicologia Experimental da USP. Foi a primeira mulher a presidir a SBPC (1986–1989) e a primeira presidente da ANPEPP e da SBP. Morreu em 2004.',
+    quizzes:['bori-biografia']
   },
 
   /* ---------- CONTEMPORÂNEOS (livro-base, Partes I a VII) ---------- */
@@ -1104,7 +1138,13 @@ const BEHAVIORISTAS = [
     ],
     bio:'Formado pela UNAM em 1960, ajudou a fundar o programa de psicologia da Universidad Veracruzana, em Xalapa, onde segue como professor. A partir do interbehaviorismo de J. R. Kantor, propõe um modelo de campo com três meios de contato (físico-químico, ecológico, convencional) que pretende explicar toda a psicologia, não só o comportamento observável.',
     quizzes:['ribes-campo']
-  }
+  },
+
+  /* ---------- EM BREVE ---------- */
+  { id:'glenn', grupo:'contemporaneos', nome:'Sigrid S. Glenn', prenome:'Sigrid S.', sobrenome:'Glenn', curto:'Glenn', ativo:false,
+    escola:'Metacontingência', palavra:'METACONTINGÊNCIA',
+    lema:'A metacontingência: quando as consequências selecionam práticas culturais, não só comportamentos individuais.'
+  },
 ];
 
 /* ---------------------------------------------------------------------
@@ -2918,6 +2958,419 @@ const QUIZZES = {
     fonte:'Ribes-Iñesta (2021, cap. 19, p. 277.)',
     dica:'Pense na hierarquia de dependência entre os três meios, já vista antes neste quiz.' }
   ]
+},
+
+/* ---------------------------------------------------------------- */
+'kantor-interbehaviorismo': {
+  "autor": "kantor",
+  "tipo": "teoria",
+  "categoria": "Sistema",
+  "titulo": "Interbehaviorismo",
+  "ano": 1959,
+  "subtitulo": "Leia o quadro e complete o campo psicológico",
+  "rotuloCartucho": "TEORIA",
+  "rotuloAbertura": "Teoria geral · J. R. Kantor",
+  "arte": "img/kantor-retrato.png",
+  "arteAlt": "J. R. Kantor idoso, de óculos redondos, em perfil, em preto e azul-gelo",
+  "rodada": 10,
+  "referencia": "Kantor, J. R. (1959). <i>Interbehavioral psychology: A sample of scientific system construction</i> (ed. rev.). Principia Press. Ver também Ribes-Iñesta, E. (2021), cap. 19 de Zilio &amp; Carrara (Eds.), <i>Contemporary behaviorisms in debate</i>. Springer.",
+  "leituraInicial": "Kantor não tem capítulo próprio no livro-base, mas aparece nele como a base do behaviorismo de campo de Ribes-Iñesta. Este quiz apresenta os conceitos do interbehaviorismo que você vai reencontrar no quiz do Ribes.",
+  "intro": "Kantor propôs que a psicologia descrevesse campos, e não agentes. O comportamento não está dentro do organismo: é a interação entre organismo e objeto de estímulo, junto com tudo o que torna essa interação possível.",
+  "conquistas": {
+    "aprovado": "Leitor(a) do campo psicológico",
+    "perfeito": "Interbehaviorista"
+  },
+  "perguntas": [
+    {
+      "tipo": "quadro",
+      "enunciado": "Para Kantor, a psicologia não estuda o organismo isolado nem a mente, mas o campo psicológico: um sistema de fatores interdependentes que inclui o organismo, o objeto de estímulo, o meio de contato e a história de interações entre os dois. Complete: nesse modelo, o evento psicológico é ___.",
+      "opcoes": [
+        "a interação entre organismo e objeto de estímulo, dentro do campo",
+        "uma resposta produzida pelo sistema nervoso do organismo",
+        "uma representação mental do ambiente externo",
+        "um estímulo que age sobre um organismo passivo"
+      ],
+      "explicacao": "O ponto central do interbehaviorismo: o psicológico não está no organismo, mas entre o organismo e o objeto, e só pode ser descrito junto com os demais fatores do campo.",
+      "fonte": "Kantor (1959), Interbehavioral psychology.",
+      "dica": "O prefixo \"inter\" já dá a resposta."
+    },
+    {
+      "tipo": "quadro",
+      "enunciado": "A unidade de análise de Kantor é o segmento comportamental: uma interação completa, do contato inicial com o objeto até o fim da resposta, situada num meio e em certas condições. Complete: o segmento difere de um reflexo isolado porque descreve ___.",
+      "opcoes": [
+        "a interação inteira, com os fatores do campo, e não só um elo estímulo-resposta",
+        "apenas a parte motora da resposta",
+        "o processo interno que liga estímulo e resposta",
+        "a história genética do organismo"
+      ],
+      "explicacao": "O segmento é sempre uma unidade relacional. Isolar só o estímulo e a resposta seria cortar o campo em pedaços, justamente o que Kantor critica.",
+      "fonte": "Kantor (1959), Interbehavioral psychology.",
+      "dica": "A palavra-chave é \"completa\"."
+    },
+    {
+      "tipo": "quadro",
+      "enunciado": "Kantor separa o objeto de estímulo da função de estímulo. O objeto é a coisa física; a função é o que esse objeto passa a fazer na interação com um organismo específico, e ela se desenvolve ao longo da história de contatos entre os dois. Complete: por isso, o mesmo objeto pode ter ___.",
+      "opcoes": [
+        "funções diferentes para organismos com histórias diferentes",
+        "sempre a mesma função, dada por suas propriedades físicas",
+        "função apenas se for novo para o organismo",
+        "função apenas quando o organismo está privado"
+      ],
+      "explicacao": "Uma partitura é o mesmo papel para um músico e para quem não lê música; a função de estímulo é outra. Isso evita tanto o inatismo quanto o mentalismo: o que o objeto \"faz\" depende do que aconteceu entre ele e o organismo.",
+      "fonte": "Kantor (1959), Interbehavioral psychology.",
+      "dica": "Pense na diferença entre o que o objeto é e o que ele faz para aquele organismo."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Kantor emparelha a função de estímulo com a função de resposta: as duas se desenvolvem juntas, na mesma história de interação. Siga o raciocínio: se a função do estímulo não existe sem a função de resposta correspondente, então não faz sentido dizer que ___.",
+      "opcoes": [
+        "o ambiente age sobre um organismo passivo, numa relação de mão única",
+        "o organismo tem uma história",
+        "os objetos têm propriedades físicas",
+        "o comportamento pode ser observado"
+      ],
+      "explicacao": "Num campo, organismo e objeto são participantes simétricos da interação. Nenhum dos dois é a causa e o outro o efeito.",
+      "fonte": "Kantor (1959), Interbehavioral psychology.",
+      "dica": "Se as duas funções nascem juntas, nenhuma vem primeiro."
+    },
+    {
+      "tipo": "quadro",
+      "enunciado": "Além do organismo, do objeto e do meio, o campo inclui fatores disposicionais (setting factors): condições como privação, fadiga, presença de outras pessoas ou hora do dia. Complete: eles não são o estímulo nem a resposta, mas ___.",
+      "opcoes": [
+        "alteram a probabilidade e a forma da interação naquele momento",
+        "causam diretamente a resposta, como um estímulo mais forte",
+        "substituem a história de interação",
+        "são estados mentais internos do organismo"
+      ],
+      "explicacao": "Privação não é estímulo e não faz parte da resposta, mas muda como a interação acontece. É uma das categorias de Kantor que Ribes herda.",
+      "fonte": "Kantor (1959), Interbehavioral psychology.",
+      "dica": "São condições do momento que modulam a interação."
+    },
+    {
+      "tipo": "quadro",
+      "enunciado": "O meio de contato é o que torna a interação possível: a luz, para ver; o ar, para ouvir. Ribes-Iñesta observa que Kantor descreveu apenas um tipo de meio de contato. Complete: esse meio único era o ___, e Ribes acrescentou o ecológico e o convencional.",
+      "opcoes": [
+        "físico-químico",
+        "convencional",
+        "linguístico",
+        "social"
+      ],
+      "explicacao": "É exatamente o ponto em que Ribes amplia Kantor. O mesmo quadro aparece, do lado de Ribes, no quiz do behaviorismo de campo.",
+      "fonte": "Ribes-Iñesta (2021, cap. 19, p. 276).",
+      "dica": "Luz e ar são meios físicos."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Kantor critica as psicologias que explicam o comportamento por entidades internas, como mente, vontade ou representações. Siga o raciocínio: se toda explicação deve ser buscada nos fatores do campo, então invocar uma entidade que não é nenhum desses fatores ___.",
+      "opcoes": [
+        "acrescenta um nome, mas não uma explicação",
+        "completa a descrição do campo",
+        "é indispensável para estudar o comportamento humano",
+        "equivale a descrever a história de interação"
+      ],
+      "explicacao": "Para Kantor, o mentalismo não é só impreciso: ele troca a descrição do campo por um rótulo que não pertence a ele.",
+      "fonte": "Kantor (1959), Interbehavioral psychology.",
+      "dica": "O que não está no campo não explica nada dentro dele."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Kantor não negava o sistema nervoso, mas recusava que ele fosse a sede do psicológico: o organismo participa do campo como um todo. Siga o raciocínio: tratar o cérebro como a causa do comportamento seria ___.",
+      "opcoes": [
+        "tomar uma parte do organismo pelo evento psicológico inteiro",
+        "a forma mais completa de análise de campo",
+        "o único modo de estudar interações",
+        "aceitar a proposta interbehaviorista"
+      ],
+      "explicacao": "Kantor era anti-reducionista, e não antifisiológico. Processos neurais participam da interação, mas não são a interação.",
+      "fonte": "Kantor (1947), Problems of physiological psychology.",
+      "dica": "A parte e o todo."
+    },
+    {
+      "tipo": "contraste",
+      "enunciado": "Kantor e Skinner recusam o mentalismo, mas diferem na unidade de análise. Complete o contraste: enquanto a análise do comportamento de Skinner toma o ambiente como variável independente e a resposta do organismo como variável dependente, Kantor descreve ___.",
+      "opcoes": [
+        "um campo em que organismo e objeto de estímulo são participantes interdependentes, sem variável independente",
+        "um processo cognitivo que medeia estímulo e resposta",
+        "um reflexo inato do organismo",
+        "uma relação estatística entre grupos de sujeitos"
+      ],
+      "explicacao": "É a diferença que Ribes explora: num campo não há um \"lado\" que age sobre o outro. Kantor comentou a análise experimental do comportamento num artigo de 1970 no Journal of the Experimental Analysis of Behavior.",
+      "fonte": "Kantor (1970), Journal of the Experimental Analysis of Behavior, 13, 101–108.",
+      "dica": "Em qual visão o ambiente \"age sobre\" o organismo?"
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Ribes-Iñesta toma o campo de Kantor como ponto de partida e o amplia: acrescenta meios de contato e uma taxonomia de níveis de organização funcional. Siga o raciocínio: se Ribes mantém os fatores de campo de Kantor e acrescenta distinções, a relação entre os dois sistemas é de ___.",
+      "opcoes": [
+        "extensão: o modelo original é mantido e diferenciado",
+        "refutação: o modelo original é abandonado",
+        "tradução: Ribes só trocou os nomes",
+        "aplicação clínica do modelo original"
+      ],
+      "explicacao": "Ribes não abandona Kantor, parte dele. Muda a resolução do mapa, não o mapa inteiro.",
+      "fonte": "Ribes-Iñesta (2021, cap. 19, pp. 275–276).",
+      "dica": "Ampliar não é refutar."
+    }
+  ]
+},
+
+/* ---------------------------------------------------------------- */
+'bori-biografia': {
+  "autor": "bori",
+  "tipo": "livro",
+  "categoria": "Biografia",
+  "titulo": "Carolina Bori",
+  "ano": 2025,
+  "edicao": "SBPC",
+  "subtitulo": "Psicologia, educação e política científica: complete o raciocínio do biógrafo",
+  "rotuloCartucho": "BIOGRAFIA",
+  "rotuloAbertura": "Biografia escrita por Gabriel Vieira Cândido · SBPC, 2025",
+  "arte": "img/bori-biblioteca.png",
+  "arteAlt": "Carolina Bori, de óculos e jaleco claro, diante de estantes de livros, em preto e azul-gelo",
+  "rodada": 10,
+  "referencia": "Cândido, G. V. (2025). <i>Carolina Bori: psicologia, educação e política científica</i>. SBPC. ISBN 978-65-89883-18-0. Prefácio de Deisy G. de Souza. <a href=\"https://portal.sbpcnet.org.br/livro/carolinabori.pdf\" target=\"_blank\" rel=\"noopener\">Baixar o livro (PDF gratuito, SBPC)</a>",
+  "leituraInicial": "Este quiz é sobre uma biografia, e não sobre um texto da própria Bori. O autor é Gabriel Vieira Cândido, historiador da psicologia, e o livro saiu pela SBPC em 2025, no centenário de nascimento dela, com prefácio de Deisy de Souza. O PDF é gratuito: o link está na referência abaixo. As perguntas seguem o argumento do autor, de Rio Claro e Brasília ao \"Plano Bori\" e à SBPC.",
+  "intro": "Carolina Bori deixou poucos textos e muitos efeitos. Cândido reconstrói a vida pública dela a partir de artigos, cartas trocadas com Keller e documentos do escritório dela na USP. Complete o raciocínio dele, pergunta por pergunta.",
+  "conquistas": {
+    "aprovado": "Leitor(a) da biografia de Bori",
+    "perfeito": "Registro número 1"
+  },
+  "perguntas": [
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Cândido reuniu 70 trabalhos assinados por Carolina Bori, uma bibliografia que ele mesmo chama de \"não extensa\" para alguém tão influente. Siga o raciocínio do autor: se a obra escrita não dá conta da extensão do trabalho dela, então a principal marca dessa cientista está ___.",
+      "opcoes": [
+        "na mudança de comportamento que ela gerava entre os cientistas no Brasil",
+        "nas teorias originais que ela publicou em periódicos estrangeiros",
+        "nos experimentos de laboratório que ela conduziu pessoalmente",
+        "nos livros didáticos que ela escreveu para a graduação"
+      ],
+      "explicacao": "Para Cândido, Bori não deixou muitos registros escritos do próprio pensamento; o que a define é o efeito que produzia sobre pessoas e instituições. É uma frase de analista do comportamento sobre uma analista do comportamento: boa parte da obra dela está no comportamento dos outros.",
+      "fonte": "Cândido (2025, p. 17). O trecho também é destacado no prefácio de Deisy de Souza.",
+      "dica": "Se não está nos textos, está no efeito que ela tinha sobre quem trabalhava com ela."
+    },
+    {
+      "tipo": "contraste",
+      "enunciado": "Cândido recusa a ideia de mito fundador, a de que uma área nasce \"como uma única semente brotando em um local específico\" (Danziger). Complete o contraste: em vez de contar a história como obra de uma heroína num único lugar, o autor adota uma concepção ___ de história, que procura ___.",
+      "opcoes": [
+        "policêntrica / os vários pontos de origem que confluíram num mesmo evento",
+        "progressista / a linha de evolução rumo a uma psicologia mais avançada",
+        "monumental / os grandes feitos que tornaram Bori superior aos colegas",
+        "institucional / a data exata de fundação de cada departamento"
+      ],
+      "explicacao": "O autor diz explicitamente que não reconhece progresso rumo a um estilo \"melhor\" e que não quer uma história de grandes feitos. Os episódios são lidos como movimentos que partem de movimentos anteriores, em lugares diferentes.",
+      "fonte": "Cândido (2025, pp. 18–19).",
+      "dica": "Muitos centros em vez de um só."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Em 1952, de volta do mestrado em Nova York, Carolina (ainda Martuscelli) publicou um artigo sobre o papel do sujeito e do experimentador. Nele, a futura difusora da análise do comportamento no Brasil criticava o experimento behaviorista porque, segundo ela, o objetivista ___.",
+      "opcoes": [
+        "trata o sujeito como material experimental e rejeita \"com um desprezo fóbico\" tudo o que é subjetivo",
+        "usa estatística demais e laboratório de menos",
+        "estuda animais em vez de crianças em idade escolar",
+        "confia demais no relato verbal dos participantes"
+      ],
+      "explicacao": "Formada na tradição gestaltista, ela defendia então que os métodos objetivos não eliminam a auto-observação do sujeito. A virada viria depois do curso de Keller na USP, em 1961. A trajetória, portanto, não é a de uma seguidora desde o início.",
+      "fonte": "Martuscelli (1952, pp. 14–15), citada em Cândido (2025, p. 34).",
+      "dica": "Pense em como uma gestaltista via o sujeito tratado como cobaia."
+    },
+    {
+      "tipo": "complete",
+      "enunciado": "Na tese de doutorado (concluída em 1954), Bori opõe dois modos de pensar. O aristotélico parte de classificações e conceitos dicotômicos e trata o caso individual como exceção à regra. O galileano descreve a situação concreta, mesmo um caso único, pelas relações entre variáveis. Complete como ela resume a passagem de um para o outro: verificou-se uma transição do conceito de ___ para o conceito de ___.",
+      "opcoes": [
+        "classe / série",
+        "série / classe",
+        "indivíduo / espécie",
+        "variável / constante"
+      ],
+      "explicacao": "Classe é a lógica da tipologia (a que categoria este caso pertence?); série é a lógica das relações funcionais (como o fenômeno varia quando uma condição varia?). A distinção vem de Lewin e prepara o terreno para a análise experimental que ela adotaria depois.",
+      "fonte": "Martuscelli (1959, p. 12), citada em Cândido (2025, pp. 42–43).",
+      "dica": "O pensamento galileano estuda variações, não categorias fixas."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Nos anos 1950, Bori argumentava que \"Psicologia Experimental\" não deveria nomear uma área à parte da psicologia. Siga o raciocínio: se o desenvolvimento da própria psicologia depende da experimentação, então ___.",
+      "opcoes": [
+        "toda a psicologia deveria incluir pesquisa em condições controladas, e o método experimental deveria fazer parte da formação de todo psicólogo",
+        "a experimentação deveria ficar restrita a um grupo pequeno de especialistas",
+        "a psicologia deveria abandonar temas sociais, que não cabem no laboratório",
+        "o laboratório deveria ser o único lugar legítimo de produção de conhecimento"
+      ],
+      "explicacao": "Repare na última opção: Cândido registra que ela não defendia o laboratório como único lugar de produção de conhecimento, apenas como o lugar onde as variáveis são conhecidas e controladas. O ponto era de formação: quem nunca experimentou dificilmente aprende a pensar experimentalmente.",
+      "fonte": "Cândido (2025, pp. 40–41).",
+      "dica": "Se a psicologia inteira depende do método, o método não pode ficar num canto do currículo."
+    },
+    {
+      "tipo": "complete",
+      "enunciado": "Em 1964, Bori e Rodolpho Azzi descrevem o papel do laboratório no novo curso da UnB. Dizem não ter ilusão sobre a palavra laboratório nem fetichismo por aparelhos, que se complicam e encarecem. Mesmo assim, concluem: uma orientação experimental sem experimentos dificilmente deixa de ser ___.",
+      "opcoes": [
+        "uma profissão de fé",
+        "uma escolha de currículo",
+        "uma teoria da aprendizagem",
+        "um problema de orçamento"
+      ],
+      "explicacao": "O argumento é comportamental: não se forma investigador falando sobre experimentação, mas dando ao aluno a chance de fazer experimentos com um mínimo de equipamento padrão. Sem isso, \"ser experimental\" vira declaração de crença, e não norma de trabalho.",
+      "fonte": "Bori e Azzi (1964, pp. 108–109), citados em Cândido (2025, pp. 61–62).",
+      "dica": "Sem prática, sobra só a crença."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Em Rio Claro, depois do curso de Keller, o grupo de Bori precisava de caixas de condicionamento operante, mas equipamento importado era caro. A solução foi adaptar gaiolas de pássaros e depois encomendar caixas a uma empresa brasileira. Siga o raciocínio de Cândido: além de resolver o problema imediato, essa escolha ___.",
+      "opcoes": [
+        "dispensou a importação e criou condições locais para a expansão da análise experimental do comportamento no país",
+        "atrasou a pesquisa, porque os dados obtidos com gaiolas adaptadas não eram publicáveis",
+        "obrigou o grupo a abandonar os experimentos com animais",
+        "tornou o laboratório dependente de doações estrangeiras"
+      ],
+      "explicacao": "É um padrão que volta ao longo do livro: em vez de esperar condições ideais, Bori criava condições locais. Poucos anos depois, a Funbec passou a fabricar caixas de Skinner para universidades de todo o Brasil.",
+      "fonte": "Cândido (2025, pp. 54–55 e 80).",
+      "dica": "Pense no que acontece com uma área quando o equipamento passa a ser feito no próprio país."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "O Sistema Personalizado de Ensino (PSI) ficou tão associado a Fred Keller que passou a ser chamado de \"Plano Keller\". Cândido, porém, reconstrói onde a proposta surgiu. Complete: o PSI nasceu ___.",
+      "opcoes": [
+        "no planejamento do Departamento de Psicologia da UnB, em encontros entre Bori, Azzi, Sherman e Keller, e o formato de Brasília serviu depois de modelo nos Estados Unidos",
+        "na Universidade de Columbia, e só veio ao Brasil depois de testado por lá",
+        "no laboratório de Skinner em Harvard, como aplicação direta das máquinas de ensinar",
+        "no Instituto de Física da USP, a pedido de professores de ensino de física"
+      ],
+      "explicacao": "O livro mostra o fluxo inverso ao que o nome sugere: a proposta foi elaborada para Brasília, aplicada ali a partir de 1964, e só então formalizada por Keller e Sherman nos Estados Unidos. Por isso o autor diz ser muito difícil separar as contribuições de Keller e de Bori.",
+      "fonte": "Cândido (2025, pp. 61 e 84–85).",
+      "dica": "O nome aponta para uma pessoa; a história aponta para uma cidade recém-inaugurada."
+    },
+    {
+      "tipo": "contraste",
+      "enunciado": "Cândido chama o capítulo 6 de \"Plano Bori\", mas avisa que não é no mesmo sentido de \"Plano Keller\". Complete o contraste: Keller buscava substituir o ensino tradicional pelo PSI; para Bori, trocar um sistema por outro seria apenas ___, e o que ela queria era que os professores ___.",
+      "opcoes": [
+        "trocar um problema por outro / planejassem condições para ensinar comportamentos com que os alunos lidassem com seus problemas cotidianos",
+        "um avanço tecnológico / adotassem o PSI em todas as disciplinas, sem modificações",
+        "uma perda de tempo / voltassem às aulas expositivas com provas mensais",
+        "uma questão administrativa / deixassem a programação de ensino para os psicólogos"
+      ],
+      "explicacao": "Para Bori, o formato do PSI não era doutrina. O ponto de partida era o aluno e o problema local que ele precisava enfrentar; o formato vinha depois, a serviço disso.",
+      "fonte": "Cândido (2025, p. 85).",
+      "dica": "Ela não queria um sistema novo, e sim professores que programassem contingências."
+    },
+    {
+      "tipo": "complete",
+      "enunciado": "Ao formar professores em PSI no Brasil e na Venezuela, Bori começava pelos objetivos: comportamentos terminais e intermediários, discutidos quanto à sua relevância humana e social. Só depois vinham os procedimentos. Ela justifica essa ordem assim: o como ele vai ensinar coloca como condição também o que, o para quem e ___.",
+      "opcoes": [
+        "o para que vai ensinar",
+        "o quanto vai custar",
+        "o quando vai avaliar",
+        "o onde vai aplicar a prova"
+      ],
+      "explicacao": "O \"para que\" separa a leitura de Bori de uma aplicação mecânica. Sem objetivos definidos, reproduzir as características do PSI (passos, monitores, ritmo próprio) seria institucionalizar uma forma vazia, o que ela criticava em professores que \"apenas reproduziam as características\" do sistema.",
+      "fonte": "Bori (1975, p. 5), citada em Cândido (2025, p. 92).",
+      "dica": "Faltou a finalidade."
+    },
+    {
+      "tipo": "contraste",
+      "enunciado": "Em 1974, Bori descreve como o PSI mudou no Brasil: \"nós já não ensinamos pessoas a programar cursos, mas buscar por contingências dentro das atividades e programá-las\". Complete o contraste: o PSI de Keller e Sherman era definido sobretudo pelo seu ___, enquanto na versão de Bori o que muda são ___.",
+      "opcoes": [
+        "formato (pequenos passos, ritmo próprio, monitores, ausência de punição) / os determinantes da sequência, dados pelos comportamentos definidos como objetivos",
+        "conteúdo (física e engenharia) / os livros usados em cada unidade",
+        "custo baixo para a universidade / os salários dos monitores",
+        "número de alunos por turma / os horários das provas"
+      ],
+      "explicacao": "Bori mantém o formato do PSI, mas a ordem das unidades deixa de ser fixa: ela deriva da análise dos comportamentos terminais. Nas palavras dela, um estágio \"mais ambicioso\" de programação.",
+      "fonte": "Bori (1974, pp. 71–72), citada em Cândido (2025, pp. 92–93).",
+      "dica": "Uma coisa é a embalagem; outra é o que decide a ordem do que vem dentro."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Nas instruções de um curso programado que Bori aplicou na Universidade do Texas, em 1966, o aluno percorre 11 unidades, cada uma liberada por um \"teste de prontidão\" que exige desempenho perfeito ou quase. Só há dois graus possíveis: A ou incompleto. Siga a lógica do curso: se o aluno falha num teste de prontidão, ___.",
+      "opcoes": [
+        "nada de ruim acontece: ele estuda mais um pouco e tenta de novo, no seu próprio ritmo",
+        "perde pontos na média final e segue para a unidade seguinte",
+        "repete o curso inteiro no semestre seguinte",
+        "é encaminhado a uma aula expositiva obrigatória"
+      ],
+      "explicacao": "O texto diz: \"Nós realmente não esperamos que passe no primeiro teste de cada unidade\". Sem punição pelo erro e com critério de domínio, o que varia entre os alunos é o tempo, e não o nível de aprendizagem. É a mesma lógica dos quadros deste jogo.",
+      "fonte": "Instruções do curso, citadas em Cândido (2025, pp. 78–79).",
+      "dica": "No curso programado, errar custa tempo, não nota."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Em 1965, depois da intervenção militar na UnB, cerca de 90% dos professores pediram demissão, e o departamento criado por Bori acabou. Historiadores chamam o episódio de \"diáspora\". Siga o raciocínio: o fim do departamento acabou ___.",
+      "opcoes": [
+        "acelerando a difusão da análise do comportamento, porque os professores voltaram às suas instituições levando o que tinham construído em Brasília",
+        "interrompendo a análise do comportamento no Brasil até os anos 1980",
+        "concentrando toda a análise do comportamento brasileira em Brasília",
+        "levando Bori a abandonar o ensino e a se dedicar só à política científica"
+      ],
+      "explicacao": "Bori e Azzi voltaram à USP; Pessotti levou Keller e Skinner à Itália; ex-alunos foram para Campinas e Ribeirão Preto, e um deles ajudou a organizar o grupo que criou a ABPMC. A perda institucional virou dispersão produtiva.",
+      "fonte": "Cândido (2025, pp. 71–72), citando Todorov (2006).",
+      "dica": "Uma diáspora espalha pessoas, e com elas o que sabem."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Na revista Psicologia (1975–1987), muitos autores eram orientandos de Bori. Ela, porém, recusava assinar como coautora os artigos deles; a orientação aparecia só em nota de rodapé. Coerente com o retrato que o livro faz dela, essa recusa sugere que ___.",
+      "opcoes": [
+        "ela via a formação de novos pesquisadores, e não a própria lista de publicações, como o produto do seu trabalho",
+        "ela discordava dos resultados que os orientandos publicavam",
+        "a revista proibia a coautoria de orientadores",
+        "ela preferia publicar apenas em revistas estrangeiras"
+      ],
+      "explicacao": "Liga-se à primeira ideia do livro: bibliografia pequena, influência enorme. A autoria era dos alunos; o efeito de Bori ficava no repertório deles.",
+      "fonte": "Cândido (2025, p. 97).",
+      "dica": "Volte à ideia de que a obra dela está no comportamento dos outros."
+    },
+    {
+      "tipo": "contraste",
+      "enunciado": "À frente da comissão de difusão científica da SBPC nos anos 1980, Bori esteve por trás da revista Ciência Hoje, do programa de rádio Encontro com a Ciência e do programa de TV Contato. Ela fazia questão de uma palavra. Complete o contraste: em vez de \"divulgação\", ela preferia ___, porque queria ___.",
+      "opcoes": [
+        "\"difusão\" / integrar a ciência à vida cotidiana das pessoas",
+        "\"propaganda\" / aumentar o orçamento da SBPC",
+        "\"extensão\" / levar professores universitários às escolas",
+        "\"vulgarização\" / simplificar os resultados para o público leigo"
+      ],
+      "explicacao": "A escolha da palavra não é detalhe: divulgar é anunciar resultados; difundir é fazer a ciência circular e fazer parte da vida das pessoas. O programa Contato, por exemplo, mostrava como a ciência aparece nos detalhes do cotidiano.",
+      "fonte": "Cândido (2025, pp. 109–111).",
+      "dica": "A palavra que ela escolheu sugere espalhar, e não apenas anunciar."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Numa palestra de 1984, Bori defende que a pesquisa faça parte da formação de todos os profissionais, e não só dos futuros cientistas. Siga o argumento: se os profissionais brasileiros não aprenderem a produzir conhecimento sobre problemas locais, eles ___.",
+      "opcoes": [
+        "vão atuar como aplicadores de modelos importados, feitos para resolver problemas de outros países",
+        "vão produzir ciência demais e tecnologia de menos",
+        "vão depender da SBPC para conseguir emprego",
+        "vão deixar o país em busca de laboratórios melhores"
+      ],
+      "explicacao": "É a mesma perspectiva brasileira que atravessa a obra dela: analisar condições locais, definir objetivos, propor estratégias. Ciência e tecnologia, para Bori, eram caminho para o desenvolvimento social do país.",
+      "fonte": "Botomé (2007) e Bori (1986; 1989), citados em Cândido (2025, p. 116).",
+      "dica": "Quem não produz conhecimento sobre o próprio problema acaba importando soluções de outros."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Em 1977, o governo militar recusou apoio à reunião anual da SBPC prevista para Fortaleza. Cerca de 400 sócios se reuniram em assembleia, artistas ajudaram a arrecadar fundos e famílias hospedaram congressistas. Bori, secretária da diretoria, participou das negociações. O resultado foi que ___.",
+      "opcoes": [
+        "a 29ª Reunião Anual aconteceu mesmo assim, abrigada pela PUC-SP, e virou um ato de resistência",
+        "a reunião foi cancelada e só voltou depois da redemocratização",
+        "a SBPC aceitou retirar os debates políticos para recuperar o apoio",
+        "a reunião foi transferida para o exterior"
+      ],
+      "explicacao": "O episódio mostra a SBPC como um dos raros fóruns abertos durante a ditadura, e Bori com uma marca que o livro repete: aparência frágil e doce, firmeza nas negociações.",
+      "fonte": "Cândido (2025, pp. 104–105).",
+      "dica": "A reunião encontrou abrigo numa universidade de São Paulo."
+    },
+    {
+      "tipo": "raciocinio",
+      "enunciado": "Aprovada a Lei 4.119 (1962), formou-se uma comissão para avaliar diplomas de psicólogo. O primeiro critério foi registrar os próprios membros. O presidente, Lourenço Filho, recusou o próprio registro por achar que seu trabalho não se enquadrava na psicologia. Com isso, o registro número 1 ___.",
+      "opcoes": [
+        "ficou com Carolina Bori, a única mulher da comissão, pelo critério \"primeiro as damas\"",
+        "ficou vago, em homenagem a Lourenço Filho",
+        "foi para o membro mais velho da comissão",
+        "foi sorteado entre os membros"
+      ],
+      "explicacao": "A anedota tem um fundo sério: ao longo dos anos 1950, Bori havia lutado pela regulamentação da profissão de psicólogo, contra o projeto que criaria apenas o cargo técnico de \"psicologista\", auxiliar de médicos na aplicação de testes.",
+      "fonte": "Cândido (2025, pp. 50–51; ver também pp. 37–38).",
+      "dica": "Havia só uma mulher na comissão."
+    }
+  ]
 }
 
 };
@@ -3200,7 +3653,7 @@ function desenharLutador(id, anima){
   else               acao = `<button class="btn" id="btnPlay">Escolher ${esc(b.curto)}</button>`;
   info.innerHTML = `<div class="f-school">${esc(trancado?'Personagem secreto':b.escola)}${sub?`<em>${esc(sub)}</em>`:''}</div>
     <p class="f-motto">${esc(trancado?'Alguém aparece quando o jogo estiver aquecido. Continue jogando para descobrir quem é.':b.lema)}</p>
-    ${trancado?'':`<p class="f-book"><b>NO LIVRO-BASE</b>${esc(textoLivro(b))}</p>`}
+    ${(trancado||!textoLivro(b))?'':`<p class="f-book"><b>NO LIVRO-BASE</b>${esc(textoLivro(b))}</p>`}
     <div class="f-actions">${acao}</div>`;
   const play = $('#btnPlay'); if (play) play.addEventListener('click',jogar);
 }
