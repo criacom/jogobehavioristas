@@ -521,6 +521,16 @@ a.btn{text-decoration:none;display:inline-block}
 .medal.lock .mn{color:var(--slate)}
 .medal.got{border-color:var(--steel);background:var(--deep)}
 
+/* =========================================================
+   TELA 7 — estatísticas gerais (meu desempenho)
+   ========================================================= */
+.logbook{border:2px solid var(--slate);padding:2px 10px;max-height:360px;overflow-y:auto}
+.logbook .row{display:grid;grid-template-columns:112px 1fr 60px 70px;gap:10px;padding:7px 2px;align-items:center;font-size:13px;border-bottom:1px solid var(--slate)}
+.logbook .row:last-child{border-bottom:none}
+.logbook .row.head{font-family:var(--f-pix);font-size:10px;color:var(--steel);text-transform:uppercase;letter-spacing:.03em;border-bottom:2px solid var(--slate)}
+.logbook .row .pct{font-family:var(--f-disp);font-weight:800;color:var(--ice)}
+@media (max-width:560px){ .logbook .row{grid-template-columns:1fr 50px 60px;font-size:12px} .logbook .row.head :first-child, .logbook .row:not(.head) :first-child{display:none} }
+
 /* toast de conquista */
 .toast{
   position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 60px));visibility:hidden;
@@ -591,6 +601,8 @@ a.btn{text-decoration:none;display:inline-block}
     <div class="brand">Micro-jogos CRIACOM <small>Vol. 8 · Behaviorismo(s)</small></div>
     <nav>
       <button class="chip" id="navTrophies">Conquistas</button>
+      <button class="chip" id="navStats">Desempenho</button>
+      <button class="chip" id="navAleatorio">Aleatório</button>
       <button class="chip" id="navSound" aria-pressed="true" title="Ligar ou desligar o som">Som</button>
     </nav>
   </header>
@@ -605,7 +617,9 @@ a.btn{text-decoration:none;display:inline-block}
         <p class="lede">Quem disse isso? Em que livro? Em que capítulo? Escolha um behaviorista, escolha uma obra ou um tema dele e responda. Cada rodada termina no seu registro cumulativo.</p>
         <div class="title-actions">
           <button class="btn" id="btnStart">Jogar</button>
+          <button class="btn" id="btnAleatorio">Modo Aleatório</button>
           <button class="btn ghost" id="btnTrophies">Ver conquistas</button>
+          <button class="btn ghost" id="btnStats">Meu desempenho</button>
         </div>
         <div class="hello">
           <img id="helloImg" alt="Boatacon, o orientador em campo, fazendo sinal de positivo">
@@ -796,6 +810,39 @@ a.btn{text-decoration:none;display:inline-block}
     <p class="lede" id="trophyCount" style="margin-top:0"></p>
     <div id="trophyList"></div>
     <div class="next-row"><button class="btn ghost" id="btnTrophyBack">Voltar</button></div>
+  </section>
+
+  <!-- TELA: estatísticas gerais -->
+  <section class="screen" id="sStats" hidden>
+    <h2 style="font-size:clamp(34px,5vw,54px);margin-bottom:6px">Meu desempenho</h2>
+    <p class="lede" id="statsLede" style="margin-top:0"></p>
+    <div class="result-head" style="margin-bottom:22px">
+      <div class="bignum" id="statAcc"></div>
+      <div class="bignum" id="statTotal"></div>
+      <div class="bignum" id="statStreak"></div>
+      <div class="bignum" id="statQuizzes"></div>
+    </div>
+    <div class="charts">
+      <div class="chart">
+        <h3>Acurácia por behaviorista</h3>
+        <p>Melhor desempenho já alcançado nos quizzes de cada um, em porcentagem.</p>
+        <canvas id="autorCanvas" aria-label="Acurácia por behaviorista"></canvas>
+      </div>
+      <div class="chart">
+        <h3>Evolução ao longo das rodadas</h3>
+        <p>Cada ponto é uma rodada concluída, na ordem em que aconteceu.</p>
+        <canvas id="evoCanvas" aria-label="Evolução da acurácia ao longo das rodadas"></canvas>
+      </div>
+    </div>
+    <div class="unlocked">
+      <h3>Banco de rodadas</h3>
+      <p class="lede" style="margin-top:0">Registro de cada rodada concluída neste navegador, da mais recente para a mais antiga.</p>
+      <div class="logbook">
+        <div class="row head"><span>Quando</span><span>Quiz</span><span>Acerto</span><span>Pontos</span></div>
+        <div id="statsLog"></div>
+      </div>
+    </div>
+    <div class="next-row"><button class="btn ghost" id="btnStatsBack">Voltar</button></div>
   </section>
 
   <footer class="foot">
@@ -1727,7 +1774,7 @@ const QUIZZES = {
     opcoes:['The Integrative Action of the Nervous System, de Sherrington','Conditioned Reflexes, de Pavlov','Animal Intelligence, de Thorndike','Behavior, de Watson'],
     explicacao:'Keller remonta a Sherrington (1906), vencedor do prêmio Nobel, leis como limiar, latência, pós-descarga e somação temporal; quatro outras vieram de Pavlov: condicionamento tipo S, extinção, indução (generalização) e discriminação. Das 24 leis do livro de 1938, portanto, a maioria já existia, o que não diminui o mérito de reuni-las num sistema único.',
     fonte:'Keller (1973), cap. 12, pp. 135–136.',
-    dica:'Prêmio Nobel, 1906.' },
+    dica:'O prêmio Nobel dele veio décadas depois desse livro de 1906.' },
   { tipo:'conceito',
     enunciado:'Na terminologia de 1938, o que a expressão "Type R" sugeria?',
     opcoes:['Dependência do reforço em relação à resposta','Dependência da resposta em relação ao estímulo antecedente','Uma resposta de tipo reflexo','Uma resposta sempre reforçada em razão fixa'],
@@ -1749,9 +1796,9 @@ const QUIZZES = {
   { tipo:'conceito',
     enunciado:'Qual novidade da 2ª edição (1973) Keller descreve como uma espécie de "penitência"?',
     opcoes:['Um capítulo sobre Freud e McDougall','Um capítulo sobre o behaviorismo radical','A inclusão de Hobbes e Helmholtz','O índice remissivo'],
-    explicacao:'Entre a primeira edição e a segunda se passaram 36 anos, e Keller aproveitou a revisão para três coisas: acrescentar um capítulo sobre teorias da aprendizagem e behaviorismo radical, suprir a omissão de Hobbes e Helmholtz (sua "penitência", nas palavras dele) e incluir um índice remissivo, feito pelo filho dele, John V. Keller.',
+    explicacao:'Entre a primeira edição e a segunda se passaram 36 anos, e Keller aproveitou a revisão para três coisas: acrescentar um capítulo sobre teorias da aprendizagem e o behaviorismo radical; incluir, como ele mesmo escreve, "a kind of penance" (uma espécie de penitência), um capítulo sobre Freud e McDougall; e reparar a omissão anterior de Hobbes e Helmholtz — isso ele diz apenas ter corrigido, sem chamar de penitência. Incluiu ainda um índice remissivo, feito pelo filho dele, John V. Keller.',
     fonte:'Keller (1973), Prefácio da 2ª edição.',
-    dica:'Ele acha que faltou espaço para dois autores de "fora" do behaviorismo.' },
+    dica:'Ele usa essa palavra para o capítulo sobre dois autores que nunca fizeram parte do behaviorismo.' },
   { tipo:'quem',
     enunciado:'No prefácio da 1ª edição (1937), Keller agradece pelo apoio na redação a Clarence Young, à esposa Frances e a quem mais, então na Universidade de Minnesota?',
     opcoes:['B. F. Skinner','John B. Watson','Edward L. Thorndike','Edwin G. Boring'],
@@ -2246,7 +2293,7 @@ const QUIZZES = {
     fonte:'Watson (1913/2008, p. 295).',
     dica:'A dificuldade extra vem de outras pessoas, não do ambiente físico.' },
   { tipo:'complete',
-    enunciado:'Watson descreve, de forma quase irônica, o tipo de relato que a introspecção tradicional buscaria sobre um estado de consciência: algo como "isto consiste na sensação cinza número 350, de tal extensão, ocorrendo junto com uma sensação de frio de tal intensidade". Ele diz que seu próprio objetivo é outro. Complete: "meu objetivo não é a descrição e a explicação dos estados de consciência enquanto tais, mas sim aprender os métodos gerais e particulares pelos quais eu possa ___."',
+    enunciado:'Watson descreve, de forma quase irônica, o tipo de relato que a introspecção tradicional buscaria sobre um estado de consciência: algo como "isto consiste na sensação cinza número 350, de tal extensão, ocorrendo junto com uma sensação de frio de tal intensidade". Ele diz que seu próprio objetivo é outro. Complete: não descrever e explicar os estados de consciência enquanto tais, mas aprender os métodos gerais e particulares pelos quais possa ___.',
     opcoes:['controlar o comportamento','classificar os tipos de personalidade','medir a intensidade das sensações','explicar a origem da linguagem'],
     explicacao:'A frase resume o desvio de meta do artigo inteiro: descrever a experiência interna dá lugar a controlar o que o organismo faz, e é esse deslocamento, não uma descoberta específica, que Watson chama de behaviorismo.',
     fonte:'Watson (1913/2008, p. 295).',
@@ -2285,7 +2332,7 @@ const QUIZZES = {
     enunciado:'Watson não se considera hostil só ao estruturalismo de Titchener; ele também tem uma "querela" com a psicologia funcional, que ao menos tentava dar função aos processos mentais. Segundo ele, ao tentar fazer os estados mentais parecerem realmente atuar no ajustamento do organismo, o funcionalista cai quase sempre na mesma armadilha terminológica. Complete: ele recorre a termos de ___, ainda que se defenda dizendo que é só conveniência de linguagem.',
     opcoes:['interação, entre mente e corpo','paralelismo psicofísico','associação de ideias','reflexo condicionado'],
     explicacao:'Watson argumenta que, para descrever um estado mental "funcionando", o funcionalista escorrega para uma linguagem de interação entre mente e corpo, mesmo quando professa o paralelismo; para ele, só o behaviorismo evita as duas armadilhas por completo.',
-    fonte:'Watson (1913/2008, p. 298).',
+    fonte:'Watson (1913/2008, p. 294).',
     dica:'É o tipo de linguagem que sugere a mente agindo diretamente sobre o corpo.' }
   ]
 }
@@ -2441,7 +2488,7 @@ const QUIZZES = {
     opcoes:['me comportar diante das cores do mesmo jeito que você','sentir prazer ou desprazer ao vê-las','lembrar dessas cores no futuro','conseguir nomeá-las corretamente em qualquer idioma'],
     explicacao:'É o argumento epistemológico que sustenta toda a proposta de 1922: a experiência privada de cada um nunca "atravessa" para o outro; o que atravessa é sempre comportamento, incluindo o comportamento de nomear e apontar.',
     fonte:'Tolman (1922/1966, p. 4).',
-    dica:'A palavra "comportar-se" já está dentro da resposta certa.' },
+    dica:'É o mesmo argumento epistemológico do artigo de 1922: nada da experiência íntima "atravessa" para o outro.' },
   { tipo:'contraste',
     enunciado:'Tolman lista três razões para a ascensão do behaviorismo: a introspecção mostrando-se inadequada desde os experimentos de Ebbinghaus sobre memória, o método sendo trabalhoso e pouco produtivo, e uma terceira, de natureza lógica. Complete essa terceira razão: como construir uma ciência sobre elementos que, por definição, são ___?',
     opcoes:['privados e incomunicáveis','mensuráveis apenas em laboratório','exclusivos dos seres humanos','invariáveis de um indivíduo para outro'],
@@ -2465,7 +2512,7 @@ const QUIZZES = {
     opcoes:['mapa tentativo e provisório do ambiente','lista fixa de reflexos condicionados','banco de hábitos já consolidados','registro de todas as recompensas recebidas até ali'],
     explicacao:'É o núcleo da proposta de 1948: entre o estímulo e a resposta existe um processamento intermediário, um mapa provisório, e é esse mapa, não o estímulo isolado, que decide o comportamento final.',
     fonte:'Tolman (1948/1966, pp. 244–245).',
-    dica:'O mapa é "tentativo": pode mudar conforme chegam novos sinais.' }
+    dica:'É a mesma metáfora da "sala de controle com mapa" das perguntas sobre a central telefônica.' }
   ]
 }
 ,
@@ -2593,7 +2640,7 @@ const QUIZZES = {
     enunciado:'O quinto postulado explica por que um organismo reage a um estímulo parecido, mas não idêntico, ao que foi reforçado. Complete: a força efetiva do hábito nesse novo estímulo é tanto maior quanto ___ a diferença entre ele e o estímulo original de reforço, medida em unidades de limiar de discriminação.',
     opcoes:['menor for','maior for','mais antiga for','mais consciente for'],
     explicacao:'É o gradiente de generalização: a força do hábito se espalha para estímulos vizinhos ao original, mas cai à medida que a diferença entre eles aumenta.',
-    fonte:'Hull (1943, Postulado 5, pp. 178–180).',
+    fonte:'Hull (1943, Postulado 5, cap. XII, p. 199).',
     dica:'Quanto mais parecido, mais força; quanto mais diferente, menos.' },
   { tipo:'raciocinio',
     enunciado:'Os postulados sexto e sétimo introduzem a motivação na equação. Primeiro, cada impulso (drive) tem um estímulo característico associado a ele. Depois, Hull explica como a força de hábito se transforma em ação de fato. Complete: a força de hábito só vira potencial de reação quando é "sensibilizada" pelos impulsos ativos no organismo, resultado que se obtém ___.',
@@ -2663,7 +2710,7 @@ const QUIZZES = {
   arte:'img/rachlin-retrato.png',
   arteAlt:'Howard Rachlin sorrindo, de camisa vinho, em preto e azul-gelo',
   rodada:10,
-  referencia:'Rachlin, H. (2021). Teleological behaviorism: Origins and present status. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 3–19). Springer. Réplica de Lazzeri, F. (pp. 21–32); resposta de Rachlin (pp. 33–41).',
+  referencia:'Rachlin, H. (2021). Teleological behaviorism: Origins and present status. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 3–19). Springer. Réplica de Lazzeri, F. (pp. 21–32); resposta de Rachlin (pp. 33–40).',
   leituraInicial:'Este quiz segue o formato de instrução programada: cada quadro ensina um pedaço pequeno da ideia e pede que você complete uma lacuna quase óbvia, para aprender com o mínimo de erro possível. Não é um teste de memória, é um percurso guiado pelos três capítulos da Parte I do livro: o texto de Rachlin, o comentário de Filipe Lazzeri e a resposta de Rachlin a ele.',
   intro:'Como pouca gente no Brasil tem acesso fácil a este livro, cada quadro aqui ensina antes de perguntar. Leia o texto inteiro do quadro; a resposta certa quase sempre já apareceu nele, só de outro jeito.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo teleológico', perfeito:'Causa final, sem erro' },
@@ -2722,13 +2769,13 @@ const QUIZZES = {
     enunciado:'Rachlin chama sua posição de behaviorismo teleológico (TEB). Para o TEB, a mente não é um conjunto de eventos internos escondidos; a mente É o próprio padrão de comportamento manifesto (overt), observável em princípio por qualquer outra pessoa. Complete: para o TEB, a mente se identifica com o ___.',
     opcoes:['padrão de comportamento manifesto','conjunto de processos neurais internos','fluxo de pensamentos privados','conjunto de emoções sentidas por dentro'],
     explicacao:'É a definição com que Rachlin abre o capítulo: uma "teoria da identidade comportamental da mente". Mente e comportamento manifesto não são duas coisas ligadas por uma causa; para o TEB, são a mesma coisa.',
-    fonte:'Rachlin (2021, cap. 1, p. 4).',
+    fonte:'Rachlin (2021, cap. 1, p. 8).',
     dica:'A resposta certa repete quase a mesma frase do quadro.' },
   { tipo:'quadro',
     enunciado:'Rachlin recorre a Aristóteles para separar dois tipos de pergunta "por quê". Uma causa eficiente responde "como" algo aconteceu (o mecanismo). Uma causa final responde "por que" algo aconteceu (o propósito, o "para quê"). Para o TEB, a mente pode ser uma causa final do comportamento, mas nunca uma causa eficiente. Complete: a mente responde à pergunta ___, não à pergunta "como".',
     opcoes:['"por quê" (o propósito do ato)','"quando" (o momento do ato)','"onde" (o lugar do ato)','"quem" (o autor do ato)'],
     explicacao:'A distinção entre causa eficiente e causa final é o alicerce do TEB: ela permite falar em "propósito" sem recorrer a nenhum mecanismo mental interno.',
-    fonte:'Rachlin (2021, cap. 1, p. 5).',
+    fonte:'Rachlin (2021, cap. 1, p. 8).',
     dica:'O quadro já disse: causa final responde a essa pergunta específica.' },
   { tipo:'quadro',
     enunciado:'Rachlin distingue causas finais estreitas de causas finais amplas. Uma causa final estreita é o mesmo que reforço: um ato de valor mais alto (comer a comida) explica por que ocorreu um ato de valor mais baixo (pressionar a barra). Complete: a causa final estreita corresponde, na linguagem já conhecida da análise do comportamento, ao conceito de ___.',
@@ -2740,19 +2787,19 @@ const QUIZZES = {
     enunciado:'Já a causa final ampla descreve a relação entre um padrão de atividade abstrato e estendido no tempo e os atos particulares que compõem esse padrão. O exemplo de Rachlin: dançar é a causa final ampla de dar os passos da dança. Pergunte "por que você está dando esses passos?" e a resposta aponta para o padrão inteiro, não para o passo isolado. Complete: a causa final ampla explica um ato apontando para o ___ do qual ele faz parte.',
     opcoes:['padrão de atividade mais amplo, estendido no tempo','reflexo condicionado que o precedeu','estado emocional momentâneo do agente','estímulo discriminativo mais próximo'],
     explicacao:'"Wide" (ampla) é a palavra-chave: o padrão inteiro, como dançar, é que explica cada passo individual, não o contrário.',
-    fonte:'Rachlin (2021, cap. 1, p. 8).',
+    fonte:'Rachlin (2021, cap. 1, p. 9).',
     dica:'Pense no exemplo da dança: o padrão inteiro explica o passo, não o passo isolado.' },
   { tipo:'quadro',
     enunciado:'Rachlin aplica a causa final ampla ao autocontrole. Em vez de descrever o autocontrole como uma força de vontade interna vencendo uma tentação externa, ele o descreve como um conflito entre um padrão comportamental amplo e saudável (por exemplo, "ter uma alimentação equilibrada") e um ato particular e impulsivo (comer o doce agora). Complete: para o TEB, autocontrole é o conflito entre um ato impulsivo e um ___.',
     opcoes:['padrão comportamental mais amplo e saudável','desejo inconsciente reprimido','traço fixo de personalidade','instinto herdado geneticamente'],
     explicacao:'Essa é uma das aplicações mais citadas do TEB: trocar "vontade contra tentação" (dois agentes internos) por "padrão amplo contra ato particular" (só comportamento, em duas escalas de tempo diferentes).',
-    fonte:'Rachlin (2021, cap. 1, p. 9).',
+    fonte:'Rachlin (2021, cap. 1, p. 15).',
     dica:'A explicação troca duas forças internas por dois comportamentos, um maior e um menor.' },
   { tipo:'quadro',
     enunciado:'Rachlin lembra que os antigos gregos, sobretudo Aristóteles, já pensavam nas "almas" como modos de viver, como padrões de comportamento manifesto dos organismos. Ele sugere que Skinner, sem usar essa palavra, também propôs uma nova forma de conceber a alma. Complete: para Rachlin, a proposta de Skinner é, no fundo, uma forma nova de pensar sobre um problema ___.',
     opcoes:['muito antigo, já tratado pelos gregos','exclusivo da psicologia do século XX','impossível de formular sem neurociência','estranho a qualquer tradição filosófica'],
     explicacao:'Rachlin gosta de mostrar que o problema mente-corpo, que o behaviorismo tenta resolver, já era tema de reflexão bem antes da psicologia existir como disciplina.',
-    fonte:'Rachlin (2021, cap. 1, p. 3).',
+    fonte:'Rachlin (2021, cap. 1, p. 8).',
     dica:'A resposta liga o problema a uma tradição bem mais antiga que Skinner.' },
   { tipo:'quadro',
     enunciado:'No capítulo 2, o comentarista Filipe Lazzeri situa o behaviorismo teleológico dentro de uma linhagem maior: ele herda pressupostos do behaviorismo radical de Skinner, como a ideia de que o comportamento é um fenômeno regido por leis e de que ações devem ser entendidas em termos de comportamento operante. Complete: para Lazzeri, o TEB tenta aumentar o poder do behaviorismo radical de resolver problemas, combinando uma visão teleológica e molar do operante com uma explicação das categorias psicológicas (emoções, pensamentos) em termos de ___.',
@@ -2804,7 +2851,7 @@ const QUIZZES = {
   arte:'img/baum-sorrindo.png',
   arteAlt:'William M. Baum sorrindo, de barba branca, em preto e azul-gelo',
   rodada:10,
-  referencia:'Baum, W. M. (2021). Introduction to molar behaviorism and multiscale behavior analysis. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 43–61). Springer. Réplica de Laurenti, C. (pp. 63–70); resposta de Baum (pp. 71–79).',
+  referencia:'Baum, W. M. (2021). Introduction to molar behaviorism and multiscale behavior analysis. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 43–62). Springer. Réplica de Laurenti, C. (pp. 63–71); resposta de Baum (pp. 73–75).',
   leituraInicial:'Mesmo formato do quiz do Rachlin: cada quadro ensina antes de perguntar, e a lacuna quase sempre repete algo que o próprio quadro acabou de dizer. Os três capítulos aqui são o texto de Baum, o comentário de Carolina Laurenti e a resposta de Baum a ela.',
   intro:'Baum construiu sua visão molar ao longo de décadas, mudando de ideia algumas vezes no caminho. Os quadros seguem essa mesma ordem: dos primeiros axiomas até a resposta mais recente sobre genes e seleção.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo molar', perfeito:'Atividade em toda escala, sem erro' },
@@ -2883,7 +2930,7 @@ const QUIZZES = {
     enunciado:'Ao longo dos anos 1970, Baum passou a considerar a visão molecular do comportamento (que trata de respostas discretas e momentâneas) incompatível com a visão baseada em tempo. Um experimento de escolha com ratos, de 1976, o convenceu de que cronometrar atividades fazia mais sentido do que contar respostas isoladas. Complete: Baum deixou de achar as duas visões complementares e passou a considerá-las ___.',
     opcoes:['incompatíveis entre si','idênticas na prática','aplicáveis só a humanos','irrelevantes para a análise do comportamento'],
     explicacao:'É uma mudança de posição que o próprio Baum reconhece na autobiografia do capítulo: primeiro achava que molar e molecular podiam conviver, depois concluiu que representam visões incompatíveis do que conta como dado.',
-    fonte:'Baum (2021, cap. 4, p. 51).',
+    fonte:'Baum (2021, cap. 4, p. 45).',
     dica:'A palavra oposta a "complementares" é a resposta certa.' },
   { tipo:'quadro',
     enunciado:'No capítulo 5, a comentarista Carolina Laurenti trata a visão molar como um novo paradigma científico, no sentido de Thomas Kuhn: uma mudança que envolve afirmações ontológicas e epistemológicas incomensuráveis com as da visão molecular. Complete: para avaliar essa mudança, Laurenti propõe examinar o "nível de profundidade" das implicações da visão molar, isto é, o quanto ela realmente ___ a forma de fazer análise do comportamento.',
@@ -2907,19 +2954,19 @@ const QUIZZES = {
     enunciado:'No capítulo 6, ao responder a Laurenti, Baum corrige um detalhe de vocabulário: ele prefere não chamar uma atividade de "agregado", palavra que sugere apenas uma coleção solta de partes. Complete a palavra que ele prefere no lugar: uma atividade é melhor descrita como um ___ com partes, algo mais parecido com uma Gestalt.',
     opcoes:['todo integrado','conjunto aleatório','sistema fechado','processo isolado'],
     explicacao:'Baum quer deixar claro que as partes de uma atividade não estão só uma ao lado da outra; elas formam uma unidade organizada, do menor até o maior nível de escala, e é essa organização que a palavra "agregado" deixaria escapar.',
-    fonte:'Baum (2021, cap. 6, p. 75).',
+    fonte:'Baum (2021, cap. 6, pp. 74–75).',
     dica:'A resposta certa evoca a ideia de Gestalt, mencionada no próprio quadro.' },
   { tipo:'quadro',
     enunciado:'Ainda no capítulo 6, Baum discute como um gene sem efeito aparente (um "gene críptico") pode se tornar vantajoso quando o ambiente muda, um mecanismo conhecido como efeito Baldwin. Seu exemplo: tentilhões das Galápagos com bicos de certo formato só levaram vantagem quando uma seca mudou o tipo de semente disponível. Complete: o efeito Baldwin mostra que um gene pode ficar "invisível" à seleção até que uma mudança no ambiente o torne ___.',
     opcoes:['vantajoso (útil para a sobrevivência)','inútil de vez','dominante sobre os demais','impossível de herdar'],
     explicacao:'O gene não muda; o que muda é o ambiente, e é essa mudança externa que revela uma vantagem que estava latente o tempo todo no gene.',
-    fonte:'Baum (2021, cap. 6, pp. 71–72).',
+    fonte:'Baum (2021, cap. 6, p. 73).',
     dica:'A seca revelou uma vantagem que já existia, escondida, no bico dos tentilhões.' },
   { tipo:'quadro',
     enunciado:'Baum encerra sua resposta a Laurenti afirmando algo importante sobre o próprio pensamento "centrado no gene": reconhecer que organismos constroem nichos que beneficiam sua prole não nega a centralidade da herança genética; ao contrário, os próprios genes que favorecem a construção de nicho são selecionados por isso. Complete: para Baum, construção de nicho e seleção genética não são ideias opostas, mas ___.',
     opcoes:['complementares (uma explica a outra)','incompatíveis entre si','irrelevantes uma para a outra','idênticas, dois nomes para o mesmo processo'],
     explicacao:'É a última peça do argumento de Baum: ele não abandona a genética ao adotar a visão molar; mostra como a construção de nicho é, ela mesma, um comportamento que pode ser selecionado geneticamente.',
-    fonte:'Baum (2021, cap. 6, p. 79).',
+    fonte:'Baum (2021, cap. 6, p. 74).',
     dica:'Uma ideia reforça a outra, em vez de competir com ela.' },
   { tipo:'quadro',
     enunciado:'Juntando os três capítulos: para Baum, comportamento é atividade que ocupa todo o tempo de um organismo vivo, organizada em partes aninhadas de diferentes escalas, e distribuída entre alternativas segundo a lei da alocação; para Laurenti, essa proposta é significativa, mas nem toda parte dela é igualmente "profunda". Complete a palavra que dá nome ao behaviorismo de Baum, sempre que o comportamento é tratado como atividade estendida no tempo, e não como resposta isolada: behaviorismo ___.',
@@ -2941,7 +2988,7 @@ const QUIZZES = {
   arte:'img/staddon-retrato.png',
   arteAlt:'Retrato de John Staddon, de óculos, em preto e azul-gelo',
   rodada:10,
-  referencia:'Staddon, J. (2021). Theoretical behaviorism. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 79–95). Springer. Réplica de Lopes, C. E. (pp. 97–109); resposta de Staddon (pp. 111–114).',
+  referencia:'Staddon, J. (2021). Theoretical behaviorism. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 79–95). Springer. Réplica de Lopes, C. E. (pp. 97–105); resposta de Staddon (pp. 107–110).',
   leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Staddon, o comentário de Carlos Eduardo Lopes e a resposta de Staddon a ele.',
   intro:'Staddon escreve criticando os dois extremos que quer evitar: o behaviorismo sem teoria de Skinner, de um lado, e o mentalismo cientificista, do outro. Os quadros seguem essa disputa de perto.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo teórico', perfeito:'Nem Cila, nem Caríbdis' },
@@ -3001,25 +3048,25 @@ const QUIZZES = {
     enunciado:'Staddon atribui parte do sucesso de Skinner a duas invenções técnicas: a caixa de Skinner, que permitia experimentos automatizados de longa duração, e o registrador cumulativo, que mostrava o comportamento de um único sujeito em tempo real, em vez de médias estáticas de grupo. Complete: a taxa de resposta aparece, no registro cumulativo, como a ___ da curva.',
     opcoes:['inclinação (slope)','cor','largura','altura máxima'],
     explicacao:'É uma leitura gráfica simples: quanto mais inclinada a linha do registro cumulativo, mais rápido o organismo está respondendo naquele trecho.',
-    fonte:'Staddon (2021, cap. 7, p. 80).',
+    fonte:'Staddon (2021, cap. 7, p. 81).',
     dica:'Pense em como se lê a velocidade numa linha que sobe: pela inclinação dela.' },
   { tipo:'quadro',
     enunciado:'Staddon cita o próprio Skinner (1950) dizendo que a taxa de resposta "não é uma medida de probabilidade", mas é o único dado apropriado disponível numa formulação nesses termos. Complete o problema que Staddon vê nessa frase: Skinner reconhece que taxa de resposta não é exatamente o que se quer medir (probabilidade), mas a usa mesmo assim, por falta de ___.',
     opcoes:['algo melhor (uma alternativa teórica)','tempo para fazer mais experimentos','pesquisadores dispostos a colaborar','organismos disponíveis em laboratório'],
     explicacao:'É exatamente esse tipo de remendo, aceitar uma medida imperfeita por falta de teoria melhor, que Staddon usa como evidência de que faltava uma teoria mais desenvolvida ao sistema de Skinner.',
-    fonte:'Staddon (2021, cap. 7, p. 84).',
+    fonte:'Staddon (2021, cap. 7, p. 81).',
     dica:'Skinner admite a limitação, mas segue em frente sem resolvê-la.' },
   { tipo:'quadro',
     enunciado:'Staddon descreve seu projeto como uma tentativa de evitar dois exageros ao mesmo tempo, usando a imagem grega de Cila e Caríbdis, dois perigos opostos entre os quais um navegante precisa passar. Complete: de um lado fica o "simplismo ateórico" (Skinner sem teoria); do outro, o "mentalismo cientificista", um exagero na direção ___.',
     opcoes:['oposta, recorrendo demais a estados mentais internos','igual, recusando também qualquer teoria','neutra, sem relação com nenhum dos dois','intermediária, misturando as duas posições'],
     explicacao:'A imagem de Cila e Caríbdis marca a posição de Staddon como um meio-termo: nem behaviorismo sem teoria nenhuma, nem uma psicologia que devolve a explicação para estados mentais não observáveis.',
-    fonte:'Staddon (2021, cap. 7, p. 81).',
+    fonte:'Staddon (2021, cap. 7, p. 79).',
     dica:'É o mesmo tipo de imagem que Watson usa entre paralelismo e interação, só que aplicada a outro par de perigos.' },
   { tipo:'quadro',
     enunciado:'Staddon avalia John Watson como "realista e ingênuo" ao mesmo tempo. A parte realista estava em rejeitar relatos subjetivos e em primeira pessoa como dado científico. Complete a frase de Staddon sobre isso: para ele, "qualia" (experiências subjetivas) não são ___.',
     opcoes:['dados (não servem de evidência científica)','importantes para a vida cotidiana','mencionadas por nenhum psicólogo','fáceis de definir com precisão'],
     explicacao:'Staddon concorda com Watson nesse ponto específico: relatos de experiência consciente não constituem, por si só, dado científico aceitável.',
-    fonte:'Staddon (2021, cap. 7, p. 81).',
+    fonte:'Staddon (2021, cap. 7, p. 79).',
     dica:'A frase segue o mesmo padrão de recusa que Watson já defendia.' },
   { tipo:'quadro',
     enunciado:'No capítulo 8, o comentarista Carlos Eduardo Lopes começa perguntando o que exatamente significa "teórico" na expressão "behaviorismo teórico" de Staddon, já que a palavra "teoria" tem sentidos diferentes na filosofia, na ciência e na psicologia. Complete: para Lopes, antes de aceitar ou recusar a proposta de Staddon, é preciso primeiro ___ o que ele quer dizer com "teoria".',
@@ -3043,13 +3090,13 @@ const QUIZZES = {
     enunciado:'No capítulo 9, ao responder a Lopes, Staddon reconhece que se arrependeu do comentário inicial sobre "ismos", que rendeu uma lista longa demais de exemplos citados por Lopes. Ele tenta justificar a observação original notando algo sobre ciências maduras, como a física. Complete: segundo Staddon, "ismos" proliferam sobretudo enquanto uma ciência ainda está ___; numa ciência madura como a física, resta só o nome "física", sem sufixo nenhum.',
     opcoes:['em desenvolvimento (não totalmente madura)','sendo ensinada em escolas','sendo financiada por governos','sendo traduzida para outros idiomas'],
     explicacao:'É a defesa de Staddon para seu comentário original: "ismos" seriam sinal de uma disciplina ainda em formação, e ele espera que um dia a psicologia dispense rótulos como "behaviorismo" ou "cognitivismo" e vire, simplesmente, "psicologia".',
-    fonte:'Staddon (2021, cap. 9, p. 111).',
+    fonte:'Staddon (2021, cap. 9, p. 107).',
     dica:'Pense no oposto de uma ciência já consolidada, como a física de hoje.' },
   { tipo:'quadro',
     enunciado:'Staddon concorda com uma afirmação de Lopes: que não existe ciência sem teoria. Ele então pergunta como isso aparece no próprio trabalho científico de Skinner, e cita o biólogo Francisco Ayala, para quem a melhor forma de entender o método científico é examinar o trabalho de grandes cientistas. Complete: Staddon usa o exemplo de Charles Darwin, que, durante sua viagem no navio Beagle, coletava espécimes por pura curiosidade, sem nenhuma ___ prévia.',
     opcoes:['teoria','anotação','amostra','permissão'],
     explicacao:'O exemplo de Darwin serve ao argumento de Staddon: teoria pode nascer depois da observação cuidadosa, não precisa vir antes dela, o que reforça sua defesa de uma ciência que também começa sem teoria pronta.',
-    fonte:'Staddon (2021, cap. 9, pp. 111–112).',
+    fonte:'Staddon (2021, cap. 9, pp. 107–108).',
     dica:'É a mesma palavra que falta a Darwin no início da viagem, segundo o próprio Staddon.' },
   { tipo:'quadro',
     enunciado:'Juntando os três capítulos: Staddon defende que o behaviorismo precisa de teoria para explicar os dados que já produziu; Lopes questiona o que "teoria" significa nessa proposta e defende que nomear escolas de pensamento já é, em si, um ato científico; Staddon responde citando ciências maduras e o exemplo de Darwin. Complete: no centro dessa disputa está uma pergunta sobre o papel da ___ na prática científica.',
@@ -3061,7 +3108,7 @@ const QUIZZES = {
     enunciado:'Vale reforçar uma distinção que atravessa os três capítulos: para Staddon, ser "teórico" não é o mesmo que ser mentalista. Ele quer teoria científica testável, não explicações por estados internos inobserváveis. Complete: o behaviorismo teórico de Staddon aceita construir teoria, mas continua recusando, do mesmo jeito que Skinner, explicar o comportamento por ___.',
     opcoes:['estados mentais inobserváveis, tomados como causa','experimentos de laboratório','registros cumulativos de dados','esquemas de reforçamento'],
     explicacao:'É o ponto que evita confundir "behaviorismo teórico" com "mentalismo": Staddon quer mais teoria, mas ainda dentro dos limites do que pode ser observado e testado, não um retorno a causas mentais escondidas.',
-    fonte:'Staddon (2021, cap. 7, p. 81.)',
+    fonte:'Staddon (2021, cap. 7, p. 79).',
     dica:'A resposta certa é justamente o "Caríbdis" que Staddon também quer evitar.' }
   ]
 }
@@ -3136,25 +3183,25 @@ const QUIZZES = {
     enunciado:'A segunda variável identificada por Donahoe é a discrepância comportamental: uma mudança no comportamento em curso, provocada pelo reforçador. Segundo ele, tanto no procedimento pavloviano quanto no operante, estímulos presentes no momento dessa discrepância ganham controle sobre as respostas próximas dali. Complete: essa ideia é chamada de princípio do reforçamento ___.',
     opcoes:['unificado','condicionado','molar','vicário'],
     explicacao:'É o conceito central do capítulo: um único princípio, baseado em contiguidade temporal e discrepância comportamental, explicaria tanto o condicionamento pavloviano quanto o operante, daí o nome "unificado".',
-    fonte:'Donahoe (2021, cap. 10, p. 119).',
+    fonte:'Donahoe (2021, cap. 10, pp. 119–120).',
     dica:'O nome do princípio aparece logo depois da explicação, como título de seção.' },
   { tipo:'quadro',
     enunciado:'Donahoe chama seu princípio de "unificado" porque ele se aplica igualmente aos dois grandes procedimentos da aprendizagem: o pavloviano (no qual o estímulo condicionado e o contexto em que aparece funcionam como a parte "estímulo") e o operante. Complete: o mérito que Donahoe atribui ao princípio unificado é explicar os dois procedimentos com ___.',
     opcoes:['o mesmo mecanismo, em vez de dois mecanismos separados','experimentos completamente diferentes para cada um','apenas animais de laboratório, nunca humanos','apenas estímulos visuais, nunca sonoros'],
     explicacao:'A economia teórica é o ponto forte do argumento: em vez de precisar de duas explicações diferentes para pavloviano e operante, o mesmo princípio, baseado nas mesmas duas variáveis, dá conta dos dois.',
-    fonte:'Donahoe (2021, cap. 10, p. 119).',
+    fonte:'Donahoe (2021, cap. 10, p. 120).',
     dica:'A palavra "unificado" já indica que dois processos viram um só.' },
   { tipo:'quadro',
     enunciado:'Donahoe compara o momento atual da análise do comportamento a um episódio importante da história da biologia: só depois que os mecanismos genéticos da hereditariedade foram descobertos é que a seleção natural se tornou amplamente aceita, na síntese entre darwinismo e mendelismo. Complete: para Donahoe, integrar análise do comportamento e neurociência hoje é parecido com integrar, no passado, a seleção natural com a ___.',
     opcoes:['hereditariedade (genética)','estatística','fisiologia digestiva','psicanálise'],
     explicacao:'É a analogia histórica central do capítulo: assim como a genética deu uma base mecanística à seleção natural, a neurociência pode dar uma base mecanística ao princípio de reforçamento.',
-    fonte:'Donahoe (2021, cap. 10, p. 115).',
+    fonte:'Donahoe (2021, cap. 10, p. 117).',
     dica:'Pense no encontro clássico entre Darwin e Mendel, mencionado no próprio quadro.' },
   { tipo:'quadro',
     enunciado:'Donahoe nota que, apesar de a análise do comportamento considerar a seleção pelo reforço a explicação central da aprendizagem individual, a maioria dos demais psicólogos não compartilha dessa visão. Complete: para ele, isso é comparável à situação da seleção natural antes de ela encontrar uma base em ___.',
     opcoes:['mecanismos genéticos conhecidos','testes de laboratório replicáveis','uma editora disposta a publicá-la','apoio de outros biólogos famosos'],
     explicacao:'Antes de a genética explicar como a hereditariedade funciona, a seleção natural encontrava resistência; Donahoe espera que a neurociência faça, pelo princípio de reforçamento, o mesmo papel que a genética fez pela seleção natural.',
-    fonte:'Donahoe (2021, cap. 10, pp. 115–116).',
+    fonte:'Donahoe (2021, cap. 10, p. 117).',
     dica:'É a mesma resposta da pergunta anterior, revisitada de outro ângulo.' },
   { tipo:'quadro',
     enunciado:'No capítulo 11, o comentarista Marcus Bentes de Carvalho Neto lembra que a relação entre psicologia e biologia tem uma história longa e turbulenta, citando Auguste Comte, para quem não haveria justificativa para uma ciência psicológica independente, já que seus fenômenos pertenceriam sempre à sociologia ou à biologia. Complete: mesmo depois de a psicologia conquistar independência como disciplina, o behaviorismo continuou oscilando entre as influências da biologia e da ___.',
@@ -3172,19 +3219,19 @@ const QUIZZES = {
     enunciado:'No capítulo 12, ao responder a Carvalho Neto, Donahoe agradece por situar o princípio de reforçamento unificado num contexto histórico mais amplo e por levantar questões sobre o tratamento da punição. Ele nota que a relação entre análise do comportamento e seus mecanismos biológicos tem sido uma relação difícil. Complete: alguns analistas do comportamento temeram, equivocadamente, que construir pontes com a neurociência pudesse ___ a análise do comportamento como empreendimento científico independente.',
     opcoes:['enfraquecer (minar)','fortalecer demais','atrasar por décadas','tornar obsoleta imediatamente'],
     explicacao:'Donahoe descreve esse receio como um mal-entendido sobre a posição de Skinner: buscar mecanismos biológicos não ameaça a independência da análise do comportamento, do mesmo jeito que a fisiologia não ameaça a independência da biologia celular.',
-    fonte:'Donahoe (2021, cap. 12, p. 147).',
+    fonte:'Donahoe (2021, cap. 12, p. 145).',
     dica:'É o medo que Donahoe considera um mal-entendido sobre a posição de Skinner.' },
   { tipo:'quadro',
     enunciado:'Donahoe compara a relação entre análise do comportamento e neurociência à relação entre outras disciplinas biológicas vizinhas: fisiologia e neurociência celular, neurociência celular e biologia molecular, biologia molecular e genética. Complete: para ele, essas disciplinas são, ao mesmo tempo, independentes umas das outras e ___.',
     opcoes:['interdependentes (precisam umas das outras)','idênticas na prática','isoladas por completo','hierárquicas, com uma dominando as demais'],
     explicacao:'É a fórmula que resume a posição de Donahoe: cada disciplina tem seu próprio nível de análise, mas nenhuma delas funciona isolada das disciplinas vizinhas.',
-    fonte:'Donahoe (2021, cap. 12, p. 147).',
+    fonte:'Donahoe (2021, cap. 12, p. 145).',
     dica:'O quadro já apresenta a lista de pares de disciplinas vizinhas como exemplo.' },
   { tipo:'quadro',
     enunciado:'Donahoe também rejeita a posição oposta: a ideia de que, uma vez conhecidos os processos de nível mais baixo (como os genes), os processos de nível mais alto (como o organismo inteiro) se tornariam supérfluos. Ele cita um estudo mostrando que, mesmo sabendo muito sobre genes, inferir as estruturas que esses genes constroem continua sendo algo ___.',
     opcoes:['desafiador (difícil de fazer)','trivial e já resolvido','impossível por princípio','irrelevante para a biologia'],
     explicacao:'É o contra-argumento de Donahoe à ideia de que "tudo se reduz ao nível mais baixo": mesmo com o mapa genético em mãos, prever o organismo inteiro a partir dele continua sendo, na prática, muito difícil.',
-    fonte:'Donahoe (2021, cap. 12, p. 147).',
+    fonte:'Donahoe (2021, cap. 12, p. 145).',
     dica:'A resposta certa mostra que o conhecimento do nível baixo não resolve tudo automaticamente.' },
   { tipo:'quadro',
     enunciado:'Juntando os três capítulos: Donahoe propõe que contiguidade temporal e discrepância comportamental, juntas, formam um princípio de reforçamento único para pavloviano e operante; Carvalho Neto lembra que a função de um estímulo depende da relação com um organismo biologicamente constituído; Donahoe responde que análise do comportamento e neurociência podem crescer juntas sem que uma substitua a outra. Complete: o fio condutor dos três capítulos é a proposta de aproximar a análise do comportamento da ___.',
@@ -3196,7 +3243,7 @@ const QUIZZES = {
     enunciado:'Vale reforçar a citação que Donahoe faz do próprio Skinner: uma ciência do comportamento deve buscar regularidades ("leis") em seu próprio nível de observação, não recorrendo a outros níveis, especialmente quando as entidades desses outros níveis forem meras inferências feitas a partir do comportamento observado. Complete: para Donahoe, isso significa que a análise do comportamento deve manter seu próprio nível de análise, mesmo enquanto dialoga com a ___.',
     opcoes:['neurociência','psicanálise','filosofia da linguagem','sociologia crítica'],
     explicacao:'É o equilíbrio que Donahoe busca: aceitar o diálogo com a neurociência sem abrir mão de que o comportamento também tem leis próprias, observáveis em seu próprio nível, sem depender de inferências sobre o que acontece "por dentro".',
-    fonte:'Donahoe (2021, cap. 12, p. 147.)',
+    fonte:'Donahoe (2021, cap. 12, p. 145).',
     dica:'É a mesma disciplina que já apareceu em quase todos os quadros deste quiz.' }
   ]
 }
@@ -3277,7 +3324,7 @@ const QUIZZES = {
     enunciado:'Na segunda etapa, a interpretação intencional, Foxall passa a descrever a situação do consumidor usando a linguagem da intencionalidade (desejos, crenças), em vez da linguagem puramente comportamental de campos de estímulo e histórias de aprendizagem. Complete: essa segunda etapa introduz um tipo de conflito temporal chamado, com um termo grego, ___, ou fraqueza de vontade.',
     opcoes:['acrasia (akrasia)','catarse','anamnese','epistemologia'],
     explicacao:'Acrasia nomeia a tendência de inverter preferências ao longo do tempo, escolhendo uma recompensa menor e mais próxima em vez de uma maior e mais distante, um fenômeno central para explicar a escolha do consumidor.',
-    fonte:'Foxall (2021, cap. 13, p. 157).',
+    fonte:'Foxall (2021, cap. 13, p. 161).',
     dica:'É um termo filosófico antigo, usado para nomear a fraqueza de vontade.' },
   { tipo:'quadro',
     enunciado:'Foxall observa que, fora de ambientes experimentais bem restritos, as pessoas não respondem a um único estímulo isolado, mas a um subconjunto selecionado de todos os estímulos aos quais estão expostas. Complete: por isso, o que ele chama de "cenário comportamental do consumidor" não é um único estímulo, como na contingência de três ou quatro termos, mas um ___.',
@@ -3289,13 +3336,13 @@ const QUIZZES = {
     enunciado:'Segundo Foxall, reconhecer que o foco do programa de pesquisa passa a ser a "ação" do consumidor, e não apenas seu "comportamento", junto com a representação de contingências e a perspectiva temporal da escolha, mostra o caráter progressivo do programa de pesquisa do behaviorismo intencional. Complete: para Foxall, um programa de pesquisa progride quando incorpora, aos poucos, mais ___ sobre o próprio objeto de estudo.',
     opcoes:['complexidade e nuance','financiamento externo','popularidade entre leigos','simplicidade e economia'],
     explicacao:'Foxall usa a linguagem da filosofia da ciência (programas de pesquisa "progressivos") para justificar que ampliar a explicação, incorporando intenção e cognição, é um sinal de avanço, não de abandono do projeto behaviorista original.',
-    fonte:'Foxall (2021, cap. 13, p. 156).',
+    fonte:'Foxall (2021, cap. 13, p. 151).',
     dica:'Um programa "progressivo" ganha em riqueza explicativa, não perde.' },
   { tipo:'quadro',
     enunciado:'No capítulo 14, o comentarista Jorge M. Oliveira-Castro nota que quase todo movimento que se autodenomina "behaviorismo" acaba enfrentando o velho problema filosófico mente-corpo, como formulado por Descartes. Complete: para Oliveira-Castro, o behaviorismo intencional de Foxall não é exceção a essa ___.',
     opcoes:['tendência (de todo behaviorismo)','regra (de toda ciência)','crítica (feita por Skinner)','divisão (entre Brasil e Reino Unido)'],
     explicacao:'Oliveira-Castro situa o projeto de Foxall dentro de uma linhagem maior: quase toda proposta behaviorista, mais cedo ou mais tarde, precisa se posicionar sobre a relação entre mente e corpo, e Foxall não foge dessa exigência.',
-    fonte:'Oliveira-Castro (2021, cap. 14, p. 189).',
+    fonte:'Oliveira-Castro (2021, cap. 14, p. 191).',
     dica:'A resposta certa nomeia algo que se repete em vários behaviorismos, não só no de Foxall.' },
   { tipo:'quadro',
     enunciado:'Oliveira-Castro descreve como o modelo de Foxall nasceu: uma adaptação da análise do comportamento e do behaviorismo radical, aplicada à interpretação do comportamento do consumidor, que depois, ao encontrar limites explicativos, passou a incorporar intencionalidade e explicação cognitiva. Complete: segundo Oliveira-Castro, Foxall incorporou intencionalidade porque encontrou os limites da explicação ___ insuficientes para certos fenômenos do consumo.',
@@ -3331,7 +3378,7 @@ const QUIZZES = {
     enunciado:'Vale reforçar uma diferença de vocabulário que atravessa os três capítulos: "comportamento do consumidor" é a categoria mais ampla e neutra; "ação do consumidor" é a categoria que já supõe intenção reconhecível por trás do ato. Complete: para o behaviorismo intencional, toda ação é comportamento, mas nem todo comportamento chega a ser considerado ___.',
     opcoes:['ação (no sentido intencional)','reforçado','observável','mensurável'],
     explicacao:'É a distinção final que resume o projeto inteiro de Foxall: ação é um subconjunto mais restrito e mais rico de comportamento, aquele que compensa ser analisado também em termos intencionais e cognitivos.',
-    fonte:'Foxall (2021, cap. 13, p. 156.)',
+    fonte:'Foxall (2021, cap. 13, p. 162).',
     dica:'Pense em qual das duas categorias é mais ampla e qual é mais específica.' }
   ]
 }
@@ -3401,67 +3448,67 @@ const QUIZZES = {
     enunciado:'Hayes define a ciência comportamental contextual (CBS) como uma forma de pensamento comportamental composta por seis características principais. A primeira delas é um refinamento do behaviorismo radical numa filosofia da ciência distinta, ainda que parecida. Complete o nome dessa filosofia: ___.',
     opcoes:['contextualismo funcional','estruturalismo radical','mentalismo científico','operacionalismo lógico'],
     explicacao:'Contextualismo funcional é a base filosófica que Hayes constrói a partir do behaviorismo radical: parecida o bastante para continuar sendo uma forma de behaviorismo, distinta o bastante para merecer nome próprio.',
-    fonte:'Hayes (2021, cap. 16, p. 235).',
+    fonte:'Hayes (2021, cap. 16, p. 239).',
     dica:'É o mesmo termo que dá nome ao grupo inteiro de ideias de Hayes.' },
   { tipo:'quadro',
     enunciado:'A segunda característica da CBS é o desenvolvimento de uma teoria para abordar a linguagem e a cognição humanas. Complete a sigla dessa teoria: ___.',
     opcoes:['RFT (Relational Frame Theory)','ACT (Acceptance and Commitment Therapy)','CBS (Contextual Behavioral Science)','VTE (vicarious trial and error)'],
     explicacao:'RFT é a teoria da linguagem e da cognição que sustenta boa parte do edifício teórico de Hayes; ACT, citada mais adiante, é uma aplicação clínica construída sobre ela, não a teoria em si.',
-    fonte:'Hayes (2021, cap. 16, p. 235).',
+    fonte:'Hayes (2021, cap. 16, p. 239).',
     dica:'Não confunda com a terapia (ACT), que vem depois na lista.' },
   { tipo:'quadro',
     enunciado:'Hayes lembra que, ao contrário de muitas formas de behaviorismo definidas por uma única pessoa ou por um pequeno grupo, a CBS reúne centenas de pesquisadores ao redor do mundo. Ele descreve seu próprio papel com modéstia: diz apenas que seu laboratório "pode ter dado o pontapé inicial". Complete: mesmo assim, Hayes reconhece que a CBS hoje é moldada por ___ pessoas ativamente.',
     opcoes:['centenas de','apenas dez','uma única','nenhuma outra'],
     explicacao:'É um ponto que Hayes faz questão de marcar: a CBS não é propriedade de um só autor, mesmo que ele tenha ajudado a iniciar boa parte dela.',
-    fonte:'Hayes (2021, cap. 16, p. 236).',
+    fonte:'Hayes (2021, cap. 16, p. 240).',
     dica:'O quadro já contrasta a CBS com behaviorismos definidos por poucas pessoas.' },
   { tipo:'quadro',
     enunciado:'Hayes explica que cada visão de mundo filosófica (formismo, organicismo, mecanicismo, contextualismo) tem uma metáfora-raiz e um critério de verdade próprios. A metáfora-raiz do contextualismo é o "ato-em-contexto". Complete: para o contextualismo, entender um evento significa sempre entendê-lo dentro do seu ___, nunca isolado dele.',
     opcoes:['contexto (a situação em que ocorre)','vocabulário técnico específico','laboratório de origem','autor que o descreveu primeiro'],
     explicacao:'É a metáfora-raiz que dá nome à própria escola: nenhum evento, para o contextualismo, é compreendido isoladamente; ele só faz sentido dentro do contexto em que acontece.',
-    fonte:'Hayes (2021, cap. 16, p. 238).',
+    fonte:'Hayes (2021, cap. 16, p. 245).',
     dica:'A palavra "contexto" já está no próprio nome da escola.' },
   { tipo:'quadro',
     enunciado:'A sexta característica da CBS é a busca de modelos e programas aplicados baseados na ciência evolutiva e em princípios comportamentais ampliados pela RFT, com precisão, alcance e profundidade. Um exemplo citado por Hayes é o modelo de flexibilidade psicológica, usado para entender e tratar o sofrimento psicológico. Complete: esse modelo deu origem a uma terapia conhecida pela sigla ___.',
     opcoes:['ACT (Terapia de Aceitação e Compromisso)','RFT (Teoria das Molduras Relacionais)','CBS (Ciência Comportamental Contextual)','TCC (Terapia Cognitivo-Comportamental tradicional)'],
     explicacao:'ACT é a aplicação clínica mais conhecida construída sobre o modelo de flexibilidade psicológica, que por sua vez se apoia na RFT.',
-    fonte:'Hayes (2021, cap. 16, p. 236).',
+    fonte:'Hayes (2021, cap. 16, p. 239).',
     dica:'É a mesma sigla que apareceu como opção errada duas perguntas atrás.' },
   { tipo:'quadro',
     enunciado:'No capítulo 17, o comentarista Julio C. de Rose dá ao seu texto um título curioso: "A asa vai voar longe do corpo?". Complete o que essa pergunta sugere, no contexto do comentário: De Rose questiona se a RFT, ao crescer tanto, corre o risco de se afastar demais do restante da ___.',
     opcoes:['análise do comportamento','psicologia cognitiva','filosofia da linguagem','neurociência comportamental'],
     explicacao:'A "asa" é a RFT e o "corpo" é a análise do comportamento tradicional; a pergunta do título já resume a principal preocupação de De Rose no capítulo.',
-    fonte:'De Rose (2021, cap. 17, título e p. 251).',
+    fonte:'De Rose (2021, cap. 17, título e p. 257).',
     dica:'O título do capítulo já contém a resposta, em forma de metáfora.' },
   { tipo:'quadro',
     enunciado:'De Rose reconhece o peso da contribuição de Hayes com generosidade, mas nota que Hayes se descreve, com modéstia, apenas como alguém que "pode ter dado o pontapé inicial" à CBS. Complete: De Rose duvida que alguém questione a ___ de Hayes nesse processo.',
     opcoes:['liderança (papel de destaque)','honestidade','formação acadêmica','nacionalidade'],
     explicacao:'De Rose usa esse comentário para elogiar Hayes antes de entrar nas ressalvas mais técnicas do capítulo, num gesto comum em textos de réplica acadêmica.',
-    fonte:'De Rose (2021, cap. 17, p. 251).',
+    fonte:'De Rose (2021, cap. 17, p. 257).',
     dica:'É um elogio inicial, antes das críticas mais técnicas do capítulo.' },
   { tipo:'quadro',
     enunciado:'De Rose destaca que, depois de mais de três décadas e meia de trabalho, a RFT, a ACT e a CBS em geral ganharam reconhecimento sólido, com associação científica própria e uma revista de grande prestígio na área. Complete: De Rose usa esses dados para argumentar que a CBS é hoje um campo ___, não uma ideia marginal ou experimental.',
     opcoes:['vigoroso e consolidado','ainda muito incerto','pouco citado','restrito a um único país'],
     explicacao:'Antes de levantar sua preocupação com a "asa" se afastando do "corpo", De Rose reconhece que a CBS já não é um projeto pequeno: tem instituições, revista e impacto acadêmico reais.',
-    fonte:'De Rose (2021, cap. 17, p. 251).',
+    fonte:'De Rose (2021, cap. 17, p. 257).',
     dica:'O quadro já lista os sinais de força institucional da CBS.' },
   { tipo:'quadro',
     enunciado:'No capítulo 18, ao responder a De Rose, Hayes conta uma pequena história inventada: uma planta preciosa recebeu um telhado e um círculo de assentos ao redor, construídos por admiradores bem-intencionados, mas o telhado bloqueava sol e chuva, e a planta foi enfraquecendo aos poucos. Complete o que um jardineiro fez, sem avisar ninguém: ele levou um ___ da planta e o replantou do lado de fora, ao sol.',
     opcoes:['pedaço (uma muda, um corte)','vaso inteiro','grupo de admiradores','desenho técnico'],
     explicacao:'É a parábola com que Hayes responde à preocupação de De Rose: a "muda" replantada representa a CBS crescendo fora da estrutura mais fechada da análise do comportamento tradicional, sem deixar de vir da mesma linhagem.',
-    fonte:'Hayes (2021, cap. 18, p. 259).',
+    fonte:'Hayes (2021, cap. 18, p. 265).',
     dica:'É a mesma ação que dá início a toda a parábola do jardineiro.' },
   { tipo:'quadro',
     enunciado:'Na parábola de Hayes, a muda replantada cresce mais forte do que a planta original, mas os admiradores da planta original reclamam: "por que você se separou da planta-mãe? Sua planta nem tem telhado! Não tem assentos!" Complete a resposta do jardineiro: a planta cresce mais justamente porque ___.',
     opcoes:['não tem mais o telhado bloqueando sol e chuva','foi plantada num vaso maior','recebeu um novo tipo de adubo','foi replantada por outra pessoa'],
     explicacao:'É o ponto central da parábola: o "telhado e os assentos" (as convenções antigas) não eram propriedades originais da planta, e livrar-se deles permitiu um crescimento mais robusto, sem que isso significasse abandonar a linhagem original.',
-    fonte:'Hayes (2021, cap. 18, p. 259).',
+    fonte:'Hayes (2021, cap. 18, p. 265).',
     dica:'O jardineiro explica que telhado e assentos nunca foram parte essencial da planta.' },
   { tipo:'quadro',
     enunciado:'O título do capítulo de resposta de Hayes é "O resultado final é progresso: todo o resto é comentário". Complete o que esse título sugere sobre a posição de Hayes diante da crítica de De Rose: para Hayes, o critério mais importante para avaliar a CBS não é sua fidelidade a formas antigas, mas seu ___ prático e científico.',
     opcoes:['progresso (avanço mensurável)','tamanho institucional','número de citações','grau de popularidade'],
     explicacao:'O título já anuncia a posição de Hayes: o que importa, no fim, é se a CBS continua avançando cientificamente, e tudo o mais (inclusive a preocupação com se afastar demais da tradição) é secundário diante desse critério.',
-    fonte:'Hayes (2021, cap. 18, título e p. 259.)',
+    fonte:'Hayes (2021, cap. 18, título e p. 265).',
     dica:'A resposta certa é a mesma palavra que dá nome ao título do capítulo.' },
   { tipo:'quadro',
     enunciado:'Juntando os três capítulos: Hayes define a CBS por seis características, entre elas o contextualismo funcional e a RFT; De Rose reconhece o valor da CBS, mas teme que a RFT se afaste demais da análise do comportamento tradicional; Hayes responde com a parábola da planta, defendendo que crescer fora das velhas convenções não significa abandonar a linhagem original. Complete: o fio condutor dos três capítulos é a tensão entre continuidade com o behaviorismo radical e ___ em direção a novos territórios.',
@@ -3566,7 +3613,7 @@ const QUIZZES = {
     enunciado:'No capítulo 20, os comentaristas Hernando Borges Neves Filho e Tiago de Oliveira Magalhães, citando Wittgenstein, notam que a existência de um método experimental muitas vezes nos faz pensar que já temos os meios de resolver os problemas que nos incomodam, quando, na verdade, problema e método "passam um pelo outro" sem se encontrar. Complete: os comentaristas usam essa ideia para valorizar o esforço de Ribes em priorizar a revisão ___ sobre o acúmulo empírico de dados.',
     opcoes:['conceitual (dos pressupostos teóricos)','estatística (das amostras coletadas)','histórica (dos experimentos antigos)','institucional (das universidades envolvidas)'],
     explicacao:'Os comentaristas leem a Teoria da Psicologia de Ribes como um esforço raro de colocar a clareza conceitual à frente do simples acúmulo de dados experimentais, um problema que atribuem a boa parte da psicologia acadêmica.',
-    fonte:'Neves Filho &amp; Magalhães (2021, cap. 20, p. 307).',
+    fonte:'Neves Filho &amp; Magalhães (2021, cap. 20, p. 315).',
     dica:'O ponto de Wittgenstein é sobre confundir método com solução de problemas conceituais.' },
   { tipo:'quadro',
     enunciado:'Os comentaristas discutem a taxonomia de contatos funcionais de Ribes, usando como exemplo o ato de ver um objeto como uma fruta, uma simples percepção. Eles argumentam que esse ato tão simples já está relacionado a convenções linguísticas do contexto social, mesmo sem ser, nos termos de Skinner, uma resposta operante verbal. Complete: para os comentaristas, isso sugere que a linguagem pode estar presente desde o tipo mais simples de contato funcional, chamado de contingências de ___.',
@@ -3590,7 +3637,7 @@ const QUIZZES = {
     enunciado:'Ribes organiza sua resposta aos comentaristas em torno de três questões: como conceber o objeto de estudo da psicologia e a natureza dos contatos funcionais num campo; o conceito de linguagem em sua proposta, sobretudo o comportamento referencial; e as relações entre multidisciplina, interdisciplina e o substrato ideológico das relações práticas entre indivíduos. Complete: ao organizar a resposta assim, Ribes trata as críticas dos comentaristas com ___, dizendo-se inclusive lisonjeado com a avaliação geral que fizeram da teoria.',
     opcoes:['respeito (reconhecendo o valor delas)','indiferença total','irritação evidente','silêncio, sem responder a nenhuma'],
     explicacao:'Ribes abre o capítulo de resposta concordando com boa parte dos comentários e reconhecendo que algumas dificuldades de compreensão vêm da novidade dos termos técnicos, um tom de diálogo típico dessa seção do livro.',
-    fonte:'Ribes-Iñesta (2021, cap. 21, p. 319).',
+    fonte:'Ribes-Iñesta (2021, cap. 21, p. 327).',
     dica:'Ribes começa a resposta elogiando os comentaristas, não os atacando.' },
   { tipo:'quadro',
     enunciado:'Juntando os três capítulos: Ribes propõe um modelo de campo, baseado em Kantor, com três meios de contato (físico-químico, ecológico, convencional) e uma taxonomia de contatos funcionais, com a ambição de cobrir toda a psicologia, não só o comportamento; os comentaristas valorizam esse esforço conceitual, mas apontam falta de clareza nos critérios da taxonomia; Ribes responde reorganizando sua defesa em torno de três questões centrais. Complete: o fio condutor dos três capítulos é a pergunta que dá título ao capítulo 19: uma teoria do comportamento, ou uma teoria da ___?',
@@ -3865,13 +3912,13 @@ const QUIZZES = {
     enunciado:'No prefácio, Kantor rejeita duas saídas ao mesmo tempo: o mentalismo tradicional e um behaviorismo que reduz a psicologia a movimentos musculares e secreções glandulares. Complete sua frase: "devemos rejeitar de bom grado todos os chamados ___, junto com os mentalismos de toda variedade."',
     opcoes:['behaviorismos','instintos','reflexos','hábitos'],
     explicacao:'É uma das frases mais citadas do prefácio: Kantor não quer nem o "fantasma na máquina" do mentalismo, nem um behaviorismo que apague a riqueza da conduta reduzindo-a a fisiologia. Ele busca uma terceira via, naturalista e não reducionista.',
-    fonte:'Kantor (1924, p. xv).',
+    fonte:'Kantor (1924, p. xiv).',
     dica:'É o nome do próprio movimento que Watson tinha lançado onze anos antes.' },
   { tipo:'complete',
     enunciado:'No capítulo III, Kantor descreve a personalidade não como uma essência interior, mas como algo construído. Complete: a personalidade é a soma organizada dos ___ que uma pessoa desenvolveu ao longo de sua história de contatos com estímulos.',
     opcoes:['sistemas de reação','traços de caráter','instintos inatos','processos inconscientes'],
     explicacao:'Personalidade, para Kantor, não é algo que a pessoa "tem" escondido por trás do comportamento: é o repertório de sistemas de reação que ela construiu interagindo com objetos e situações ao longo da vida.',
-    fonte:'Kantor (1924, cap. III, p. 74).',
+    fonte:'Kantor (1924, cap. III, p. 75).',
     dica:'A resposta é o mesmo termo usado no capítulo II para descrever o lado do organismo num segmento comportamental.' },
   { tipo:'contraste',
     enunciado:'No capítulo VII, Kantor separa reações culturais de reações idiossincráticas. Complete o contraste: as reações culturais são compartilhadas por um grupo, adquiridas por convenção social; já as idiossincráticas são ___.',
@@ -4381,7 +4428,7 @@ const IMG = {
 };
 
 /* ---------- persistência ---------- */
-function estadoVazio(){ return { rodadas:0, quizzes:{}, conquistas:{}, secretos:{}, vistos:{}, som:true }; }
+function estadoVazio(){ return { rodadas:0, quizzes:{}, conquistas:{}, secretos:{}, vistos:{}, som:true, totalPerguntas:0, totalAcertos:0, streakRecorde:0, historico:[] }; }
 let ST = estadoVazio();
 try { const raw = localStorage.getItem(SAVE_KEY); if (raw) ST = Object.assign(estadoVazio(), JSON.parse(raw)); } catch(e){}
 function salvar(){ try { localStorage.setItem(SAVE_KEY, JSON.stringify(ST)); } catch(e){} }
@@ -4492,11 +4539,11 @@ function verificarSecretos(autorId, novas){
 }
 
 /* ---------- navegação ---------- */
-const TELAS = ['sTitle','sHall','sDossier','sBrief','sGuia','sQuiz','sResult','sTrophies'];
+const TELAS = ['sTitle','sHall','sDossier','sBrief','sGuia','sQuiz','sResult','sTrophies','sStats'];
 let telaAnterior = 'sTitle';
 function ir(id){
   const atual = TELAS.find(t=>!$('#'+t).hidden);
-  if (id==='sTrophies' && atual!=='sTrophies') telaAnterior = atual;
+  if ((id==='sTrophies'||id==='sStats') && atual!==id) telaAnterior = atual;
   TELAS.forEach(t=>$('#'+t).hidden = (t!==id));
   window.scrollTo(0,0);
 }
@@ -4801,6 +4848,62 @@ function htmlSaiba(s){
     <p class="pg">Onde ler, em ${esc(s.ref)}: ${onde}.</p>
     <p>${esc(s.porque)}</p>${trecho}<div class="chips">${chips}</div></aside>`;
 }
+/* ---------- modo extra: ALEATÓRIO (mistura todos os quizzes liberados) ---------- */
+const QUIZ_ALEATORIO_ID = '__aleatorio__';
+const N_ALEATORIO = 15;
+function behavioristasJogaveis(){ return BEHAVIORISTAS.filter(b=>b.ativo && !secretoTrancado(b)); }
+function construirPoolAleatorio(){
+  const pool = [];
+  behavioristasJogaveis().forEach(b=>{
+    b.quizzes.forEach(qid=>{
+      const q = QUIZZES[qid]; if (!q) return;
+      const titulo = q.tipo==='livro' ? `${q.titulo} (${q.ano})` : q.titulo;
+      q.perguntas.forEach(p=>pool.push({ p, qid, autor:b.id, curto:b.curto, titulo, arte:q.arte }));
+    });
+  });
+  return pool;
+}
+function abrirIntroducaoAleatorio(){
+  quizEscolhido = QUIZ_ALEATORIO_ID;
+  $('#briefBox').classList.add('is-land');
+  $('#briefArt').classList.remove('portrait-art');
+  $('#briefArt').hidden = true;
+  const jogaveis = behavioristasJogaveis();
+  $('#briefKind').textContent = 'Modo extra · mistura geral';
+  $('#briefTitle').textContent = 'Aleatório';
+  $('#briefSub').textContent = 'A cada rodada, uma seleção diferente de perguntas';
+  const regras = [
+    `${N_ALEATORIO} perguntas sorteadas de todos os quizzes já liberados (hoje, ${jogaveis.length} behavioristas).`,
+    'A cada pergunta a fonte muda: o nome no topo da tela mostra de quem e de qual obra ela veio.',
+    'Responda com o mouse, o toque ou as teclas 1 a 4.',
+    'Acertos rápidos e sequências valem mais pontos. Uma dica por pergunta, pela metade dos pontos.'
+  ];
+  $('#briefRules').innerHTML = regras.map(t=>`<li>${esc(t)}</li>`).join('');
+  $('#briefRef').innerHTML = '';
+  $('#briefLeitura').hidden = true; $('#briefLeitura').innerHTML = '';
+  $('#briefNpc').src = IMG.boatOk;
+  $('#briefTalk').textContent = 'Aqui ninguém avisa quem vem a seguir. Pode ser Watson, pode ser Hayes: leia cada pergunta com atenção antes de responder.';
+  $('#briefBonus').hidden = true;
+  ir('sBrief');
+  $('#btnGo').focus({preventScroll:true});
+}
+function iniciarQuizAleatorio(){
+  const escolhidos = embaralhar(construirPoolAleatorio()).slice(0, N_ALEATORIO);
+  const pergs = escolhidos.map(item=>{
+    const certa = item.p.opcoes[0];
+    return {...item.p, ops:embaralhar(item.p.opcoes), certa, _origem:{ autor:item.autor, curto:item.curto, titulo:item.titulo, arte:item.arte }};
+  });
+  const qPseudo = { autor:null, tipo:'aleatorio', titulo:'Modo Aleatório', subtitulo:'', referencia:null, rodada:pergs.length };
+  $('#resSecret').innerHTML='';
+  R = { leituras:[], qid:QUIZ_ALEATORIO_ID, q:qPseudo, pergs, i:0, pts:0, seq:0, maxSeq:0, errosSeg:0, maxErrosSeg:0, dicas:0, t0:performance.now(), log:[], respondida:false, aleatorio:true };
+  $('#hudWhere').textContent = 'Modo Aleatório';
+  $('#hudArt').hidden = true;
+  const pr = $('#progress'); pr.innerHTML=''; pergs.forEach(()=>pr.appendChild(el('i')));
+  ir('sQuiz');
+  mostrarPergunta();
+  falar('Primeira pergunta. Pode ser de qualquer behaviorista já liberado.','ok');
+}
+
 let R = null;   // rodada em andamento
 
 function iniciarQuiz(qid){
@@ -4824,6 +4927,12 @@ function mostrarPergunta(){
   R.respondida = false; R.dicaUsada = false; R.tq = performance.now();
   $('#hudQ').textContent = `${R.i+1}/${R.pergs.length}`;
   $('#hudPts').textContent = R.pts; $('#hudStreak').textContent = R.seq;
+  if (R.aleatorio && p._origem){
+    const o = p._origem;
+    $('#hudWhere').textContent = `${o.curto} — ${o.titulo}`;
+    $('#hudArt').hidden = !o.arte;
+    if (o.arte) $('#hudArt').src = o.arte;
+  }
   [...$('#progress').children].forEach((b,k)=>b.classList.toggle('now',k===R.i));
   $('#qType').textContent = ROTULO_TIPO[p.tipo]||'PERGUNTA';
   $('#qPrompt').textContent = p.enunciado;
@@ -4918,30 +5027,41 @@ function finalizar(){
   ST.rodadas++;
   const reg = ST.quizzes[R.qid] || { melhor:0, concluidas:0, melhorPts:0 };
   reg.melhor = Math.max(reg.melhor,pct); reg.concluidas++; reg.melhorPts = Math.max(reg.melhorPts,R.pts);
-  ST.quizzes[R.qid] = reg; salvar();
+  ST.quizzes[R.qid] = reg;
+  // estatísticas agregadas (tela "Meu desempenho")
+  ST.totalPerguntas = (ST.totalPerguntas||0) + n;
+  ST.totalAcertos = (ST.totalAcertos||0) + acertos;
+  ST.streakRecorde = Math.max(ST.streakRecorde||0, R.maxSeq||0);
+  ST.historico = ST.historico || [];
+  ST.historico.push({ ts:Date.now(), qid:R.qid, autor:R.q.autor, pct, acertos, n, pts:R.pts, maxSeq:R.maxSeq||0 });
+  if (ST.historico.length>300) ST.historico = ST.historico.slice(-300);
+  salvar();
   // conquistas
-  const b = B_POR_ID[R.q.autor];
+  const b = R.q.autor ? B_POR_ID[R.q.autor] : null;
   if (R.dicas===0) desbloquear('g-semdica',novas);
   if (R.maxErrosSeg>=3) desbloquear('g-extincao',novas);
   if (ST.rodadas>=5) desbloquear('g-registro',novas);
-  desbloquear(`${b.id}-contato`,novas);
-  if (pct>=70) desbloquear(`${R.qid}-aprovado`,novas);
-  if (pct===100) desbloquear(`${R.qid}-perfeito`,novas);
-  if (b.quizzes.every(id=>ST.quizzes[id] && ST.quizzes[id].melhor>=70)) desbloquear(`${b.id}-repertorio`,novas);
-  if (b.quizzes.every(id=>ST.quizzes[id] && ST.quizzes[id].melhor===100)) desbloquear(`${b.id}-mestre`,novas);
-  const liberados = verificarSecretos(b.id, novas);
+  let liberados = [];
+  if (b){
+    desbloquear(`${b.id}-contato`,novas);
+    if (pct>=70) desbloquear(`${R.qid}-aprovado`,novas);
+    if (pct===100) desbloquear(`${R.qid}-perfeito`,novas);
+    if (b.quizzes.every(id=>ST.quizzes[id] && ST.quizzes[id].melhor>=70)) desbloquear(`${b.id}-repertorio`,novas);
+    if (b.quizzes.every(id=>ST.quizzes[id] && ST.quizzes[id].melhor===100)) desbloquear(`${b.id}-mestre`,novas);
+    liberados = verificarSecretos(b.id, novas);
+  }
 
   $('#resPct').innerHTML = `${pct}%<small>${acertos} de ${n} acertos</small>`;
   $('#resPts').innerHTML = `${R.pts}<small>pontos${reg.melhorPts===R.pts&&reg.concluidas>1?' · recorde':''}</small>`;
   $('#resLat').innerHTML = `${latMed.toFixed(1)}s<small>latência média</small>`;
-  const fala = pct===100 ? 'Rodada perfeita. Nenhum erro no registro: dá para emoldurar essa curva.'
+  const fala = pct===100 ? (R.aleatorio ? 'Rodada perfeita, misturando behavioristas diferentes. Repertório amplo de verdade.' : 'Rodada perfeita. Nenhum erro no registro: dá para emoldurar essa curva.')
     : pct>=70 ? 'Bom repertório. Veja no gráfico onde a curva ficou plana: é ali que vale reler.'
     : 'Dá para modelar isso. Abra a revisão dos erros aqui embaixo e tente outra rodada; as perguntas mudam a cada vez.';
   $('#resTalk').textContent = liberados.length
     ? 'Espere. Tem alguém no fundo do laboratório, sorrindo para você: é o Fred Keller, amigo do Skinner. Ele quer te mostrar um livro que escreveu.'
     : fala;
-  let foto = b.resultado ? { src:b.resultado, alt:b.resultadoAlt } : null;
-  if (b.resultadoFotos) foto = pick(pct>=70 ? b.resultadoFotos.bom : b.resultadoFotos.ruim);
+  let foto = b && b.resultado ? { src:b.resultado, alt:b.resultadoAlt } : null;
+  if (b && b.resultadoFotos) foto = pick(pct>=70 ? b.resultadoFotos.bom : b.resultadoFotos.ruim);
   $('#resPhoto').hidden = !foto;
   if (foto){
     const leg = b.legendaResultado || { bom:`${b.curto.toUpperCase()} ANALISA: BOA CURVA`, ruim:`${b.curto.toUpperCase()} ANALISA: MAIS UMA RODADA` };
@@ -5058,6 +5178,89 @@ function montarConquistas(){
   ir('sTrophies');
 }
 
+/* ---------- tela de estatísticas gerais (meu desempenho) ---------- */
+function montarEstatisticas(){
+  const totalQ = ST.totalPerguntas||0, totalA = ST.totalAcertos||0;
+  const pctGeral = totalQ ? Math.round(100*totalA/totalQ) : 0;
+  const totalQuizzesDisp = Object.keys(QUIZZES).length;
+  const concluidos = Object.keys(ST.quizzes).filter(qid=>QUIZZES[qid]).length;
+  $('#statsLede').textContent = ST.rodadas
+    ? `Registro comportamental deste navegador: ${ST.rodadas} rodada${ST.rodadas>1?'s':''} concluída${ST.rodadas>1?'s':''} até agora.`
+    : 'Ainda não há rodadas registradas. Jogue um quiz para começar seu registro.';
+  $('#statAcc').innerHTML = `${pctGeral}%<small>acurácia geral</small>`;
+  $('#statTotal').innerHTML = `${totalQ}<small>perguntas respondidas</small>`;
+  $('#statStreak').innerHTML = `${ST.streakRecorde||0}<small>sequência recorde</small>`;
+  $('#statQuizzes').innerHTML = `${concluidos}<small>de ${totalQuizzesDisp} quizzes concluídos</small>`;
+
+  const logBox = $('#statsLog');
+  const hist = (ST.historico||[]).slice().reverse();
+  if (!hist.length){
+    logBox.innerHTML = '<div class="row"><span style="color:var(--steel)">Sem registros ainda.</span></div>';
+  } else {
+    logBox.innerHTML = hist.slice(0,80).map(h=>{
+      const q = QUIZZES[h.qid]; const nome = q ? (q.tipo==='livro' ? `${q.titulo} (${q.ano})` : q.titulo) : (h.qid===QUIZ_ALEATORIO_ID ? 'Modo Aleatório' : h.qid);
+      const b = B_POR_ID[h.autor];
+      const quando = new Date(h.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + ' ' + new Date(h.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      return `<div class="row"><span>${quando}</span><span>${b?esc(b.curto)+' — ':''}${esc(nome)}</span><span class="pct">${h.pct}%</span><span>${h.pts} pts</span></div>`;
+    }).join('');
+  }
+  ir('sStats');
+  requestAnimationFrame(()=>{ desenharAutorChart(); desenharEvoChart(); });
+}
+function desenharAutorChart(){
+  const {ctx,w,h} = prepCanvas($('#autorCanvas'));
+  const m={l:34,r:10,t:14,b:34};
+  eixos(ctx,w,h,m,'behaviorista','melhor acurácia (%)');
+  const porAutor = {};
+  Object.keys(ST.quizzes).forEach(qid=>{
+    const q = QUIZZES[qid]; if(!q) return;
+    const b = B_POR_ID[q.autor]; if(!b) return;
+    const d = porAutor[b.id] = porAutor[b.id] || { nome:b.curto, soma:0, n:0 };
+    d.soma += ST.quizzes[qid].melhor; d.n++;
+  });
+  const dados = Object.values(porAutor).map(d=>({ nome:d.nome, pct:Math.round(d.soma/d.n) })).sort((a,b)=>b.pct-a.pct);
+  if (!dados.length){
+    ctx.fillStyle='#91a9c1'; ctx.textAlign='center'; ctx.font='13px "Barlow Semi Condensed",Arial';
+    ctx.fillText('Jogue uma rodada para ver este gráfico.', w/2, h/2); return;
+  }
+  const bw = (w-m.l-m.r)/dados.length;
+  const Y = v => h-m.b-(h-m.t-m.b)*v/100;
+  ctx.textAlign='center';
+  dados.forEach((d,i)=>{
+    const x = m.l + i*bw + bw*0.18, bwid = bw*0.64;
+    ctx.fillStyle = 'rgba(190,220,255,.85)'; ctx.shadowColor='rgba(170,210,255,.5)'; ctx.shadowBlur=5;
+    ctx.fillRect(x, Y(d.pct), bwid, (h-m.b)-Y(d.pct));
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#dbe9f7'; ctx.font='12px "Barlow Semi Condensed",Arial';
+    ctx.fillText(d.pct+'%', x+bwid/2, Y(d.pct)-4);
+    ctx.fillStyle='#91a9c1'; ctx.font='11px "Barlow Semi Condensed",Arial';
+    ctx.fillText(d.nome, x+bwid/2, h-m.b+14);
+  });
+}
+function desenharEvoChart(){
+  const {ctx,w,h} = prepCanvas($('#evoCanvas'));
+  const m={l:34,r:10,t:10,b:28};
+  eixos(ctx,w,h,m,'rodada','acurácia (%)');
+  const hist = ST.historico||[];
+  if (hist.length<2){
+    ctx.fillStyle='#91a9c1'; ctx.textAlign='center'; ctx.font='13px "Barlow Semi Condensed",Arial';
+    ctx.fillText(hist.length ? 'Jogue mais uma rodada para ver a evolução.' : 'Jogue uma rodada para ver este gráfico.', w/2, h/2);
+    return;
+  }
+  const N = hist.length;
+  const X = i => m.l + (w-m.l-m.r)*i/(N-1);
+  const Y = v => h-m.b-(h-m.t-m.b)*v/100;
+  ctx.fillStyle='#91a9c1'; ctx.textAlign='right'; ctx.font='12px "Barlow Semi Condensed",Arial';
+  [0,50,100].forEach(v=>ctx.fillText(v,m.l-6,Y(v)+4));
+  ctx.textAlign='center'; ctx.fillText('1',X(0),h-m.b+14); ctx.fillText(String(N),X(N-1),h-m.b+14);
+  ctx.strokeStyle='#dbe9f7'; ctx.lineWidth=2; ctx.shadowColor='rgba(170,210,255,.6)'; ctx.shadowBlur=6;
+  ctx.beginPath();
+  hist.forEach((r,i)=>{ const x=X(i), y=Y(r.pct); i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y); });
+  ctx.stroke(); ctx.shadowBlur=0;
+  ctx.fillStyle='#dbe9f7';
+  hist.forEach((r,i)=>{ ctx.beginPath(); ctx.arc(X(i),Y(r.pct),3,0,Math.PI*2); ctx.fill(); });
+}
+
 /* ---------- ligações ---------- */
 $('#coverImg').src = IMG.capa;
 $('#helloImg').src = IMG.boatOk;
@@ -5067,17 +5270,22 @@ function atualizarSom(){ $('#navSound').setAttribute('aria-pressed', ST.som?'tru
 atualizarSom();
 $('#navSound').addEventListener('click',()=>{ ST.som=!ST.som; salvar(); atualizarSom(); SOM.clique(); });
 $('#btnStart').addEventListener('click',()=>{ SOM.clique(); abrirSelecao(); });
+$('#btnAleatorio').addEventListener('click',()=>{ SOM.clique(); abrirIntroducaoAleatorio(); });
+$('#navAleatorio').addEventListener('click',()=>{ SOM.clique(); if(R && !$('#sQuiz').hidden && !confirm('Sair da rodada em andamento?')) return; abrirIntroducaoAleatorio(); });
 $('#btnTrophies').addEventListener('click',()=>{ SOM.clique(); montarConquistas(); });
 $('#navTrophies').addEventListener('click',()=>{ SOM.clique(); if(R && !$('#sQuiz').hidden && !confirm('Sair da rodada em andamento?')) return; montarConquistas(); });
 $('#btnTrophyBack').addEventListener('click',()=>{ SOM.clique(); if(telaAnterior==='sQuiz'||telaAnterior==='sResult'){ abrirDossie(autorAtual); } else if(telaAnterior==='sDossier'){ abrirDossie(autorAtual); } else if(telaAnterior==='sHall'){ abrirSelecao(); } else ir('sTitle'); });
+$('#btnStats').addEventListener('click',()=>{ SOM.clique(); montarEstatisticas(); });
+$('#navStats').addEventListener('click',()=>{ SOM.clique(); if(R && !$('#sQuiz').hidden && !confirm('Sair da rodada em andamento?')) return; montarEstatisticas(); });
+$('#btnStatsBack').addEventListener('click',()=>{ SOM.clique(); if(telaAnterior==='sQuiz'||telaAnterior==='sResult'){ abrirDossie(autorAtual); } else if(telaAnterior==='sDossier'){ abrirDossie(autorAtual); } else if(telaAnterior==='sHall'){ abrirSelecao(); } else ir('sTitle'); });
 $('#btnBackHall').addEventListener('click',()=>{ SOM.clique(); abrirSelecao(); });
 $('#btnHint').addEventListener('click',pedirDica);
-$('#btnGo').addEventListener('click',()=>{ SOM.clique(); iniciarQuiz(quizEscolhido); });
-$('#btnBriefBack').addEventListener('click',()=>{ SOM.clique(); abrirDossie(autorAtual); });
+$('#btnGo').addEventListener('click',()=>{ SOM.clique(); if(quizEscolhido===QUIZ_ALEATORIO_ID) iniciarQuizAleatorio(); else iniciarQuiz(quizEscolhido); });
+$('#btnBriefBack').addEventListener('click',()=>{ SOM.clique(); if(quizEscolhido===QUIZ_ALEATORIO_ID) ir('sTitle'); else abrirDossie(autorAtual); });
 $('#btnGuia').addEventListener('click',()=>{ SOM.clique(); abrirGuia(); });
 $('#btnGuiaBack').addEventListener('click',()=>{ SOM.clique(); ir('sBrief'); });
-$('#btnAgain').addEventListener('click',()=>{ SOM.clique(); iniciarQuiz(R.qid); });
-$('#btnToDossier').addEventListener('click',()=>{ SOM.clique(); abrirDossie(autorAtual); });
+$('#btnAgain').addEventListener('click',()=>{ SOM.clique(); if(R.aleatorio) iniciarQuizAleatorio(); else iniciarQuiz(R.qid); });
+$('#btnToDossier').addEventListener('click',()=>{ SOM.clique(); if(R.aleatorio) abrirSelecao(); else abrirDossie(autorAtual); });
 $('#btnReset').addEventListener('click',()=>{ if(confirm('Apagar pontuações e conquistas deste navegador?')){ const som=ST.som; ST=estadoVazio(); ST.som=som; salvar(); ir('sTitle'); } });
 $('.brand').style.cursor='pointer';
 $('.brand').addEventListener('click',()=>{ if(R && !$('#sQuiz').hidden && !confirm('Sair da rodada em andamento?')) return; ir('sTitle'); });
