@@ -609,7 +609,7 @@ a.btn{text-decoration:none;display:inline-block}
         </div>
         <div class="hello">
           <img id="helloImg" alt="Boatacon, o orientador em campo, fazendo sinal de positivo">
-          <div class="bubble" style="max-width:300px"><span class="who">BOATACON</span>Eu te acompanho nas perguntas. Começamos pelo Skinner; os outros estão chegando.</div>
+          <div class="bubble" style="max-width:300px"><span class="who">BOATACON</span>Eu te acompanho nas perguntas. São dezesseis behavioristas para escolher, cada um com seus quizzes e guias de leitura.</div>
         </div>
       </div>
     </div>
@@ -969,7 +969,7 @@ const BEHAVIORISTAS = [
       { src:'img/kantor-aula.png',    leg:'LECIONA',   alt:'Kantor diante de uma turma, gesticulando' }
     ],
     bio:'Jacob Robert Kantor (1888–1984) estudou em Chicago e passou a maior parte de sua carreira em Indiana. Propôs o interbehaviorismo: toda explicação psicológica deve descrever um campo que inclui o organismo, o objeto-estímulo, a história de interação, o meio e os fatores de configuração — sem recorrer a agentes mentais internos. Seu trabalho influenciou diretamente o modelo de campo de Ribes-Iñesta.',
-    quizzes:['kantor-interbehaviorismo']
+    quizzes:['kantor-interbehaviorismo','kantor-principios']
   },
 
   /* ---------- NÚCLEO ---------- */
@@ -1248,6 +1248,7 @@ const QUIZZES = {
   arte:'img/skinner-pombo.png',
   arteAlt:'Skinner jovem no laboratório, ao lado de um pombo numa câmara experimental',
   rodada:10,
+  leituraInicial:'Este quiz não segue um único livro: ele mistura obras de Skinner (Walden Two, The Behavior of Organisms, Science and Human Behavior, Verbal Behavior, Beyond Freedom and Dignity, About Behaviorism, entre outras) e conceitos centrais do behaviorismo radical. Se quiser um caminho mais guiado por um livro específico, procure os quizzes de Science and Human Behavior ou About Behaviorism, que têm guia de leitura próprio.',
   intro:'Esta rodada mistura obras, conceitos e alguns vizinhos teóricos do Skinner, para você aprender a distinguir um do outro. Se travar, peça uma dica: ela custa metade dos pontos da pergunta.',
   conquistas:{ aprovado:'Operante emitido', perfeito:'Behaviorista radical' },
   perguntas:[
@@ -1359,8 +1360,66 @@ const QUIZZES = {
   arteAlt:'Capa do livro About Behaviorism, de B. F. Skinner, com o rosto do autor',
   rodada:10,
   referencia:'Skinner, B. F. (1974). <i>About behaviorism</i>. Knopf.',
+  leituraInicial:'O livro é curto para os padrões de Skinner e tem uma estrutura fácil de acompanhar: leia a Introdução inteira (as vinte afirmações que ele considera equivocadas) antes de começar, porque o capítulo 14 volta a cada uma delas para respondê-la — é esse vaivém entre a lista inicial e as respostas finais que o quiz mais explora.',
   intro:'About Behaviorism, 1974. Skinner abre o livro com vinte afirmações sobre o behaviorismo que considera equivocadas e passa catorze capítulos respondendo a elas, uma por uma. As perguntas seguem essa mesma trilha, do capítulo 1 ao 14.',
   conquistas:{ aprovado:'Leitor(a) de About Behaviorism', perfeito:'As 20 objeções respondidas' },
+    guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'About Behaviorism — B. F. Skinner, 1974',
+    intro:'Skinner escreve este livro para responder, um a um, os mal-entendidos mais comuns sobre o behaviorismo. A estrutura é simples de acompanhar: a Introdução lista vinte afirmações que ele considera erradas, catorze capítulos desenvolvem a posição do behaviorismo radical, e o capítulo final volta a cada uma das vinte afirmações para respondê-las à luz do que foi dito.',
+    trilha:[
+      { titulo:'Introdução — vinte mal-entendidos', paginas:'Introdução',
+        texto:'Skinner lista vinte coisas comumente ditas sobre o behaviorismo (que ele ignora a consciência, que trata pessoas como robôs, que nega criatividade e propósito, entre outras) e afirma, de saída, que todas são erradas. É a lista que o livro inteiro se propõe a desfazer.' },
+      { titulo:'Causas do comportamento e o mundo dentro da pele', paginas:'caps. 1–2',
+        texto:'Skinner distingue o behaviorismo metodológico (que ignora eventos privados por não serem observáveis por terceiros) do behaviorismo radical, sua própria posição: eventos privados existem e são comportamento, ocorrendo "dentro da pele", sujeitos às mesmas leis que o comportamento público.' },
+      { titulo:'Comportamento inato e operante', paginas:'caps. 3–4',
+        texto:'O capítulo sobre operante é o mais longo do livro: reforçadores fortalecem o comportamento que os produz não porque "sentem bem", mas porque a susceptibilidade ao reforço tem valor de sobrevivência, moldada pela seleção natural.' },
+      { titulo:'Percepção, linguagem e pensamento', paginas:'caps. 5–7',
+        texto:'Skinner estende a análise operante para perceber, falar (comportamento verbal) e pensar — tratando esses processos como comportamento, não como eventos mentais que o precedem e o causam.' },
+      { titulo:'Causas e razões, conhecer', paginas:'caps. 8–9',
+        texto:'A distinção entre dar uma causa e dar uma razão para o comportamento, e o que significa, para um behaviorista, "conhecer" alguma coisa.' },
+      { titulo:'Motivação, emoção, o eu e os outros', paginas:'caps. 10–11',
+        texto:'Skinner rejeita motivação e emoção como causas internas independentes, tratando-as como produtos de contingências de reforço; e argumenta que a pessoa não é um "agente iniciador", mas um "lócus" onde histórias genéticas e ambientais se encontram.' },
+      { titulo:'Controle e o que está dentro da pele', paginas:'caps. 12–13',
+        texto:'O capítulo sobre controle enfrenta de frente a objeção mais política ao behaviorismo: controlar o comportamento não é uma escolha entre controlar ou não controlar, mas entre fazê-lo às cegas ou a partir do que a ciência sabe.' },
+      { titulo:'Resumo final — as vinte respostas', paginas:'cap. 14',
+        texto:'Skinner retoma, uma a uma, as vinte afirmações da Introdução e responde a cada uma com o que foi desenvolvido nos treze capítulos anteriores — o fechamento do argumento do livro inteiro.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo metodológico', def:'Posição que trata apenas o comportamento publicamente observável como dado científico válido, deixando de lado eventos privados (sentimentos, pensamentos) por não serem verificáveis por terceiros.' },
+      { termo:'Behaviorismo radical', def:'A posição do próprio Skinner: eventos privados existem e são comportamento como qualquer outro, ocorrendo "dentro da pele" e sujeitos às mesmas leis, mas não são tratados como causas independentes do comportamento público.' },
+      { termo:'Comportamento operante', def:'Comportamento que atua sobre o ambiente e é fortalecido ou enfraquecido por suas consequências (reforçadores) — o conceito central de toda a obra de Skinner.' },
+      { termo:'Pessoa como lócus', def:'A formulação de Skinner para o que comumente se chama de "eu" ou "self": não um agente que inicia ações livremente, mas o ponto de encontro de histórias genéticas e ambientais que determinam o comportamento.' },
+      { termo:'Dar uma causa vs. dar uma razão', def:'Distinção do capítulo 8: uma causa aponta a variável ambiental ou genética que produz o comportamento; uma razão é, em geral, um relato verbal do próprio comportamento, útil socialmente mas não necessariamente sua explicação científica.' }
+    ],
+    temas:[
+      { pp:'Introdução', titulo:'Vinte afirmações, todas erradas',
+        texto:'Skinner escolhe uma estrutura incomum: começa listando, sem defender, vinte coisas que "pessoas inteligentes" costumam dizer sobre o behaviorismo — de "ignora a consciência" a "é incompatível com o amor pelo próximo" — e diz que pretende mostrar, ao longo do livro, por que cada uma está errada. É um recurso retórico que também funciona como sumário: cada capítulo do livro corresponde, ao menos em parte, a uma ou mais dessas vinte objeções.',
+        trecho:{ en:'It ignores consciousness, feelings, and states of mind.', pt:'Ignora a consciência, os sentimentos e os estados mentais.', ref:'Skinner (1974, Introdução, item 1)' } },
+      { pp:'cap. 2', titulo:'O mundo dentro da pele não é negado, é reformulado',
+        texto:'A acusação mais repetida contra o behaviorismo é que ele nega a existência de sentimentos e pensamentos. Skinner responde no capítulo 2: o behaviorismo radical não nega o "mundo dentro da pele" — trata-o como comportamento e como estimulação, sujeito às mesmas leis do comportamento público, só que privado, acessível apenas a quem o vive.' },
+      { pp:'cap. 12', titulo:'Controlar não é uma opção, é uma condição da vida',
+        texto:'No capítulo sobre controle, Skinner argumenta que agir sobre o ambiente para controlá-lo é tão característico da vida quanto respirar. A pergunta relevante não é se vamos controlar o comportamento (o fazemos o tempo todo, com educação, leis, publicidade), mas se vamos continuar fazendo isso às cegas, por tentativa e erro cultural, ou a partir do que a ciência do comportamento já sabe.',
+        trecho:{ en:'We can no more stop controlling nature than we can stop breathing or digesting food.', pt:'Não podemos parar de controlar a natureza mais do que podemos parar de respirar ou de digerir alimentos.', ref:'Skinner (1974, cap. 12)' } }
+    ],
+    fotos:[
+      { src:'img/skinner-velho.png', legenda:'B. F. Skinner em 1974', nota:'Vinte anos depois de Science and Human Behavior, e três anos depois da polêmica em torno de Beyond Freedom and Dignity, que este livro tenta esclarecer com mais calma.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'About Behaviorism × Science and Human Behavior: vinte anos depois',
+      acordos:[
+        'Os dois livros defendem a mesma posição de fundo: uma ciência natural do comportamento, baseada em contingências de reforço, sem apelar a causas mentais internas independentes.',
+        'Ambos tratam o comportamento operante como o fenômeno central a explicar, e o controle cultural como algo inevitável, a ser exercido com base em ciência, não às cegas.'
+      ],
+      divergem:[
+        'Science and Human Behavior (1953) é um livro-texto sistemático, organizado por temas (indivíduo, grupo, controle cultural); About Behaviorism (1974) é uma resposta direta e organizada a vinte objeções específicas, escrita vinte anos depois, já respondendo a décadas de críticas acumuladas.',
+        'About Behaviorism dedica muito mais espaço a defender a posição do behaviorismo radical frente ao mentalismo e à filosofia da mente do que o livro de 1953, que assume essa posição com menos debate filosófico explícito.',
+        'Beyond Freedom and Dignity (1971), publicado entre os dois, já havia gerado boa parte da controvérsia pública que About Behaviorism tenta desfazer com mais paciência e detalhamento conceitual.'
+      ]
+    },
+    impacto:'About Behaviorism se tornou, para muitos leitores, a porta de entrada mais acessível ao pensamento de Skinner — mais curto e mais dialógico que Science and Human Behavior, e escrito diretamente contra os mal-entendidos que a controvérsia em torno de Beyond Freedom and Dignity havia deixado. O formato de "vinte objeções, catorze capítulos de resposta, resumo final" segue sendo usado até hoje como roteiro didático para apresentar o behaviorismo radical a quem chega até ele já com essas mesmas dúvidas.',
+    mascoteFala:'Vinte acusações na Introdução, vinte respostas no capítulo final. O livro inteiro é a ponte entre as duas listas.'
+  },
   perguntas:[
   { tipo:'conceito',
     enunciado:'Como Skinner define o behaviorismo na primeira frase da Introdução?',
@@ -1494,8 +1553,60 @@ const QUIZZES = {
   arteAlt:'Folha de rosto de The Definition of Psychology, segunda edição, de Fred S. Keller',
   rodada:10,
   referencia:'Keller, F. S. (1973). <i>The definition of psychology</i> (2nd ed.). Appleton-Century-Crofts. (Original work published 1937)',
+  leituraInicial:'É mais um livro de história da psicologia do que um manual de definições prontas: Keller percorre escola por escola (estruturalismo, funcionalismo, Gestalt, neobehaviorismo) antes de chegar à sua própria posição, no capítulo final. Vale ler pela jornada, não só pular direto para a conclusão.',
   intro:'Keller escreveu este livro para mostrar como a psicologia chegou a se definir. Cada capítulo passa por uma escola: estruturalismo, funcionalismo, Watson, Gestalt. No fim, ele diz qual definição prefere, e você já a conhece.',
   conquistas:{ aprovado:'Historiador(a) da psicologia', perfeito:'Definição precisa' },
+    guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'The Definition of Psychology — Fred S. Keller, 1937/1973',
+    intro:'Keller escreveu este livro como um curso: uma história da psicologia contada capítulo a capítulo, escola por escola, até chegar à pergunta que dá título ao livro — o que, afinal, a psicologia deveria definir como seu objeto? Este guia segue essa mesma trilha histórica.',
+    trilha:[
+      { titulo:'Começos filosóficos', paginas:'p. 1',
+        texto:'Keller abre voltando aos filósofos gregos e ao problema mente-corpo, mostrando que a pergunta "o que a psicologia estuda" é mais antiga do que qualquer escola psicológica moderna.' },
+      { titulo:'O reflexo e o comportamento voluntário', paginas:'pp. 29–45',
+        texto:'A "história do reflexo" — de Descartes a Sherrington e Pavlov — e a discussão sobre como o comportamento dito voluntário poderia, ou não, ser explicado com o mesmo vocabulário do reflexo.' },
+      { titulo:'Titchener e o estruturalismo', paginas:'p. 59',
+        texto:'A psicologia como ciência da experiência consciente, decomposta em elementos simples por introspecção treinada — o alvo direto que Watson atacaria vinte anos depois.' },
+      { titulo:'A América e o funcionalismo', paginas:'p. 73',
+        texto:'A psicologia funcionalista pergunta não "do que a mente é feita", mas "para que ela serve" — um passo de transição entre o estruturalismo e o behaviorismo.' },
+      { titulo:'A Alemanha e a Gestalt', paginas:'p. 105',
+        texto:'A crítica gestaltista ao elementarismo: percepções e comportamentos organizados como totalidades, não como somas de partes.' },
+      { titulo:'Teorias da aprendizagem e o novo behaviorismo', paginas:'p. 131',
+        texto:'O capítulo em que Keller situa o neobehaviorismo watsoniano e suas variações (Hull, Tolman, Skinner) dentro da mesma linhagem histórica que vem sendo contada desde o capítulo 1.' },
+      { titulo:'O problema da definição', paginas:'p. 143',
+        texto:'O capítulo final, que dá nome ao livro: depois de percorrer toda essa história, Keller apresenta sua própria definição preferida de psicologia — a que a tradição skinneriana, da qual ele fazia parte, adotaria como ponto de partida.' }
+    ],
+    glossario:[
+      { termo:'Estruturalismo', def:'Escola de Titchener: a psicologia como estudo da experiência consciente, decomposta por introspecção em seus elementos mais simples (sensações, imagens, sentimentos).' },
+      { termo:'Funcionalismo', def:'Escola americana que pergunta pela função do comportamento e da mente na adaptação do organismo ao ambiente, e não apenas pela sua estrutura.' },
+      { termo:'Gestalt', def:'Escola alemã para a qual a experiência e o comportamento são organizados como totalidades ("a soma é diferente das partes"), não decompostos em elementos isolados.' },
+      { termo:'Reflexo', def:'Unidade básica de análise para fisiologistas como Sherrington e Pavlov: uma resposta ligada de forma relativamente fixa a um estímulo, ponto de partida histórico para o condicionamento.' },
+      { termo:'Neobehaviorismo', def:'A geração posterior a Watson (Hull, Tolman, e depois Skinner), que reformulou o behaviorismo original incorporando variáveis intervenientes, teoria formal e, no caso de Skinner, o comportamento operante.' }
+    ],
+    temas:[
+      { pp:'cap. 1, p. 1', titulo:'Uma história para justificar uma definição',
+        texto:'Keller não escreve um manual de definições prontas: ele reconstrói a história inteira da psicologia, escola por escola, para mostrar que cada definição de "objeto da psicologia" nasceu de um contexto filosófico e científico específico — e que a definição certa só pode ser julgada à luz dessa história.' },
+      { pp:'p. 143', titulo:'O problema da definição, ao final',
+        texto:'É só depois de passar por estruturalismo, funcionalismo, Gestalt e pelas variações do behaviorismo que Keller assume sua posição: uma psicologia como ciência natural do comportamento, no sentido que a tradição skinneriana desenvolveria com mais rigor experimental nas décadas seguintes.' }
+    ],
+    fotos:[
+      { src:'img/keller-retrato.png', legenda:'Fred S. Keller', nota:'Colega de graduação de Skinner em Harvard e coautor, com ele, do livro-texto Principles of Psychology (1950), quinze anos depois deste livro.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Keller e Skinner: colegas, não rivais',
+      acordos:[
+        'Keller e Skinner foram colegas de graduação em Harvard e coautores do livro-texto Principles of Psychology (1950); não há, aqui, uma disputa teórica como a que existe com Watson ou Hull.',
+        'Ambos chegam, por caminhos de leitura diferentes, à mesma conclusão histórica: a psicologia amadurece quando se define como ciência natural do comportamento.',
+        'Keller usa sua formação em história e filosofia da ciência para dar a esse veredito o peso de uma conclusão bem fundamentada, não de uma escolha de escola.'
+      ],
+      divergem:[
+        'O livro de Keller é sobretudo uma história da psicologia; o de Skinner é, majoritariamente, teoria e dados de laboratório.',
+        'Keller dedica boa parte do livro a escolas que Skinner mal discute em detalhe (estruturalismo, Gestalt), porque seu objetivo é mostrar de onde a psicologia veio antes de dizer para onde ela deveria ir.'
+      ]
+    },
+    impacto:'The Definition of Psychology continua sendo, para gerações de estudantes de análise do comportamento, um dos poucos livros que contam a história inteira da psicologia — das origens filosóficas ao behaviorismo radical — sem tratar essa história como uma sequência de erros até chegar à resposta certa. Keller também é lembrado por outra contribuição central à tradição: o Sistema Personalizado de Ensino (PSI), um método de ensino individualizado baseado em princípios de reforço que ele desenvolveu décadas depois deste livro.',
+    mascoteFala:'É um livro de história disfarçado de livro de definição. Vale ler pela jornada, não só pela conclusão.'
+  },
   perguntas:[
   { tipo:'quem',
     enunciado:'Keller o chama de "pai da psicologia moderna" por ter sido o primeiro grande dualista, separando mente e corpo de modo radical.',
@@ -1756,7 +1867,8 @@ const QUIZZES = {
         'A recepção pública foi muito diferente: Beyond Freedom and Dignity chegou à capa da revista Time em 1971 e se tornou o alvo central das acusações de "behaviorismo totalitário" que Science and Human Behavior, quase vinte anos mais cauteloso em tom, não havia provocado na mesma escala.'
       ]
     },
-    impacto:'Poucos livros-texto de psicologia continuam impressos setenta anos depois de escritos. Science and Human Behavior segue em catálogo desde janeiro de 1953 porque o pequeno conjunto de princípios comportamentais que ele organiza, vindo do laboratório animal, se aplicou depois a áreas que o livro apenas anuncia: educação (Walden Two, 1948, e The Technology of Teaching, 1968), clínica e autocontrole, e o desenho deliberado de práticas culturais, radicalizado em Beyond Freedom and Dignity (1971). O capítulo final, sobre "o problema do controle", continua sendo o texto de referência de Skinner para a pergunta que a análise do comportamento nunca deixou de responder: se toda cultura já controla o comportamento de algum modo, a escolha não é entre controlar e não controlar, e sim entre fazer isso às cegas ou a partir do que a ciência já sabe sobre como o comportamento funciona.'
+    impacto:'Poucos livros-texto de psicologia continuam impressos setenta anos depois de escritos. Science and Human Behavior segue em catálogo desde janeiro de 1953 porque o pequeno conjunto de princípios comportamentais que ele organiza, vindo do laboratório animal, se aplicou depois a áreas que o livro apenas anuncia: educação (Walden Two, 1948, e The Technology of Teaching, 1968), clínica e autocontrole, e o desenho deliberado de práticas culturais, radicalizado em Beyond Freedom and Dignity (1971). O capítulo final, sobre "o problema do controle", continua sendo o texto de referência de Skinner para a pergunta que a análise do comportamento nunca deixou de responder: se toda cultura já controla o comportamento de algum modo, a escolha não é entre controlar e não controlar, e sim entre fazer isso às cegas ou a partir do que a ciência já sabe sobre como o comportamento funciona.',
+    mascoteFala:'Setenta anos em catálogo. Poucos livros de psicologia resistem tanto tempo assim.'
   },
   perguntas:[
   { tipo:'conceito',
@@ -2021,6 +2133,51 @@ const QUIZZES = {
   leituraInicial:'O texto ficou conhecido como o "manifesto behaviorista": curto, mas denso, e vale a leitura inteira antes de jogar. Preste atenção especial ao resumo de cinco pontos que Watson escreve no final (pp. 300–301): ele repete, de forma mais direta, quase tudo que foi argumentado ao longo do artigo.',
   intro:'Este quiz não pergunta datas nem nomes soltos. Cada questão pega o raciocínio de Watson no meio do caminho e pede que você complete o próximo passo, do jeito que ele mesmo o daria. A resposta certa é a que segue a lógica do texto, não a que soa melhor sozinha.',
   conquistas:{ aprovado:'Leitor(a) do manifesto behaviorista', perfeito:'Sem linha divisória entre homens e animais' },
+    guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'A psicologia como o behaviorista a vê — Watson, 1913',
+    intro:'É um artigo curto (treze páginas na tradução), mas cada parágrafo empurra o argumento um passo adiante. Este guia acompanha esse passo a passo, na mesma ordem do texto, para servir de mapa antes ou depois do quiz.',
+    trilha:[
+      { titulo:'Abertura — o manifesto', paginas:'pp. 289–291',
+        texto:'Watson troca o objetivo da psicologia: em vez de descrever estados de consciência, ela deve prever e controlar o comportamento. Ele nega qualquer "linha divisória" entre o homem e o animal, e já avisa que os dados de comportamento humano e animal terão o mesmo peso metodológico.' },
+      { titulo:'A crítica ao método introspectivo', paginas:'pp. 292–294',
+        texto:'Watson compara a psicologia com a física e a química: quando um experimento não se repete, ninguém culpa o cientista de "não saber fazer física" — mas em psicologia a culpa recai sobre a introspecção "mal treinada" do observador. Para ele, isso é sintoma de um método que não sabe duvidar de si mesmo.' },
+      { titulo:'O programa positivo e os exemplos aplicados', paginas:'pp. 294–300',
+        texto:'Depois de dizer o que a nova psicologia deve abandonar (mente, imagem mental, conteúdo), Watson propõe reconstruir tudo em termos de estímulo, resposta e hábito. Ilustra com seu próprio trabalho de campo com pássaros em Tortuga e com exemplos aplicados: aprendizagem de listas verbais, efeito da cafeína no trabalho, confiabilidade do testemunho jurídico.' },
+      { titulo:'O resumo de cinco pontos', paginas:'pp. 300–301',
+        texto:'Watson fecha repetindo, de forma mais direta, quase tudo que argumentou: a psicologia é um ramo puramente objetivo das ciências naturais; a introspecção não faz parte central do método; consciência não é negada, mas tratada como instrumento, não como objeto de estudo.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo (1913)', def:'Para Watson, um ramo experimental puramente objetivo das ciências naturais, cujo objetivo teórico é a previsão e o controle do comportamento — não a descrição da consciência.' },
+      { termo:'Introspecção', def:'O método da psicologia tradicional da época: observar e relatar os próprios estados mentais. Watson o considera pouco confiável porque não há como um observador externo checar o relato de outra pessoa.' },
+      { termo:'Estímulo e resposta', def:'O par de termos que substitui, para Watson, todo o vocabulário mentalista. Uma psicologia madura seria aquela em que, dada a resposta, o estímulo pode ser previsto, e vice-versa.' },
+      { termo:'Manifesto behaviorista', def:'Nome pelo qual este artigo de 1913 ficou conhecido: mais um programa de reforma da psicologia do que um relatório de descobertas novas.' }
+    ],
+    temas:[
+      { pp:'pp. 289–290', titulo:'Duas saídas, uma escolha',
+        texto:'Watson descreve um impasse: os dados obtidos com animais raramente diziam algo direto sobre a psicologia humana "pura" da época, e por isso eram vistos com desconfiança. Ele enxerga só duas saídas — a psicologia se abre para incluir os fatos do comportamento, ou o estudo do comportamento vira uma ciência à parte, independente da psicologia da consciência. O artigo inteiro é escrito torcendo pela segunda opção.',
+        trecho:{ en:'Psychology as the behaviorist views it is a purely objective experimental branch of natural science.', pt:'A psicologia, tal como o behaviorista a vê, é um ramo puramente objetivo e experimental das ciências naturais.', ref:'Watson (1913/2008, p. 289)' } },
+      { pp:'pp. 291–292', titulo:'A analogia com Darwin',
+        texto:'Watson compara o momento da psicologia ao que a biologia viveu na época de Darwin, quando o evolucionismo inteiro era julgado por sua relevância para a origem do homem. Quando a zoologia passou a estudar a evolução espécie por espécie, o homem deixou de ser o centro obrigatório de referência — e é essa mesma maturidade que ele deseja para a psicologia do comportamento.' },
+      { pp:'pp. 295–296', titulo:'Do campo para o laboratório, e de volta à vida prática',
+        texto:'Watson não fala só de teoria: cita seu próprio estudo de campo com pássaros em Tortuga (observando o grupo, depois indivíduos, depois filhotes criados à parte dos pais, para separar o que é aprendido do que é inato) e exemplos bem concretos de aplicação — desde a curva de esquecimento de listas de sílabas até o efeito da cafeína na produtividade e a confiabilidade de testemunhas em tribunal.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Watson × Skinner: o que fica, o que muda',
+      acordos:[
+        'Recusa da consciência como objeto central de estudo científico do comportamento.',
+        'Compromisso com um vocabulário observável, público, checável por qualquer pessoa.',
+        'Convicção de que comportamento humano e animal podem ser estudados com métodos comparáveis.'
+      ],
+      divergem:[
+        'Watson trabalha com reflexo e condicionamento clássico (estímulo → resposta); Skinner descobre e prioriza o comportamento operante, controlado por suas consequências, não por um estímulo antecedente.',
+        'Watson chega perto de negar a existência de eventos privados; Skinner os aceita como comportamento, só que ocorrendo "dentro da pele", sujeito às mesmas leis.',
+        'Watson escreve um manifesto de reforma, com poucos dados de sustentação; Skinner constrói, décadas depois, um programa experimental extenso (An Experimental Analysis, câmara operante, curvas cumulativas) antes de propor mudanças conceituais.'
+      ]
+    },
+    impacto:'"A psicologia como o behaviorista a vê" é, até hoje, o texto de referência para marcar o nascimento oficial do behaviorismo como movimento. Skinner o cita na abertura de About Behaviorism como o momento em que a "primeira explícita" versão behaviorista apareceu — e também como um "erro estratégico": ao brigar com a introspecção em vez de simplesmente propor um objeto de estudo novo, Watson teria confundido, segundo Skinner, uma discussão que os behavioristas radicais ainda precisariam desfazer décadas depois.',
+    mascoteFala:'Treze páginas, mas cada frase empurra a próxima. Vale ler de uma sentada.'
+  },
   perguntas:[
   { tipo:'complete',
     enunciado:'Watson abre o artigo definindo o objetivo teórico da nova psicologia. Complete: a psicologia do behaviorista é um ramo experimental puramente objetivo das ciências naturais, cujo objetivo teórico é a ___.',
@@ -2197,7 +2354,8 @@ const QUIZZES = {
         'Essa disputa já aparece dentro do próprio jogo: uma das perguntas do quiz de teoria geral do Skinner cita "Are Theories of Learning Necessary?" (1950), o artigo em que ele contesta diretamente teorias do tipo que Tolman defendia.'
       ]
     },
-    impacto:'A ideia do "mapa cognitivo" saiu do papel décadas depois. Em 1971, o neurocientista John O\'Keefe descreveu, no hipocampo de ratos, células que disparam conforme o animal muda de posição no espaço, as células de lugar. Em 2014, O\'Keefe dividiu o Prêmio Nobel de Fisiologia ou Medicina com May-Britt e Edvard Moser, descobridores das células de grade, por um trabalho que a própria Fundação Nobel descreveu como a base biológica de um sistema de posicionamento interno do cérebro, próxima de uma confirmação física da hipótese de Tolman. O conceito de variável interveniente também deixou herança: virou ferramenta padrão da psicologia experimental e ajudou a preparar o terreno para a "revolução cognitiva" das décadas de 1950 e 1960.'
+    impacto:'A ideia do "mapa cognitivo" saiu do papel décadas depois. Em 1971, o neurocientista John O\'Keefe descreveu, no hipocampo de ratos, células que disparam conforme o animal muda de posição no espaço, as células de lugar. Em 2014, O\'Keefe dividiu o Prêmio Nobel de Fisiologia ou Medicina com May-Britt e Edvard Moser, descobridores das células de grade, por um trabalho que a própria Fundação Nobel descreveu como a base biológica de um sistema de posicionamento interno do cérebro, próxima de uma confirmação física da hipótese de Tolman. O conceito de variável interveniente também deixou herança: virou ferramenta padrão da psicologia experimental e ajudou a preparar o terreno para a "revolução cognitiva" das décadas de 1950 e 1960.',
+    mascoteFala:'Décadas depois, um Nobel confirmou o mapa cognitivo no hipocampo. Vale a espera.'
   },
   perguntas:[
   { tipo:'raciocinio',
@@ -2326,6 +2484,62 @@ const QUIZZES = {
   leituraInicial:'É o livro mais técnico do elenco: Hull escreve como um físico, com postulados numerados e fórmulas matemáticas ao lado de cada um. Não precisa entender a matemática para acompanhar o quiz. Vale ler o capítulo I (pp. 1–15), onde ele explica que tipo de ciência está tentando construir, e depois folhear os dezesseis postulados formais, espalhados dos capítulos III a XVIII.',
   intro:'Hull constrói a teoria dele como quem empilha blocos: cada postulado novo depende dos anteriores, e cada um tenta resolver um problema que o anterior deixou em aberto. As perguntas aqui pedem que você complete essa construção, postulado por postulado, sem citar número ou fórmula de cor.',
   conquistas:{ aprovado:'Leitor(a) de Principles of Behavior', perfeito:'Dezesseis postulados' },
+    guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Principles of Behavior — Clark L. Hull, 1943',
+    intro:'É o livro mais técnico do elenco: vinte capítulos organizados como um sistema hipotético-dedutivo, com postulados numerados e corolários derivados deles, quase como em geometria. Ninguém precisa ler os 431 páginas para acompanhar o quiz — este guia mostra o mapa do livro inteiro e destaca o que vale a pena ler com atenção.',
+    trilha:[
+      { titulo:'I. A natureza da teoria científica', paginas:'p. 1',
+        texto:'Hull expõe seu método antes de aplicá-lo: para ele, uma ciência madura do comportamento precisa de um sistema dedutivo, com postulados explícitos dos quais se derivam previsões testáveis — o mesmo método usado pela física e pela geometria de Euclides.' },
+      { titulo:'II a IV. Rumo a uma teoria objetiva', paginas:'pp. 16–56',
+        texto:'Hull introduz sua teoria objetiva do comportamento e discute a recepção de estímulos e a coordenação da ação como problemas biológicos de sobrevivência — a base fisiológica sobre a qual todo o sistema será construído.' },
+      { titulo:'V a VII. Comportamento inato e reforço primário',
+        paginas:'pp. 57–101',
+        texto:'O núcleo do sistema: como conexões entre receptor e efetor (estímulo e resposta) se formam a partir do reforço primário, e depois do reforço secundário (estímulos que adquirem função reforçadora por associação).' },
+      { titulo:'VIII a XI. A força do hábito (sHr)', paginas:'pp. 102–182',
+        texto:'Quatro capítulos dedicados ao construto central do sistema, a força do hábito, e às variáveis que a determinam: número de reforços, intervalo de tempo até o reforço, e a relação temporal entre estímulo condicionado e resposta.' },
+      { titulo:'XII a XIV. Generalização, estímulos compostos e motivação', paginas:'pp. 183–257',
+        texto:'Hull estende o sistema para dar conta da generalização de estímulos, de combinações de estímulos e da motivação primária como fator que ativa o hábito em potencial de reação.' },
+      { titulo:'XV a XVIII. Extinção, inibição e oscilação', paginas:'pp. 258–348',
+        texto:'Capítulos sobre por que hábitos deixam de ocorrer: extinção experimental, inibição, a oscilação comportamental (variabilidade momento a momento) e o limiar de reação.' },
+      { titulo:'XIX e XX. Padrões de estímulo e conclusão geral', paginas:'pp. 349–430',
+        texto:'O sistema se fecha com o problema de padrões complexos de estímulos compostos e um resumo geral de todos os dezesseis postulados formais apresentados ao longo do livro.' }
+    ],
+    glossario:[
+      { termo:'Sistema hipotético-dedutivo', def:'Método de Hull: postulados explícitos, formulados como axiomas, dos quais se derivam corolários e previsões testáveis experimentalmente — nos moldes da geometria euclidiana.' },
+      { termo:'sHr (força do hábito)', def:'Construto teórico central do sistema: a força da conexão entre um estímulo e uma resposta, que cresce com o número de reforços e decai com o tempo entre resposta e reforço.' },
+      { termo:'Reforço primário', def:'Um reforçador que reduz diretamente uma necessidade biológica (como comida para um organismo faminto), sem depender de associação prévia com outro reforçador.' },
+      { termo:'Reforço secundário', def:'Um estímulo originalmente neutro que adquire função reforçadora por ter sido associado, repetidamente, a um reforço primário.' },
+      { termo:'Postulado', def:'Cada uma das dezesseis afirmações formais que compõem o sistema de Hull, numeradas e explicitamente sujeitas a revisão se os dados as contradisserem.' },
+      { termo:'Oscilação comportamental', def:'Conceito de Hull para a variabilidade momento a momento na força efetiva de reação, mesmo sob condições experimentais idênticas.' }
+    ],
+    temas:[
+      { pp:'p. 1', titulo:'Ciência como sistema dedutivo',
+        texto:'Hull acredita que uma teoria científica madura deve funcionar como a geometria: alguns poucos postulados básicos, formulados com precisão matemática, dos quais se derivam logicamente todas as previsões possíveis. É essa ambição que explica a estrutura incomum do livro — dezesseis postulados numerados, espalhados pelos capítulos III a XVIII, cada um seguido de corolários.' },
+      { pp:'pp. 68–101', titulo:'Do reforço primário ao secundário',
+        texto:'Hull constrói o sistema de baixo para cima: primeiro explica como uma conexão entre receptor e efetor se fortalece pelo reforço primário (redução direta de uma necessidade biológica), depois estende o mesmo princípio para explicar por que estímulos neutros passam a funcionar como reforçadores quando associados a um reforço primário — o reforço secundário.' },
+      { pp:'pp. 102–182', titulo:'sHr, o construto que organiza tudo',
+        texto:'Praticamente metade do livro (capítulos VIII a XI) é dedicada a uma única variável: a força do hábito, símbolo sHr. Hull dedica capítulos inteiros a mostrar como ela varia em função do número de reforços, do intervalo entre resposta e reforço, e da relação temporal entre o estímulo condicionado e a reação — um nível de formalização matemática que nenhum outro autor deste elenco tentou.' }
+    ],
+    fotos:[
+      { src:'img/hull-perfil.png', legenda:'Clark L. Hull', nota:'Professor em Yale, onde desenvolveu o sistema hipotético-dedutivo apresentado neste livro ao longo de mais de uma década de trabalho.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Hull × Skinner: os dois grandes rivais do neobehaviorismo',
+      acordos:[
+        'Ambos rejeitam a introspecção como método e insistem em variáveis observáveis e manipuláveis experimentalmente.',
+        'Ambos tratam o reforço como conceito central para explicar por que o comportamento se fortalece ou enfraquece.',
+        'Ambos publicam, na mesma década (Hull em 1943, Skinner em The Behavior of Organisms, 1938, e depois Science and Human Behavior, 1953), sistemas ambiciosos de análise do comportamento.'
+      ],
+      divergem:[
+        'Hull constrói um sistema hipotético-dedutivo, com postulados formais e construtos intervenientes (como sHr) inferidos, não observados diretamente; Skinner rejeita esse tipo de teorização formal, preferindo descrever relações funcionais diretas entre comportamento e ambiente.',
+        'Para Hull, a força do hábito é uma variável interveniente entre estímulo e resposta; para Skinner, essa mediação teórica é dispensável — o que importa é a relação observável entre resposta e consequência.',
+        'O sistema de Hull perdeu influência nas décadas seguintes por depender de postulados difíceis de testar isoladamente; a abordagem mais descritiva de Skinner, e sua ênfase no comportamento operante, se tornou a linha dominante da análise do comportamento.'
+      ]
+    },
+    impacto:'Principles of Behavior foi, por quase duas décadas, o sistema teórico mais influente da psicologia da aprendizagem nos Estados Unidos, formando uma geração inteira de pesquisadores (entre eles Neal Miller e Kenneth Spence) que testaram, refinaram e às vezes contestaram seus postulados numéricos. A ambição de tratar o comportamento com o rigor formal de um sistema dedutivo acabou perdendo terreno para abordagens mais descritivas como a de Skinner, mas o livro continua sendo referência histórica para entender por que a psicologia experimental, em certo momento, apostou tanto em teorias formais e matemáticas do comportamento.',
+    mascoteFala:'Não precisa ler os 431 páginas. O capítulo I e o resumo dos postulados já contam a história inteira.'
+  },
   perguntas:[
   { tipo:'complete',
     enunciado:'Hull abre o livro comparando o que ele quer fazer pela psicologia ao método já consolidado nas ciências físicas: um pequeno conjunto de definições e postulados, dos quais fenômenos observados podem ser deduzidos como teoremas. Complete o que ele recusa como método científico de verdade: generalizações soltas, tiradas caso a caso da observação, sem nunca se organizarem num sistema de ___.',
@@ -2453,6 +2667,56 @@ const QUIZZES = {
   leituraInicial:'Este quiz segue o formato de instrução programada: cada quadro ensina um pedaço pequeno da ideia e pede que você complete uma lacuna quase óbvia, para aprender com o mínimo de erro possível. Não é um teste de memória, é um percurso guiado pelos três capítulos da Parte I do livro: o texto de Rachlin, o comentário de Filipe Lazzeri e a resposta de Rachlin a ele.',
   intro:'Como pouca gente no Brasil tem acesso fácil a este livro, cada quadro aqui ensina antes de perguntar. Leia o texto inteiro do quadro; a resposta certa quase sempre já apareceu nele, só de outro jeito.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo teleológico', perfeito:'Causa final, sem erro' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Teleological Behaviorism — Rachlin, Lazzeri e a réplica, capítulos 1 a 3',
+    intro:'Três capítulos curtos: o texto de Rachlin, o comentário crítico de Filipe Lazzeri e a resposta de Rachlin a ele. É o formato de todos os "capítulo + réplica" desta série de quizzes, e este guia segue a mesma ordem, com o vocabulário e os trechos que mais aparecem nos quadros.',
+    trilha:[
+      { titulo:'Capítulo 1 — Teleological Behaviorism: Origins and Present Status', paginas:'pp. 3–19',
+        texto:'Rachlin conta primeiro sua própria formação em Harvard, no laboratório de Herrnstein, antes de apresentar o TEB: a tese de que a mente é o próprio padrão de comportamento manifesto, não uma causa interna escondida atrás dele. É aqui que entram as causas finais estreita e ampla.' },
+      { titulo:'Capítulo 2 — Filipe Lazzeri, comentário', paginas:'pp. 21–32',
+        texto:'Lazzeri situa o TEB na história do behaviorismo (Watson, Tolman, Skinner) e questiona até que ponto uma teoria da mente pode dispensar completamente qualquer categoria psicológica que não seja comportamento manifesto.' },
+      { titulo:'Capítulo 3 — Resposta de Rachlin', paginas:'pp. 33–41',
+        texto:'Rachlin responde partindo de uma anedota reveladora: quando lhe pediram para reler The Behavior of Organisms (1938) de Skinner décadas depois, percebeu o quanto daquele livro tinha "envelhecido bem" e o quanto não. É daí que ele defende o que herda de Skinner e o que descarta.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo teleológico (TEB)', def:'A posição de Rachlin: a mente se identifica com o próprio padrão de comportamento manifesto (overt), observável em princípio por qualquer pessoa — não é uma causa interna escondida por trás do comportamento.' },
+      { termo:'Causa eficiente', def:'Responde à pergunta "como": o mecanismo, interno ou externo, que precede e produz um evento. É o tipo de causa que a neurociência busca.' },
+      { termo:'Causa final', def:'Responde à pergunta "por quê": o propósito ou padrão para o qual um ato contribui. Rachlin recupera essa noção aristotélica sem apelar a nenhuma entidade mental.' },
+      { termo:'Causa final estreita', def:'Equivale ao conceito já conhecido de reforço: um ato de valor mais alto (comer) explica por que ocorreu um ato de valor mais baixo (pressionar a barra).' },
+      { termo:'Causa final ampla', def:'A relação entre um padrão de atividade abstrato, estendido no tempo (como "dançar"), e os atos particulares que o compõem (cada passo). O padrão inteiro explica a parte, não o contrário.' },
+      { termo:'Eu estendido (extended self)', def:'Para explicar por que as pessoas cooperam mesmo quando não haveria ganho individual em fazê-lo, Rachlin propõe que o "eu" inclui um padrão social mais amplo do que o indivíduo isolado.' }
+    ],
+    temas:[
+      { titulo:'A mente é o padrão, não a causa escondida', pp:'pp. 3–5',
+        texto:'A tese de abertura do capítulo: em vez de tratar estados mentais como eventos internos que causam o comportamento, o TEB os identifica com o próprio padrão de comportamento manifesto, o que muda inteiramente o que significa "explicar" uma ação.',
+        trecho:{ en:'"...a theory of the behavioral identity of the mind."', pt:'"...uma teoria da identidade comportamental da mente." (tradução livre)', ref:'Rachlin, 2021, cap. 1, p. 4' } },
+      { titulo:'Herança e ruptura com Skinner', pp:'pp. 33–34',
+        texto:'Na resposta a Lazzeri, Rachlin descreve a contribuição de Skinner como "mais filosófica do que psicológica": uma nova forma de conceber a alma como padrão de vida observável, na linha de Aristóteles. É onde ele marca o que aceita e o que descarta do legado skinneriano.',
+        trecho:{ en:'"...his most lasting contribution is in my opinion more philosophical than psychological."', pt:'"...sua contribuição mais duradoura é, na minha opinião, mais filosófica do que psicológica." (tradução livre, sobre Skinner)', ref:'Rachlin, 2021, cap. 1, p. 8' } },
+      { titulo:'Cooperação e o "eu" estendido', pp:'pp. 27–29',
+        texto:'No problema do "carona grátis" (free rider), a teoria econômica prevê que ninguém deveria contribuir para bens públicos, já que cada um se beneficia mais não contribuindo. Rachlin explica a cooperação real das pessoas propondo um "eu" que se estende além do indivíduo isolado de cada momento.' }
+    ],
+    fotos:[
+      { src:'img/rachlin-sentado.png', legenda:'RACHLIN',
+        nota:'Howard Rachlin em outro registro, também convertido ao estilo do jogo, para variar da imagem já usada na abertura deste quiz.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Rachlin × Skinner: onde herda, onde se afasta',
+      acordos:[
+        'Nenhum dos dois aceita eventos mentais internos como causa eficiente do comportamento; ambos preferem manter a explicação em termos observáveis, mesmo quando isso exige vocabulário novo.',
+        'Os dois tratam o reforço como o conceito básico da análise: para Rachlin, a "causa final estreita" é simplesmente outro nome para reforço.',
+        'Rachlin reconhece explicitamente a contribuição de Skinner como uma "nova forma de conceber a alma" — um marco filosófico que o TEB tenta preservar, mesmo mudando o vocabulário.'
+      ],
+      divergem:[
+        'Skinner evita qualquer apelo a causas finais ou propósito; Rachlin recupera essa noção aristotélica, desde que ela seja definida por padrões de comportamento observável, não por um estado mental escondido.',
+        'A unidade de análise muda de escala: Skinner analisa principalmente a resposta operante isolada; o TEB pede um "padrão de atividade amplo, estendido no tempo" (como dançar, ou ser uma pessoa cooperativa) para explicar cada ato particular.',
+        'O "eu" para Rachlin pode se estender socialmente, incluindo os outros com quem uma pessoa coopera; Skinner trata o indivíduo isolado como unidade de análise padrão.'
+      ]
+    },
+    impacto:'O TEB nasceu como uma tentativa de resolver, com vocabulário aristotélico, um problema que atravessa a psicologia desde Descartes: como falar de propósito e de "eu" sem recair no dualismo mente-corpo. A proposta de Rachlin sobre o "eu estendido" influenciou diretamente estudos sobre autocontrole, cooperação e cognição não humana, e mantém viva, dentro do próprio behaviorismo, uma disputa que remonta a Aristóteles sobre causas finais e causas eficientes.',
+    mascoteFala:'Aristóteles emprestado sem dualismo. É mais simples do que parece no capítulo 1.'
+  },
   perguntas:[
   { tipo:'quadro',
     enunciado:'Rachlin chama sua posição de behaviorismo teleológico (TEB). Para o TEB, a mente não é um conjunto de eventos internos escondidos; a mente É o próprio padrão de comportamento manifesto (overt), observável em princípio por qualquer outra pessoa. Complete: para o TEB, a mente se identifica com o ___.',
@@ -2544,6 +2808,52 @@ const QUIZZES = {
   leituraInicial:'Mesmo formato do quiz do Rachlin: cada quadro ensina antes de perguntar, e a lacuna quase sempre repete algo que o próprio quadro acabou de dizer. Os três capítulos aqui são o texto de Baum, o comentário de Carolina Laurenti e a resposta de Baum a ela.',
   intro:'Baum construiu sua visão molar ao longo de décadas, mudando de ideia algumas vezes no caminho. Os quadros seguem essa mesma ordem: dos primeiros axiomas até a resposta mais recente sobre genes e seleção.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo molar', perfeito:'Atividade em toda escala, sem erro' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Molar Behaviorism — Baum, Laurenti e a réplica, capítulos 4 a 6',
+    intro:'Baum conta sua formação sob Herrnstein em Harvard antes de apresentar a visão molar: comportamento como atividade estendida no tempo, não como respostas isoladas. Carolina Laurenti comenta, e Baum responde discutindo genes e seleção.',
+    trilha:[
+      { titulo:'Capítulo 4 — Introduction to Molar Behaviorism and Multiscale Behavior Analysis', paginas:'pp. 43–61',
+        texto:'Apresenta os três axiomas do behaviorismo molar (só organismos inteiros se comportam; viver é se comportar; toda atividade é composta de partes que também são atividades) e a "lei da alocação", generalização da lei da igualação de Herrnstein.' },
+      { titulo:'Capítulo 5 — Carolina Laurenti, comentário', paginas:'pp. 63–70',
+        texto:'Laurenti discute se a visão molar chega a configurar uma mudança de paradigma, no sentido de Kuhn, dentro da análise do comportamento, comparando-a à visão molecular tradicional.' },
+      { titulo:'Capítulo 6 — Resposta de Baum', paginas:'pp. 71–79',
+        texto:'Baum recorre à evolução da célula eucariota como metáfora para responder a Laurenti sobre a relação entre genes, seleção e comportamento, e para reforçar por que a escala do "molar" cabe na mesma lógica da seleção natural.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo molar', def:'Visão segundo a qual o comportamento é melhor descrito como atividade estendida no tempo (um processo), não como uma sequência de respostas isoladas ligadas ponto a ponto a estímulos e reforços.' },
+      { termo:'Lei da alocação', def:'Generalização da lei da igualação de Herrnstein: a proporção de comportamento alocada a uma alternativa tende a igualar a proporção de reforçadores obtidos por ela, para qualquer número de alternativas.' },
+      { termo:'"Só organismos inteiros se comportam" (Axioma 1)', def:'Primeiro axioma do behaviorismo molar: comportamento não é propriedade de partes do organismo (músculos, neurônios), mas do organismo como um todo agindo no ambiente.' },
+      { termo:'"Viver é se comportar" (Axioma 2)', def:'Segundo axioma: enquanto um organismo está vivo, ele se comporta continuamente, o que implica que o comportamento ocupa todo o tempo disponível, dividido entre atividades.' },
+      { termo:'Visão molecular', def:'A visão tradicional que a proposta molar contesta: analisa o comportamento em unidades pequenas e discretas (respostas individuais), cada uma ligada a um estímulo e uma consequência próximos no tempo.' },
+      { termo:'Estímulo privado', def:'Um evento interno (como "dor") citado para explicar comportamento; Baum argumenta que, numa ciência do comportamento, esses eventos são causas inobserváveis e a tentação de recorrer a eles vem da linguagem cotidiana, não da análise funcional.' }
+    ],
+    temas:[
+      { titulo:'Comportamento como processo, não como peça', pp:'pp. 51–52',
+        texto:'O núcleo da proposta molar: tratar cada atividade como um processo que se estende no tempo e preserva sua identidade mesmo mudando de forma, em vez de uma sequência de eventos discretos e desconectados.',
+        trecho:{ en:'"As a process, behavior changes, but it does so without losing its identity."', pt:'"Como processo, o comportamento muda, mas o faz sem perder sua identidade." (tradução livre)', ref:'Laurenti, 2021, cap. 5, p. 64' } },
+      { titulo:'A tentação do estímulo privado', pp:'p. 47',
+        texto:'Baum usa o exemplo de alguém que grita e diz "estou com dor": para ele, o que existe é a lesão e o comportamento verbal, não uma "dor" privada funcionando como causa separada e inobservável.',
+        trecho:{ en:'"...what he is doing and saying is the injury, not a private stimulus called ‘pain.’"', pt:'"...o que ele está fazendo e dizendo é a lesão, não um estímulo privado chamado ‘dor’." (tradução livre)', ref:'Baum, 2021, cap. 4, p. 47' } },
+      { titulo:'Genes, seleção e comportamento', pp:'pp. 71–73',
+        texto:'Na resposta a Laurenti, Baum recorre a um cenário especulativo sobre a origem da célula eucariota, por endossimbiose, para argumentar que a mesma lógica de seleção que explica a evolução biológica se estende, numa escala de tempo diferente, à seleção de comportamentos pelo reforço.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Baum × Skinner: onde herda, onde se afasta',
+      acordos:[
+        'Ambos rejeitam estímulos privados (como "dor" ou "fome") como causas explicativas independentes das condições externas que os produzem.',
+        'Os dois tratam a seleção por consequências como o processo central que explica o comportamento operante, na mesma linha da seleção natural.',
+        'Baum reconhece a lei da igualação de Herrnstein, um pesquisador formado na tradição skinneriana, como ponto de partida direto da lei da alocação.'
+      ],
+      divergem:[
+        'A unidade de análise muda: Skinner tende a tratar a resposta operante individual como o dado básico; a visão molar de Baum trata a atividade estendida no tempo, o padrão inteiro, como a unidade que de fato existe e se comporta.',
+        'Para a visão molecular tradicional (mais próxima de Skinner), cada resposta é discreta e ligada a um reforço próximo; para Baum, dividir o comportamento em unidades tão pequenas é artificial e esconde o processo real.',
+        'Baum estende a lógica seletiva explicitamente aos genes, tratando comportamento e evolução biológica como duas escalas do mesmo tipo de processo seletivo, uma integração que Skinner sugeria em termos mais gerais, sem o mesmo detalhamento biológico.'
+      ]
+    },
+    impacto:'A visão molar mudou parte do debate metodológico dentro da análise do comportamento, ao propor que unidades de tempo mais longas, e não apenas a resposta imediata, são o objeto certo de estudo. A "multiscale behavior analysis" de Baum aproxima a análise do comportamento de conceitos evolutivos, e o debate com Laurenti sobre se isso configura uma mudança de paradigma nos moldes de Kuhn continua ativo entre analistas do comportamento.',
+    mascoteFala:'Zoom out: unidades de tempo mais longas mudam o que conta como resposta.'
+  },
   perguntas:[
   { tipo:'quadro',
     enunciado:'O primeiro axioma de Baum diz que o comportamento de um organismo é composto pelas próprias ações do organismo. O segundo, chamado "estar vivo é se comportar", diz que, enquanto um organismo está vivo, ele se comporta o tempo todo, sem parar. Complete a implicação direta do segundo axioma: observar um organismo por uma hora é observar ___.',
@@ -2635,6 +2945,51 @@ const QUIZZES = {
   leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Staddon, o comentário de Carlos Eduardo Lopes e a resposta de Staddon a ele.',
   intro:'Staddon escreve criticando os dois extremos que quer evitar: o behaviorismo sem teoria de Skinner, de um lado, e o mentalismo cientificista, do outro. Os quadros seguem essa disputa de perto.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo teórico', perfeito:'Nem Cila, nem Caríbdis' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Theoretical Behaviorism — Staddon, Lopes e a réplica, capítulos 7 a 9',
+    intro:'Staddon defende um "amendamento necessário" ao behaviorismo radical de Skinner: aceitar teoria, incluindo variáveis não observadas diretamente, desde que ligadas com rigor a dados comportamentais. Carlos Eduardo Lopes comenta, e Staddon responde.',
+    trilha:[
+      { titulo:'Capítulo 7 — Theoretical Behaviorism', paginas:'pp. 79–95',
+        texto:'Staddon parte do sucesso experimental do behaviorismo radical (caixa de Skinner, registro cumulativo) para argumentar que ele foi, ao mesmo tempo, hostil demais à teoria — e propõe reintroduzi-la sem recair no mentalismo.' },
+      { titulo:'Capítulo 8 — Carlos Eduardo Lopes, comentário', paginas:'pp. 97–109',
+        texto:'Lopes questiona o próprio conceito de "teoria" usado por Staddon, situando o debate no contexto mais amplo da filosofia e sociologia da ciência (incluindo Latour), e pergunta que tipo de teoria, exatamente, o behaviorismo teórico defende.' },
+      { titulo:'Capítulo 9 — Resposta de Staddon', paginas:'pp. 111–114',
+        texto:'Staddon responde de forma direta e um tanto impaciente com o vocabulário filosófico de Lopes ("realismo, construcionismo, positivismo..."), reafirmando que seu interesse é pragmático: teorias que gerem previsões testáveis sobre comportamento.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo teórico (ThB)', def:'Proposta de Staddon: um "amendamento necessário" ao behaviorismo radical de Skinner, que aceita construtos teóricos e variáveis não diretamente observadas, desde que rigorosamente ligados a dados comportamentais.' },
+      { termo:'Variáveis controladoras', def:'Termo de Skinner que Staddon retoma: os aspectos do procedimento de treino responsáveis pelos padrões observados de comportamento — "as variáveis independentes das quais a probabilidade de resposta é função".' },
+      { termo:'Probabilidade de resposta', def:'A medida que Skinner defendia como variável dependente correta para a psicologia da aprendizagem, em vez da latência (tempo até responder), que Staddon mostra não variar de forma confiável com a motivação.' },
+      { termo:'Lei de Jost', def:'Lei da memória de 1897 usada por Staddon: entre duas associações de força igual mas idades diferentes, a mais antiga decai mais devagar — evidência de que a força de um hábito não decai exponencialmente.' },
+      { termo:'Comportamento "supersticioso"', def:'Fenômeno estudado por Skinner e revisitado por Staddon e Simmelhag: atividades que emergem quando reforço é entregue independente do comportamento, e que Staddon reinterpreta como atividades induzidas, não aprendidas por acaso.' },
+      { termo:'Atividades interinas vs. terminais', def:'Distinção de Staddon e Simmelhag (1971): dentro do intervalo entre reforços, organismos mostram dois tipos de atividade que diferem sistematicamente do relato original de Skinner sobre a "superstição".' }
+    ],
+    temas:[
+      { titulo:'O sucesso e o limite do método de Skinner', pp:'pp. 79–80',
+        texto:'Staddon reconhece que a caixa de Skinner e o registrador cumulativo permitiram décadas de pesquisa produtiva, mas argumenta que o movimento radical se tornou "ativamente hostil" à teoria, ao ponto de travar sua própria explicação dos fenômenos que descobria.',
+        trecho:{ en:'"...it was much less successful in explaining them. The movement lacked, and indeed was actively hostile to, theory."', pt:'"...foi bem menos bem-sucedido em explicá-los. O movimento carecia de teoria, e era, de fato, ativamente hostil a ela." (tradução livre)', ref:'Staddon, 2021, cap. 7, p. 80' } },
+      { titulo:'Reexaminando a "superstição" de Skinner', pp:'pp. 89–92',
+        texto:'Mais de vinte anos depois do experimento clássico de Skinner sobre comportamento supersticioso em pombos, Staddon e Simmelhag repetiram o estudo observando segundo a segundo, e encontraram padrões (atividades interinas e terminais) que a descrição original de Skinner não previa.' },
+      { titulo:'Teoria como ferramenta, não como dogma', pp:'p. 113',
+        texto:'Na resposta a Lopes, Staddon recusa a discussão em termos de "ismos" filosóficos abstratos e insiste que seu interesse é pragmático: teorias que ajudem a prever comportamento, testáveis por dados, não sistemas filosóficos fechados.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Staddon × Skinner: onde herda, onde se afasta',
+      acordos:[
+        'Staddon reconhece o sucesso experimental do behaviorismo radical como ponto de partida indispensável: sem a caixa de Skinner e o registro cumulativo, não haveria dados para teorizar sobre.',
+        'Ambos preferem que os construtos teóricos sejam ancorados em variáveis manipuláveis do ambiente, e não em introspecção ou entidades mentais.',
+        'Staddon usa o próprio critério de Skinner (probabilidade de resposta como medida melhor que latência) como argumento a favor da abordagem funcional.'
+      ],
+      divergem:[
+        'Skinner evitava deliberadamente construir teorias sobre processos não observados; Staddon defende que isso é um "amendamento necessário", não uma traição ao projeto behaviorista.',
+        'O behaviorismo teórico aceita variáveis internas do tipo "estado" (análogas a variáveis intervenientes), desde que rigorosamente ligadas a dados comportamentais — algo que o radicalismo de Skinner rejeitava por princípio.',
+        'A releitura do experimento da "superstição" (Staddon & Simmelhag, 1971) revisa diretamente uma conclusão empírica do próprio Skinner, mostrando padrões que sua descrição original não previa.'
+      ]
+    },
+    impacto:'O behaviorismo teórico de Staddon ajudou a abrir espaço, dentro da tradição skinneriana, para modelos formais e construtos teóricos que a ortodoxia radical evitava — uma ponte parcial entre a análise do comportamento e a psicologia comparada e cognitiva mais ampla, sem abandonar o compromisso com dados observáveis e testáveis.',
+    mascoteFala:'Uma ponte, não uma ruptura: modelos formais sem abrir mão do dado observável.'
+  },
   perguntas:[
   { tipo:'quadro',
     enunciado:'Staddon apresenta seu behaviorismo teórico (ThB) como uma emenda necessária ao behaviorismo radical de Skinner. Para ele, o movimento skinneriano foi muito bem-sucedido produzindo experimentos e descobrindo fenômenos novos, mas muito menos bem-sucedido explicando esses fenômenos, porque foi ativamente hostil à teoria. Complete: para Staddon, faltou ao behaviorismo radical não experimentos, mas ___.',
@@ -2726,6 +3081,50 @@ const QUIZZES = {
   leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Donahoe, o comentário de Marcus Bentes de Carvalho Neto e a resposta de Donahoe a ele.',
   intro:'Donahoe quer aproximar a análise do comportamento da neurociência, sem que uma vire refém da outra. Os quadros seguem essa aproximação de perto, com bastante cuidado nos dois conceitos técnicos centrais do capítulo.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo biológico', perfeito:'Reforço unificado, sem erro' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Biological Behaviorism — Donahoe, Carvalho Neto e a réplica, capítulos 10 a 12',
+    intro:'Donahoe propõe integrar a análise do comportamento com a neurociência, sem que uma vire refém da outra. Marcus Bentes de Carvalho Neto comenta a proposta situando-a na história da relação entre psicologia e biologia, e Donahoe responde.',
+    trilha:[
+      { titulo:'Capítulo 10 — Biological Behaviorism', paginas:'pp. 113–136',
+        texto:'Depois de uma nota biográfica sobre sua formação (incluindo o confronto entre a psicologia hulliana e a skinneriana), Donahoe apresenta o "princípio de reforço unificado", integrando condicionamento pavloviano e operante a um mesmo mecanismo neural.' },
+      { titulo:'Capítulo 11 — Marcus Bentes de Carvalho Neto, comentário', paginas:'pp. 137–145',
+        texto:'Carvalho Neto situa a proposta na longa e "conturbada" história entre psicologia e biologia, desde Comte, e questiona até que ponto integrar behaviorismo e neurociência resolve, ou desloca, o problema filosófico de fundo.' },
+      { titulo:'Capítulo 12 — Resposta de Donahoe', paginas:'pp. 147–148',
+        texto:'Donahoe agradece o contexto histórico trazido por Carvalho Neto e detalha como entende a relação entre análise do comportamento e seus mecanismos biológicos, sem reduzir uma à outra.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo biológico', def:'Proposta de Donahoe: integrar a análise experimental do comportamento com a neurociência, buscando os mecanismos neurais que implementam princípios comportamentais já estabelecidos, sem substituir a análise funcional por eles.' },
+      { termo:'Princípio de reforço unificado', def:'Mecanismo neural único proposto por Donahoe para explicar tanto o reforço pavloviano (condicionado) quanto o operante, a partir de sistemas de dopamina (VTA) ativados por discrepância comportamental.' },
+      { termo:'Reforçador condicionado', def:'Um estímulo antes neutro que passa a funcionar como reforçador por ter sido associado a um reforçador incondicionado; central para explicar cadeias longas de comportamento, como resolução de problemas e comportamento verbal.' },
+      { termo:'Bloqueio (blocking)', def:'Fenômeno em que a presença prévia de um estímulo condicionado reduz o condicionamento de um segundo estímulo apresentado junto a ele; Donahoe explica pelo princípio de reforço unificado, em termos de discrepância comportamental reduzida.' },
+      { termo:'Comportamento privado (neuronal)', def:'Para Donahoe, mudanças em redes de neurônios podem ocorrer mesmo sem comportamento público observável, mas seguem o mesmo princípio de reforço — o "comportamento" do neurônio também é selecionado por consequências.' }
+    ],
+    temas:[
+      { titulo:'Nem reduzir, nem isolar', pp:'p. 117',
+        texto:'Donahoe cita o próprio Skinner (1938) reconhecendo que uma explicação do comportamento ganha em unificação de conhecimento quando se correlaciona com a neurologia, mesmo sem depender dela — é essa brecha que o behaviorismo biológico tenta ocupar.',
+        trecho:{ en:'"...the correlation demanded as an explanation is with a science of neurology which completes its local references..."', pt:'"...a correlação exigida como explicação é com uma ciência da neurologia que completa suas referências locais..." (tradução livre, citando Skinner, 1938)', ref:'Donahoe, 2021, cap. 10, p. 117, citando Skinner (1938, p. 422)' } },
+      { titulo:'Um mecanismo, dois condicionamentos', pp:'pp. 119–123',
+        texto:'O núcleo técnico do capítulo: Donahoe descreve experimentos que separam, no tempo, a relação estímulo-resposta da relação estímulo-reforço eliciado, para mostrar que um único princípio neural de reforço explica tanto o condicionamento pavloviano quanto o operante.' },
+      { titulo:'Do reforço à linguagem', pp:'p. 131',
+        texto:'Donahoe estende o mesmo princípio ao comportamento verbal: quando uma criança aponta para um cachorro após ser perguntada "onde está o cachorro?" e é aprovada, o próprio objeto "cachorro" passa a funcionar como reforçador condicionado para dizer a palavra na presença dele.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Donahoe × Skinner: onde herda, onde se afasta',
+      acordos:[
+        'Donahoe cita o próprio Skinner (1938) para justificar sua proposta: uma explicação ganha em unificação quando se correlaciona com a neurologia, sem depender dela para ser válida no nível comportamental.',
+        'Ambos mantêm a análise funcional (relações entre variáveis observáveis) como o núcleo da explicação do comportamento, mesmo quando Donahoe adiciona um nível biológico.',
+        'Os dois recusam explicar comportamento por estados mentais internos não físicos; a diferença é que Donahoe aceita, e busca ativamente, uma explicação física (neural) desses processos.'
+      ],
+      divergem:[
+        'Skinner tratava a relação com a fisiologia como uma correlação bem-vinda, mas dispensável para a psicologia enquanto ciência independente; Donahoe torna a integração com a neurociência parte central do próprio projeto teórico.',
+        'O "princípio de reforço unificado" de Donahoe é uma hipótese sobre mecanismo neural específico (sistemas de dopamina), um nível de detalhe que o radicalismo metodológico de Skinner evitava propor.',
+        'Donahoe estende o vocabulário de reforço até o "comportamento" de redes neuronais individuais, uma escala bem menor do que qualquer coisa que Skinner tenha analisado diretamente.'
+      ]
+    },
+    impacto:'O behaviorismo biológico de Donahoe é um dos elos mais citados entre a análise do comportamento e a neurociência do sistema de recompensa, influenciando pesquisas sobre dopamina e aprendizagem que hoje atravessam a psicologia, a farmacologia e a neurociência computacional.',
+    mascoteFala:'Reforço e dopamina no mesmo capítulo. A ponte com a neurociência começa aqui.'
+  },
   perguntas:[
   { tipo:'quadro',
     enunciado:'Donahoe identifica duas variáveis como críticas para o processo de reforçamento. A primeira, já bem conhecida, é a contiguidade temporal: o intervalo de tempo entre o estímulo e a resposta que precedem o reforçador. Complete: a contiguidade temporal é necessária para o reforçamento, mas, segundo experimentos recentes que Donahoe cita, ela sozinha não é ___.',
@@ -2817,6 +3216,50 @@ const QUIZZES = {
   leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Foxall, o comentário de Jorge M. Oliveira-Castro e a resposta de Foxall a ele. O terreno aqui é a psicologia do consumidor, o campo de pesquisa em que Foxall construiu essa proposta.',
   intro:'Foxall trabalha com escolha do consumidor, um terreno em que a análise do comportamento tradicional encontra limites práticos. Os quadros mostram como ele tenta ir além desses limites sem abandonar de vez o vocabulário behaviorista.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo intencional', perfeito:'As três etapas, sem erro' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Intentional Behaviorism — Foxall, Oliveira-Castro e a réplica, capítulos 13 a 15',
+    intro:'Foxall trabalha com escolha do consumidor, terreno em que a análise comportamental estrita encontra limites práticos. Ele propõe três estágios de explicação, do behaviorista ao cognitivo. Jorge M. Oliveira-Castro comenta, e Foxall responde.',
+    trilha:[
+      { titulo:'Capítulo 13 — Intentional Behaviorism', paginas:'pp. 155–188',
+        texto:'Foxall apresenta o Modelo de Perspectiva Behaviorista (BPM) da escolha do consumidor e os três estágios do seu programa de pesquisa: explicação extensional (behaviorista), interpretação intencional e, por fim, interpretação cognitiva.' },
+      { titulo:'Capítulo 14 — Jorge M. Oliveira-Castro, comentário', paginas:'pp. 189–207',
+        texto:'Oliveira-Castro questiona se é necessário, e coerente, misturar vocabulário intencional (crenças, desejos) com uma análise que começa behaviorista, e discute os riscos conceituais dessa mistura.' },
+      { titulo:'Capítulo 15 — Resposta de Foxall', paginas:'pp. 209–232',
+        texto:'Foxall defende que recorrer a termos intencionais só se justifica quando a análise funcional (extensional) chega ao limite do que consegue explicar — não como substituto, mas como complemento para casos difíceis.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo intencional', def:'Proposta de Foxall: um programa de pesquisa em três estágios que começa com explicação extensional (behaviorista) da escolha do consumidor e recorre a vocabulário intencional e, por fim, cognitivo, apenas quando a análise funcional não é suficiente.' },
+      { termo:'Modelo de Perspectiva Behaviorista (BPM)', def:'Modelo de Foxall para compra e consumo: propõe que a escolha do consumidor é função dos padrões de reforço e punição que seguiram a atividade de consumo, classificados numa taxonomia óctupla de contingências.' },
+      { termo:'Explicação extensional', def:'O primeiro estágio do programa de Foxall: uma análise puramente funcional, em termos de estímulos ambientais observáveis, sem recorrer a estados mentais.' },
+      { termo:'Interpretação intencional', def:'Segundo estágio: quando a explicação extensional não dá conta do comportamento do consumidor, Foxall recorre a termos como crença e desejo para descrever, não para explicar por causas internas.' },
+      { termo:'Perspectiva de ação', def:'A mudança de foco de Foxall de "comportamento que acontece com o consumidor" para "ação que o consumidor realiza" — o que levanta a questão dos processos cognitivos que medeiam essa ação.' },
+      { termo:'Desconto hiperbólico (hyperbolic discounting)', def:'Padrão de escolha em que recompensas menores e mais próximas no tempo são preferidas de forma desproporcional a recompensas maiores e mais distantes; usado por Foxall para discutir akrasia (fraqueza de vontade) no consumo.' }
+    ],
+    temas:[
+      { titulo:'Três estágios, não uma substituição', pp:'pp. 159–161',
+        texto:'O programa de Foxall não abandona a análise funcional: ela é o primeiro estágio, e continua sendo testada em cada caso. Só quando ela não explica satisfatoriamente é que a interpretação intencional, e depois a cognitiva, entram em cena.' },
+      { titulo:'De comportamento a ação', pp:'p. 166',
+        texto:'A virada do capítulo: tratar o consumidor como alguém que realiza ações (algo que ele faz), não apenas como alguém a quem acontece um comportamento — o que exige perguntar que processos medeiam essa ação.' },
+      { titulo:'O problema da fraqueza de vontade', pp:'pp. 175–180',
+        texto:'Usando o desconto hiperbólico, Foxall discute como alguém pode preferir uma recompensa maior e mais tardia num momento e mudar de preferência conforme o momento da escolha se aproxima — o problema clássico da akrasia, analisado sem apelar a uma "vontade" interna que simplesmente falha.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Foxall × Skinner: onde herda, onde se afasta',
+      acordos:[
+        'O primeiro estágio do programa de Foxall é uma análise funcional rigorosa, no mesmo espírito da análise skinneriana: estímulos, respostas e consequências observáveis.',
+        'Foxall insiste que a interpretação intencional só entra quando a explicação extensional não é suficiente — a análise funcional continua sendo o padrão-ouro, não é descartada.',
+        'A taxonomia de contingências do BPM deriva diretamente do esquema de três termos (estímulo discriminativo, resposta, consequência) da análise do comportamento skinneriana.'
+      ],
+      divergem:[
+        'Skinner rejeitava termos intencionais e mentalistas (crença, desejo) como desnecessários e potencialmente enganosos; Foxall os reintroduz deliberadamente como um estágio interpretativo legítimo, quando a análise funcional chega ao limite.',
+        'Foxall adiciona um terceiro estágio, cognitivo, que Skinner teria recusado por completo, por tratar processos mentais como explicação causal.',
+        'O terreno de aplicação muda a exigência: em decisões complexas de consumo, Foxall argumenta que a análise puramente extensional simplesmente não fecha a explicação sem recorrer a algum nível de descrição intencional.'
+      ]
+    },
+    impacto:'O Modelo de Perspectiva Behaviorista de Foxall se tornou uma referência na análise comportamental do consumidor, e a discussão sobre quando (e se) vale a pena misturar vocabulário funcional e intencional continua central nos debates metodológicos da economia comportamental e da psicologia do consumidor.',
+    mascoteFala:'Comprar não é só responder a reforço. Foxall mistura vocabulário de propósito com cuidado.'
+  },
   perguntas:[
   { tipo:'quadro',
     enunciado:'Foxall pergunta o que faz de um comportamento de consumo uma ação, e não apenas um comportamento qualquer. Para responder, ele propõe um procedimento de três etapas: uma interpretação behaviorista, seguida de uma interpretação intencional, seguida de uma interpretação cognitiva. Complete: esse procedimento serve para relacionar o contexto da escolha do consumidor com processos cada vez mais ___.',
@@ -2908,6 +3351,51 @@ const QUIZZES = {
   leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Hayes, o comentário de Julio C. de Rose e a resposta de Hayes a ele.',
   intro:'A ciência comportamental contextual (CBS) de Hayes é hoje um campo grande, com associação própria e revista própria. Os quadros percorrem as seis características que ele usa para defini-la e a disputa amistosa que se segue com De Rose.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo contextual', perfeito:'Seis características, sem erro' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Contextual Behavioral Science — Hayes, De Rose e a réplica, capítulos 16 a 18',
+    intro:'Hayes define a ciência comportamental contextual (CBS) por seis características, incluindo a Teoria das Molduras Relacionais (RFT). Julio C. de Rose comenta, questionando a distância que a CBS toma do tronco skinneriano, e Hayes responde com uma parábola.',
+    trilha:[
+      { titulo:'Capítulo 16 — Contextual Behavioral Science as a Distinct Form of Behavioral Research and Practice', paginas:'pp. 235–250',
+        texto:'Hayes define a CBS por seis características centrais: do contextualismo funcional como refinamento filosófico do behaviorismo radical até a Teoria das Molduras Relacionais (RFT) como explicação da linguagem e cognição.' },
+      { titulo:'Capítulo 17 — Julio C. de Rose, comentário', paginas:'pp. 251–258',
+        texto:'De Rose pergunta, no próprio título ("A asa vai voar para longe do corpo?"), se a CBS está se afastando demais da análise do comportamento skinneriana da qual nasceu, apesar de pesquisadores de RFT continuarem presentes nas mesmas revistas e associações tradicionais.' },
+      { titulo:'Capítulo 18 — Resposta de Hayes', paginas:'pp. 259–265',
+        texto:'Hayes responde com a parábola da "planta maravilhosa": um grupo constrói um telhado sobre uma planta preciosa para protegê-la, sem perceber que o telhado bloqueia a luz e a chuva de que ela precisa para crescer.' }
+    ],
+    glossario:[
+      { termo:'Ciência comportamental contextual (CBS)', def:'Forma de pensamento behaviorista definida por Hayes com seis características centrais: contextualismo funcional, Teoria das Molduras Relacionais, entre outras, formando um campo com associação e revistas próprias.' },
+      { termo:'Contextualismo funcional', def:'Refinamento do behaviorismo radical proposto por Hayes: uma filosofia de ciência em que uma análise é considerada verdadeira ou válida na medida em que leva a uma ação eficaz, não por corresponder a uma realidade fixa e independente do contexto.' },
+      { termo:'Teoria das Molduras Relacionais (RFT)', def:'Teoria comportamental da linguagem e cognição desenvolvida por Hayes e colegas ao longo de mais de três décadas, com centenas de estudos básicos e aplicados testando suas previsões.' },
+      { termo:'Flexibilidade psicológica', def:'Conceito central da CBS aplicada, tratado como uma teoria (no sentido analítico-abstrativo) da psicopatologia e de sua superação.' },
+      { termo:'Seleção por consequências', def:'O princípio evolutivo mais amplo em que Hayes situa a CBS: o mesmo tipo de causalidade explica seleção natural, moldagem do comportamento individual e evolução cultural, citando Skinner (1981) diretamente.' }
+    ],
+    temas:[
+      { titulo:'Verdade como funcionamento eficaz', pp:'p. 241',
+        texto:'A marca filosófica da CBS: o contextualismo funcional julga uma análise verdadeira quando ela leva a uma ação bem-sucedida em relação a um objetivo, não quando corresponde a algum fato absoluto e independente de contexto.',
+        trecho:{ en:'"...the truth criterion of contextualism is successful working..."', pt:'"...o critério de verdade do contextualismo é o funcionamento bem-sucedido..." (tradução livre)', ref:'Hayes, 2021, cap. 16, p. 241' } },
+      { titulo:'A porta que Skinner abriu, mas não atravessou', pp:'p. 244',
+        texto:'Hayes cita Skinner (1974) reconhecendo que o behaviorismo radical não descarta eventos privados nem os trata como inobserváveis ou subjetivos — só não os considerava cruciais. A RFT entra exatamente por essa porta que Skinner deixou aberta.',
+        trecho:{ en:'"[Radical behaviorism] does not insist upon truth by agreement and can therefore consider events taking place in the private world within the skin."', pt:'"[O behaviorismo radical] não insiste na verdade por concordância pública e por isso pode considerar eventos que ocorrem no mundo privado dentro da pele." (tradução livre, citando Skinner, 1974, p. 16)', ref:'Hayes, 2021, cap. 16, p. 244' } },
+      { titulo:'A parábola da planta e do telhado', pp:'pp. 259–260',
+        texto:'Respondendo à pergunta de De Rose sobre se a CBS está se afastando demais do tronco skinneriano, Hayes conta a história de um grupo que constrói um telhado protetor sobre uma planta preciosa, sem perceber que ele bloqueia a luz e a chuva de que ela precisa para crescer — uma resposta indireta sobre os riscos de proteger demais uma tradição científica do próprio ambiente que a alimenta.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Hayes × Skinner: onde herda, onde se afasta',
+      acordos:[
+        'A CBS se descreve como um refinamento do behaviorismo radical, não como uma ruptura: o contextualismo funcional preserva o compromisso com a análise funcional do comportamento.',
+        'Hayes cita Skinner (1981) para situar a seleção por consequências como o mesmo tipo de causalidade que explica seleção natural, comportamento individual e cultura — herdando diretamente esse argumento.',
+        'A abertura para eventos privados na RFT parte de uma permissão que o próprio Skinner (1974) já havia dado: eles não são inobserváveis nem subjetivos, apenas privados.'
+      ],
+      divergem:[
+        'A RFT desenvolve um tratamento sistemático e formal da linguagem e da cognição, com centenas de estudos, num nível de detalhe que Skinner nunca ofereceu em Verbal Behavior (1957).',
+        'O critério de verdade do contextualismo funcional (funcionamento eficaz relativo a um objetivo) é uma posição filosófica explícita que Skinner não formulou nesses termos.',
+        'De Rose questiona justamente se a CBS, ao se organizar como campo com associação e revistas próprias, criou uma distância institucional do tronco skinneriano tradicional — questão que a parábola de Hayes responde de forma indireta, sem negar a distância.'
+      ]
+    },
+    impacto:'A CBS deu origem à Terapia de Aceitação e Compromisso (ACT) e a um campo de pesquisa aplicada em saúde mental hoje amplamente estudado fora da análise do comportamento tradicional, ao mesmo tempo que mantém pesquisadores atuantes nas principais revistas e associações behavioristas — a mesma tensão entre pertencimento e distância que organiza a troca entre Hayes e De Rose.',
+    mascoteFala:'Da sala de aula da análise do comportamento para a clínica: a ACT nasce aqui.'
+  },
   perguntas:[
   { tipo:'quadro',
     enunciado:'Hayes define a ciência comportamental contextual (CBS) como uma forma de pensamento comportamental composta por seis características principais. A primeira delas é um refinamento do behaviorismo radical numa filosofia da ciência distinta, ainda que parecida. Complete o nome dessa filosofia: ___.',
@@ -2999,6 +3487,50 @@ const QUIZZES = {
   leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Ribes-Iñesta, o comentário assinado pelo próprio autor deste jogo (Hernando Borges Neves Filho) com Tiago de Oliveira Magalhães, e a resposta de Ribes a eles.',
   intro:'Ribes-Iñesta parte da obra de J. R. Kantor para propor não uma teoria do comportamento, mas uma teoria da psicologia inteira. Os quadros seguem essa ambição de perto, dos meios de contato até a taxonomia dos contatos funcionais.',
   conquistas:{ aprovado:'Leitor(a) do behaviorismo de campo', perfeito:'Três meios de contato, sem erro' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Field-Theory Behaviorism — Ribes-Iñesta, Neves Filho & Magalhães e a réplica, capítulos 19 a 21',
+    intro:'Ribes-Iñesta parte da obra de J. R. Kantor para propor não uma teoria do comportamento, mas uma teoria da psicologia inteira. O comentário deste capítulo é assinado pelo próprio autor deste jogo, Hernando Borges Neves Filho, com Tiago de Oliveira Magalhães — e Ribes responde a eles para fechar a Parte VII.',
+    trilha:[
+      { titulo:'Capítulo 19 — A Theory of Behavior or a Theory of Psychology?', paginas:'pp. 273–306',
+        texto:'Ribes começa com uma breve biografia, depois apresenta a Teoria de Campo: os meios de contato (físico-químico, ecológico e convencional), a distinção entre relações de contingência e mediação, e uma taxonomia de cinco tipos de contato funcional.' },
+      { titulo:'Capítulo 20 — Neves Filho & Magalhães, comentário', paginas:'pp. 307–318',
+        texto:'O comentário parte de uma citação de Wittgenstein sobre "confusão conceitual" em psicologia para discutir se a linguagem ordinária pode mesmo ser incorporada, e não substituída, por uma teoria científica da psicologia — e questiona pontos específicos da taxonomia de Ribes.' },
+      { titulo:'Capítulo 21 — Resposta de Ribes-Iñesta', paginas:'pp. 319–341',
+        texto:'Ribes agradece o comentário, concorda com vários pontos e defende os dois pilares que considera fundamentais: a definição do comportamento psicológico e a adequação dos conceitos teóricos usados para descrevê-lo.' }
+    ],
+    glossario:[
+      { termo:'Teoria de Campo (Field-Theory)', def:'Proposta de Ribes-Iñesta: uma teoria não apenas do comportamento, mas da psicologia inteira, construída a partir da psicologia interconductual de J. R. Kantor.' },
+      { termo:'Meios de contato', def:'As condições que tornam possível a relação entre um organismo e um objeto de estímulo. Kantor descrevia apenas o meio físico-químico; Ribes propõe mais dois: o ecológico (habitat biológico) e o convencional (instituições e costumes, exclusivamente humano).' },
+      { termo:'Contatos funcionais', def:'Taxonomia de cinco tipos de relação entre organismo e ambiente que a Teoria de Campo usa para classificar toda a psicologia, das relações mais simples (contingência) às mais complexas (extensão de contingência, ligada à linguagem).' },
+      { termo:'Extensão de contingência', def:'Tipo de contato funcional ligado à linguagem: tornar presente, por meio de palavras, uma circunstância ausente, e reagir a ela como se estivesse presente — a base do comportamento referencial e simbólico na Teoria de Campo.' },
+      { termo:'Psicologia interconductual', def:'A tradição de J. R. Kantor da qual a Teoria de Campo de Ribes deriva diretamente — uma linhagem distinta do behaviorismo skinneriano, com raiz filosófica diferente.' }
+    ],
+    temas:[
+      { titulo:'Uma teoria da psicologia, não só do comportamento', pp:'cap. 19, p. 273',
+        texto:'A ambição que dá nome ao capítulo: em vez de mais uma teoria do comportamento ao lado de outras, Ribes quer uma teoria capaz de organizar todos os fenômenos psicológicos, incluindo os que outras teorias behavioristas deixam de fora.' },
+      { titulo:'De um meio de contato a três', pp:'p. 276',
+        texto:'Kantor havia descrito apenas o meio físico-químico como condição para o contato entre organismo e objeto de estímulo. Ribes amplia essa categoria com o meio ecológico e o meio convencional, este último exclusivo da espécie humana, ligado à vida em instituições e costumes.' },
+      { titulo:'Uma disciplina isolada por escolha teórica', pp:'p. 315',
+        texto:'No comentário, Neves Filho e Magalhães observam que o "Modelo das Três Contingências" de Skinner separava rigidamente biologia, análise do comportamento e antropologia por domínio de estudo — e que essa separação ajudou a isolar a análise skinneriana de avanços feitos por biólogos em desenvolvimento ontogenético, um isolamento que a Teoria de Campo de Ribes tenta evitar desde a raiz kantoriana.',
+        trecho:{ en:'"...it is reasonable to say that that way of understanding the relations between [biology, behavior analysis, and anthropology] favored a certain degree of isolation..."', pt:'"...é razoável dizer que essa forma de entender as relações [entre biologia, análise do comportamento e antropologia] favoreceu um certo grau de isolamento..." (tradução livre)', ref:'Neves Filho &amp; Magalhães, 2021, cap. 20, p. 315' } }
+    ],
+    comparacaoSkinner:{
+      titulo:'Ribes × Skinner: onde herda, onde se afasta',
+      acordos:[
+        'Ambos rejeitam explicações por causas mentais internas não observáveis, mantendo o comportamento (ou, para Ribes, o contato funcional) como o nível próprio de análise psicológica.',
+        'Os dois recusam eventos privados como entidades especiais: para a Teoria de Campo, expressões como "lembrar" são parte de episódios de linguagem cotidiana, não relatos de algo escondido por dentro.',
+        'Ribes reconhece a análise operante como um caso específico dentro de sua taxonomia mais ampla de contatos funcionais, sem descartar seu valor.'
+      ],
+      divergem:[
+        'A linhagem é diferente: Ribes parte de J. R. Kantor e da psicologia interconductual, não de Skinner, o que muda o vocabulário de base desde o início (meios de contato, contatos funcionais, em vez de estímulo-resposta-reforço).',
+        'A ambição de escopo muda: Ribes quer uma teoria de toda a psicologia; o projeto skinneriano, segundo o comentário de Neves Filho e Magalhães, separava rigidamente o domínio do comportamento do domínio da biologia e da antropologia.',
+        'A extensão de contingência dá à Teoria de Campo um tratamento explícito do simbólico e do linguístico como categoria própria, distinta da contingência operante comum, o que o vocabulário skinneriano tradicional não distinguia com a mesma nitidez.'
+      ]
+    },
+    impacto:'A Teoria de Campo de Ribes-Iñesta é hoje uma das tradições teóricas mais desenvolvidas dentro da análise do comportamento de língua espanhola e portuguesa, com décadas de refinamento conceitual, e o debate registrado neste livro, com um comentário assinado pelo próprio autor deste jogo, faz parte dessa discussão contínua sobre até onde uma teoria da psicologia pode ir além do vocabulário herdado de Skinner sem deixar de ser uma ciência natural do comportamento.',
+    mascoteFala:'De Kantor a Ribes: o campo psicológico ganha níveis e um comentário assinado pelo próprio autor deste jogo.'
+  },
   perguntas:[
   { tipo:'quadro',
     enunciado:'Ribes-Iñesta pergunta, já no título do capítulo, se sua proposta é uma teoria do comportamento ou uma teoria da psicologia. Complete: ele defende a segunda opção, porque quer que seu modelo de campo sirva para explicar todos os fenômenos ___, não apenas o comportamento observável de organismos individuais.',
@@ -3229,6 +3761,181 @@ const QUIZZES = {
   ]
 },
 
+'kantor-principios': {
+  autor:'kantor', tipo:'livro', categoria:'Livro',
+  titulo:'Principles of Psychology', ano:1924, edicao:'Vol. 1',
+  subtitulo:'Antes do interbehaviorismo ter nome, o campo já estava aqui',
+  rotuloCartucho:'LIVRO 1924',
+  rotuloAbertura:'J. R. Kantor · Principles of Psychology, Vol. 1 (1924)',
+  arte:'img/kantor-aula.png',
+  arteAlt:'Kantor diante de uma turma, gesticulando, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Kantor, J. R. (1924). <i>Principles of psychology</i> (Vol. 1). Alfred A. Knopf.',
+  leituraInicial:'Este quiz é uma porta de entrada, não um resumo do livro inteiro: 504 páginas, quinze capítulos, e ainda há um segundo volume (1926). As perguntas seguem a ordem dos capítulos e usam o vocabulário do próprio Kantor de 1924 — antes mesmo de ele cunhar o termo "interbehaviorismo", décadas depois.',
+  intro:'Kantor ainda não usa a palavra "interbehaviorismo" neste livro, mas já recusa tanto o mentalismo quanto o behaviorismo redutor de sua época, propondo estudar segmentos de comportamento como unidades de organismo e estímulo interligados. É esse esqueleto conceitual, de 1924, que sustenta tudo que viria depois.',
+  conquistas:{ aprovado:'Leitor(a) dos Principles of Psychology', perfeito:'Nem mentalismo, nem reducionismo' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Principles of Psychology — J. R. Kantor, Volume 1, 1924',
+    intro:'Kantor escreve este livro-tratado (o primeiro de dois volumes, o segundo publicado em 1926) para reconstruir a psicologia inteira a partir de um único compromisso: nem mentalismo, nem behaviorismo reducionista. Cada um dos quinze capítulos deste volume desenvolve um tipo de reação, do reflexo ao hábito, sempre como interação entre organismo e objeto de estímulo. Este guia percorre os quinze capítulos na ordem do livro.',
+    trilha:[
+      { titulo:'I — O domínio, o método e o desenvolvimento da psicologia', paginas:'pp. 1–31',
+        texto:'Kantor abre dividindo toda a ciência em três campos — comportamento físico, biológico e psicológico — e situa a psicologia como ciência natural do comportamento de organismos em contato com estímulos, sem recorrer a nada "dentro" do organismo.' },
+      { titulo:'II — Os dados primários da psicologia', paginas:'pp. 32–72',
+        texto:'O capítulo que introduz o segmento de comportamento: um ato bipolar, em que resposta e estímulo são fases correlacionadas de uma mesma unidade, nenhuma delas compreensível sem a outra.' },
+      { titulo:'III — O indivíduo psicológico, ou personalidade', paginas:'pp. 73–91',
+        texto:'Personalidade não é uma essência interior: é a soma organizada dos sistemas de reação que uma pessoa desenvolveu ao longo de sua história de contatos com estímulos.' },
+      { titulo:'IV — O organismo psicológico, ou personalidade em ação', paginas:'pp. 92–129',
+        texto:'Kantor observa a personalidade já formada em contato com situações reais, distinguindo comportamento inteligente e não inteligente, deliberativo e propositivo.' },
+      { titulo:'V — Os segmentos de comportamento mais simples, ou fundacionais', paginas:'pp. 130–158',
+        texto:'Reflexos, movimentos aleatórios e reações momentâneas — as formas mais elementares de comportamento, ponto de partida genético para tudo que vem depois.' },
+      { titulo:'VI — A natureza da conduta básica e como ela se desenvolve', paginas:'pp. 159–183',
+        texto:'As reações básicas: formas fundamentais adquiridas cedo na história comportamental do indivíduo, base para os comportamentos mais complexos dos capítulos seguintes.' },
+      { titulo:'VII — O desenvolvimento e a operação da conduta humana ou social complexa', paginas:'pp. 184–215',
+        texto:'Kantor distingue quatro tipos de reação complexa: suprabásica, contingencial, cultural e idiossincrática — cada uma com estímulos e origens próprias dentro da vida social.' },
+      { titulo:'VIII — O comportamento de atenção como atualização de estímulos', paginas:'pp. 216–248',
+        texto:'A atenção não é um "foco mental": é o processo pelo qual objetos do ambiente se tornam, de fato, estímulos funcionais para a pessoa.' },
+      { titulo:'IX — A natureza da sensação e da percepção', paginas:'pp. 249–294',
+        texto:'Perceber é uma forma de segmento comportamental como qualquer outra, desenvolvida e operada em contato direto com objetos, não um processo mental que "representa" o mundo.' },
+      { titulo:'X — A ação implícita como resposta a objetos-estímulo ausentes', paginas:'pp. 295–315',
+        texto:'O que a tradição mentalista chamaria de "imaginação" ou "pensamento", Kantor descreve como reações implícitas: comportamento real, só que não dirigido a um objeto fisicamente presente.' },
+      { titulo:'XI — A associação como tipo fundamental de atividade psicológica', paginas:'pp. 316–345',
+        texto:'Como diferentes objetos e situações passam a evocar respostas uns dos outros — reformulado sem apelar a "ideias" ligadas na mente, mas a histórias de contato entre organismo e estímulos.' },
+      { titulo:'XII — O caráter interno primário das reações de sentimento', paginas:'pp. 346–386',
+        texto:'Reações de sentimento (feeling) são um tipo peculiar de segmento comportamental: o efeito da ação recai sobre a própria pessoa, não sobre o objeto-estímulo.' },
+      { titulo:'XIII — O conhecer como determinação e orientação da conduta', paginas:'pp. 387–418',
+        texto:'Conhecer é tratado como um tipo de reação (de significado e de conhecimento), não como posse de representações mentais verdadeiras sobre o mundo.' },
+      { titulo:'XIV — A natureza da conduta volitiva', paginas:'pp. 419–439',
+        texto:'Kantor separa "volitivo" de "voluntário", propondo uma descrição própria para o que comumente se atribui à vontade — sem recorrer a um agente interno que decide.' },
+      { titulo:'XV — A natureza integrativa das reações de hábito', paginas:'pp. 440–463',
+        texto:'O volume se fecha com o hábito: conexões íntimas entre respostas e estímulos específicos, construídas por contatos repetidos ao longo do tempo, até a ação se tornar quase automática.' }
+    ],
+    glossario:[
+      { termo:'Segmento de comportamento', def:'A unidade básica de análise de Kantor: um ato psicológico bipolar, em que resposta e estímulo são fases correlacionadas — nenhuma existe, nem pode ser entendida, sem a outra.' },
+      { termo:'Sistema de reação', def:'A resposta específica de um organismo, analisada como componente de um segmento comportamental — o correlato, do lado da resposta, do que o objeto-estímulo é do lado do ambiente.' },
+      { termo:'Animatismo', def:'Termo de Kantor para qualquer psicologia que atribua ao organismo estados ou forças internas não observáveis (mentais ou fisiológicas) como causa do comportamento — o alvo central da crítica do livro.' },
+      { termo:'Reações básicas, suprabásicas, contingenciais, culturais e idiossincráticas', def:'A escala de complexidade que Kantor usa para classificar o comportamento humano, das reações mais elementares (básicas) às mais dependentes de convenção social (culturais) e de história pessoal única (idiossincráticas).' },
+      { termo:'Atualização de estímulo', def:'O processo, descrito no capítulo sobre atenção, pelo qual um objeto do ambiente passa a funcionar de fato como estímulo para uma pessoa — a função de estímulo não é uma propriedade fixa do objeto.' },
+      { termo:'Ação implícita', def:'Comportamento dirigido a um objeto-estímulo ausente (o que a psicologia mentalista chamaria de imaginar, pensar ou lembrar) — tratado por Kantor como reação real, não como evento mental interno.' }
+    ],
+    temas:[
+      { pp:'pp. 3–4', titulo:'Três campos, uma mesma lógica de investigação',
+        texto:'Kantor organiza toda a ciência em três campos de complexidade crescente — comportamento físico, biológico e psicológico — e insiste que o psicológico não precisa de um método ou de uma metafísica especiais: precisa apenas ser descrito com o mesmo rigor naturalista dos outros dois.',
+        trecho:{ en:'We may divide all sciences into three distinct fields based upon outstanding differences in the activity of the objects studied. These three fields are (1) physical behavior, (2) biological behavior, and (3) psychological behavior.', pt:'Podemos dividir todas as ciências em três campos distintos, com base em diferenças marcantes na atividade dos objetos estudados. Esses três campos são: (1) o comportamento físico, (2) o comportamento biológico e (3) o comportamento psicológico.', ref:'Kantor (1924, p. 4)' } },
+      { pp:'pp. xiii–xv', titulo:'Nem mentalismo, nem behaviorismo redutor',
+        texto:'No prefácio, Kantor rejeita explicitamente duas saídas: o mentalismo tradicional (animatismo, estados mentais internos) e o behaviorismo que reduz a psicologia a movimentos musculares e secreções glandulares. Para ele, os dados genuínos da psicologia são a conduta completa de organismos em contato com objetos-estímulo — nem menos (reduzida a músculos e glândulas), nem mais (inflada com entidades mentais).',
+        trecho:{ en:'We must heartily reject all so-called behaviorisms along with mentalisms of every variety.', pt:'Devemos rejeitar de bom grado todos os chamados behaviorismos, junto com os mentalismos de toda variedade.', ref:'Kantor (1924, p. xv)' } },
+      { pp:'p. 36', titulo:'O ato bipolar: nasce aqui o que depois vira "campo"',
+        texto:'É neste capítulo que aparece, pela primeira vez no livro, a ideia que sustentaria toda a obra futura de Kantor: os dados da psicologia são atos bipolares, resposta e estímulo como duas fases de uma mesma unidade. Décadas antes de "interbehaviorismo" virar palavra, o conceito de campo relacional já está de pé.',
+        trecho:{ en:'The data of our science consist of bipolar acts, one phase of which is the response of the organism, while the other is the stimulus object or condition connected with that response.', pt:'Os dados da nossa ciência consistem em atos bipolares, cuja uma fase é a resposta do organismo, e a outra é o objeto ou condição de estímulo ligado a essa resposta.', ref:'Kantor (1924, p. 36)' } }
+    ],
+    fotos:[
+      { src:'img/kantor-retrato.png', legenda:'J. R. Kantor, por volta da época deste livro', nota:'Professor na Universidade de Indiana quando publicou este primeiro volume, aos 36 anos.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Kantor × Skinner: quem veio antes, o que ficou parecido',
+      acordos:[
+        'Ambos rejeitam explicações mentalistas e insistem numa ciência natural do comportamento, descrito em termos de interação com o ambiente.',
+        'Ambos recusam reduzir a psicologia a fisiologia ou neurologia: para os dois, o comportamento tem suas próprias leis, que não precisam ser "traduzidas" para o nível biológico.',
+        'Ambos tratam a história de contato entre organismo e estímulo (não uma natureza fixa do objeto ou do organismo) como o que determina o comportamento presente.'
+      ],
+      divergem:[
+        'Kantor publica este livro em 1924, mais de uma década antes de Skinner sistematizar o comportamento operante (The Behavior of Organisms, 1938) — Kantor é precursor, não devedor, de boa parte do vocabulário funcional que a análise do comportamento adotaria.',
+        'Para Kantor, organismo e estímulo são participantes simétricos de um campo, sem que um seja "variável independente" e o outro "dependente"; Skinner mantém essa assimetria metodológica (o ambiente controla o comportamento) mesmo rejeitando o mentalismo.',
+        'Kantor nunca adota o experimento de laboratório como método privilegiado da forma como Skinner viria a fazer: seu projeto em 1924 é, sobretudo, taxonômico e conceitual — classificar e descrever os tipos de segmento comportamental, não isolar variáveis numa câmara operante.'
+      ]
+    },
+    impacto:'Trinta e quatro anos antes de cunhar formalmente o termo "psicologia interbehavioral" (Interbehavioral Psychology, 1959), Kantor já havia lançado, neste primeiro volume de 1924, o essencial do seu projeto: uma psicologia de campo, sem mentalismo e sem reducionismo fisiológico, construída sobre a ideia de que resposta e estímulo são faces inseparáveis de um mesmo evento. É esse esqueleto conceitual — o "segmento de comportamento" de 1924, amadurecido depois em "interbehavior" — que Emilio Ribes-Iñesta retoma explicitamente como fundação de sua Teoria de Campo, décadas mais tarde.',
+    mascoteFala:'Palavra "interbehaviorismo" ainda não existe aqui, mas a ideia já está pronta desde 1924.'
+  },
+  perguntas:[
+  { tipo:'complete',
+    enunciado:'Kantor abre o livro dividindo toda a ciência em três campos, ordenados por complexidade crescente. Complete: "esses três campos são (1) o comportamento físico, (2) o comportamento biológico e (3) o ___."',
+    opcoes:['comportamento psicológico','comportamento social','comportamento neural','comportamento mental'],
+    explicacao:'É a primeira grande distinção do livro: física, biologia e psicologia estudam formas de comportamento cada vez mais complexas, mas todas naturais — nenhuma delas exige um método ou uma metafísica especial.',
+    fonte:'Kantor (1924, p. 4).',
+    dica:'A terceira categoria dá nome à própria disciplina do livro.' },
+  { tipo:'quadro',
+    enunciado:'Para Kantor, os dados fundamentais da psicologia são "atos bipolares": um segmento de comportamento em que a resposta do organismo e o objeto-estímulo são duas fases da mesma unidade, e nenhuma existe sem a outra. Complete: por isso, não faz sentido estudar ___.',
+    opcoes:['a resposta isolada do estímulo que a provocou, ou vice-versa','o comportamento de mais de um organismo ao mesmo tempo','reações que se repetem com frequência','estímulos que vêm do ambiente social'],
+    explicacao:'O "segmento de comportamento" é a unidade mínima de análise de Kantor, e ela é inteira, não separável: resposta e estímulo são fases correlacionadas de um único evento.',
+    fonte:'Kantor (1924, p. 36).',
+    dica:'Pense no que significa "bipolar": duas fases de uma coisa só.' },
+  { tipo:'raciocinio',
+    enunciado:'No prefácio, Kantor rejeita duas saídas ao mesmo tempo: o mentalismo tradicional e um behaviorismo que reduz a psicologia a movimentos musculares e secreções glandulares. Complete sua frase: "devemos rejeitar de bom grado todos os chamados ___, junto com os mentalismos de toda variedade."',
+    opcoes:['behaviorismos','instintos','reflexos','hábitos'],
+    explicacao:'É uma das frases mais citadas do prefácio: Kantor não quer nem o "fantasma na máquina" do mentalismo, nem um behaviorismo que apague a riqueza da conduta reduzindo-a a fisiologia. Ele busca uma terceira via, naturalista e não reducionista.',
+    fonte:'Kantor (1924, p. xv).',
+    dica:'É o nome do próprio movimento que Watson tinha lançado onze anos antes.' },
+  { tipo:'complete',
+    enunciado:'No capítulo III, Kantor descreve a personalidade não como uma essência interior, mas como algo construído. Complete: a personalidade é a soma organizada dos ___ que uma pessoa desenvolveu ao longo de sua história de contatos com estímulos.',
+    opcoes:['sistemas de reação','traços de caráter','instintos inatos','processos inconscientes'],
+    explicacao:'Personalidade, para Kantor, não é algo que a pessoa "tem" escondido por trás do comportamento: é o repertório de sistemas de reação que ela construiu interagindo com objetos e situações ao longo da vida.',
+    fonte:'Kantor (1924, cap. III, p. 74).',
+    dica:'A resposta é o mesmo termo usado no capítulo II para descrever o lado do organismo num segmento comportamental.' },
+  { tipo:'contraste',
+    enunciado:'No capítulo VII, Kantor separa reações culturais de reações idiossincráticas. Complete o contraste: as reações culturais são compartilhadas por um grupo, adquiridas por convenção social; já as idiossincráticas são ___.',
+    opcoes:['produtos únicos da história pessoal de cada indivíduo','sempre inatas e presentes desde o nascimento','impossíveis de observar diretamente','exclusivas de organismos não humanos'],
+    explicacao:'Kantor organiza o comportamento social complexo numa escala: suprabásico, contingencial, cultural (compartilhado por convenção) e idiossincrático (só daquele indivíduo, fruto de sua história particular de contatos).',
+    fonte:'Kantor (1924, cap. VII, pp. 197–211).',
+    dica:'Pense na raiz da palavra "idiossincrático": aquilo que é próprio de um só.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo VIII, Kantor descreve a atenção não como um estado mental de "foco", mas como um processo. Complete: através da ação de atenção, os objetos do ambiente se tornam ___.',
+    opcoes:['estímulos que de fato provocam respostas na pessoa','memórias armazenadas na mente','imagens conscientes vívidas','fontes de prazer ou desprazer'],
+    explicacao:'A atenção "atualiza" um objeto em estímulo funcional: antes da atenção, o objeto está lá, mas não está necessariamente controlando o comportamento da pessoa. É um processo comportamental, não um holofote mental.',
+    fonte:'Kantor (1924, cap. VIII, p. 216).',
+    dica:'O título do capítulo já entrega a resposta: "atualização de estímulos".' },
+  { tipo:'raciocinio',
+    enunciado:'No capítulo X, Kantor descreve reações a objetos-estímulo ausentes — o que a psicologia mentalista chamaria de "imaginar" ou "lembrar". Siga o raciocínio de Kantor: se a reação é real e observável, mesmo sem o objeto fisicamente presente, então o correto é chamá-la de ___.',
+    opcoes:['ação implícita, e não de evento mental interno','alucinação, e portanto patológica','reflexo condicionado clássico','processo puramente fisiológico'],
+    explicacao:'Kantor evita tanto tratar isso como "conteúdo mental" quanto ignorar o fenômeno: a ação implícita é comportamento genuíno, só que dirigido a um objeto ausente, e continua sendo estudável como qualquer outro segmento comportamental.',
+    fonte:'Kantor (1924, cap. X, p. 295).',
+    dica:'É o nome que dá título ao capítulo X.' },
+  { tipo:'complete',
+    enunciado:'No capítulo XII, sobre reações de sentimento, Kantor nota uma peculiaridade: diferente de outras ações efetivas, a reação de sentimento não produz uma mudança sobre o objeto-estímulo. Complete: em vez disso, quem é afetado pela ação é ___.',
+    opcoes:['a própria pessoa que reage','sempre outro organismo presente na cena','o ambiente físico ao redor','o objeto-estímulo em si'],
+    explicacao:'É a distinção central do capítulo: numa reação efetiva comum, a ação recai sobre o objeto (por exemplo, empurrar uma porta); numa reação de sentimento, a ação recai sobre a própria pessoa que reage.',
+    fonte:'Kantor (1924, cap. XII, p. 346).',
+    dica:'Pense em quem "sofre" o efeito da própria reação.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo XIV, Kantor faz uma distinção pouco comum entre dois termos que costumam ser tratados como sinônimos. Complete: ele separa a conduta ___ da conduta meramente voluntária, tratando-as como fenômenos diferentes.',
+    opcoes:['volitiva','reflexa','habitual','contingencial'],
+    explicacao:'Kantor argumenta que "volitivo" e "voluntário" foram historicamente confundidos, misturando características de reações diferentes sob um único rótulo impreciso — por isso dedica um capítulo inteiro a separá-los com cuidado.',
+    fonte:'Kantor (1924, cap. XIV, p. 419).',
+    dica:'É a palavra que dá nome ao capítulo XIV.' },
+  { tipo:'raciocinio',
+    enunciado:'O livro termina no capítulo XV com as reações de hábito, descritas como conexões íntimas entre respostas e estímulos específicos, construídas por contatos repetidos ao longo do tempo. Considerando que este é apenas o primeiro de dois volumes publicados por Kantor sobre os Principles of Psychology, o que se pode concluir sobre o projeto do livro?',
+    opcoes:['Kantor planejava um tratado extenso e sistemático, cobrindo a psicologia inteira em etapas, não um manual introdutório curto','O primeiro volume é uma versão resumida do segundo, publicado depois com o mesmo conteúdo','O segundo volume corrige erros do primeiro','O primeiro volume trata só de animais, e o segundo, só de humanos'],
+    explicacao:'Com 504 páginas e quinze capítulos só no primeiro volume (o segundo viria em 1926), fica claro que Kantor não escreveu um manual introdutório, mas um tratado monumental, capítulo por capítulo, tipo de reação por tipo de reação — um projeto de reconstrução completa da psicologia como ciência natural.',
+    fonte:'Kantor (1924), Principles of Psychology, Vol. 1.',
+    dica:'Pense no tamanho e na estrutura do livro, não no conteúdo de um capítulo específico.' },
+  { tipo:'contraste',
+    enunciado:'No capítulo V, Kantor contrasta a atitude fisiológica com a atitude psicológica diante do reflexo. Para a fisiologia, o problema do reflexo começa e termina inteiramente dentro do organismo. Complete como Kantor descreve o reflexo do ponto de vista psicológico: reflexos são ___.',
+    opcoes:['a operação de estímulos e respostas interagindo reciprocamente, não um mecanismo fechado dentro do corpo','impulsos nervosos que se propagam sem depender de nenhum estímulo externo','sempre inatos e idênticos entre indivíduos da mesma espécie','reações que não podem ser condicionadas por experiência alguma'],
+    explicacao:'Kantor ilustra com um exemplo simples: um prato de maçãs pode fazer a saliva escorrer, um prato de pêssegos pode não ter o mesmo efeito. Isso mostra que o reflexo depende do objeto específico e da história do organismo com ele, não apenas de uma "máquina neural" fechada dentro do corpo.',
+    fonte:'Kantor (1924, cap. V, p. 142).',
+    dica:'A resposta certa é sobre uma relação entre duas coisas, não sobre um mecanismo isolado.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo VII, Kantor descreve as reações suprabásicas como uma "superestrutura" construída sobre as reações básicas já adquiridas. Um exemplo que ele dá é a criança que reage a uma palavra nova de forma parecida com o modo como reagia a um objeto básico conhecido. Complete: isso acontece porque a suprabásica ___ as respostas já adquiridas no estágio básico para novos objetos.',
+    opcoes:['transfere, ou "carrega", de forma análoga','apaga e substitui completamente','torna inconscientes','reduz à sua forma mais simples possível'],
+    explicacao:'Kantor chama esse processo de "carrying over": o indivíduo estende a objetos novos, mas parecidos, a função de estímulo que objetos básicos já tinham adquirido — é assim que o repertório cresce sem recomeçar do zero a cada novo objeto.',
+    fonte:'Kantor (1924, cap. VII, p. 193).',
+    dica:'Pense no que a criança faz com a palavra nova: ela reage de um jeito que já conhece de outro contexto.' },
+  { tipo:'raciocinio',
+    enunciado:'No capítulo XI, Kantor examina como o fato da associação (respostas conectando-se a objetos e entre si) foi historicamente usado para sustentar uma teoria "neurônica" da mente: já que existem conexões associativas, conclui-se que existe um mecanismo neural que as explica e que "é" a mente. Qual é a crítica mais provável de Kantor a esse raciocínio, dado o que ele defende desde o prefácio do livro?',
+    opcoes:['A associação é um fato comportamental real, mas isso não autoriza elevá-la a um princípio neural explicativo escondido no cérebro','A associação não existe e é uma ilusão dos psicólogos mentalistas','A teoria neurônica está certa e deveria substituir toda a psicologia comportamental','Só animais associam estímulos; humanos usam a razão, não associação'],
+    explicacao:'É exatamente o padrão que Kantor rejeita desde o prefácio: transformar um fato observável (a associação entre respostas e objetos) numa entidade explicativa oculta (um mecanismo neural que "é" a mente) é o mesmo erro do mentalismo, só que vestido de fisiologia.',
+    fonte:'Kantor (1924, cap. XI, p. 340).',
+    dica:'A resposta certa é consistente com a rejeição de animatismo e de reducionismo fisiológico que já apareceu no prefácio.' },
+  { tipo:'complete',
+    enunciado:'No capítulo XIII, Kantor separa dois tipos de reação de conhecimento. Complete a distinção: reações de significado (meaning) servem para determinar o caráter de uma outra reação, muitas vezes performativa; já as reações de conhecimento propriamente ditas (knowledge reactions proper) têm uma função ___.',
+    opcoes:['puramente orientadora, independente de qualquer ação performativa','idêntica às reações de significado, sem diferença real','exclusivamente motora','ligada apenas a reflexos condicionados'],
+    explicacao:'Kantor reserva "significado" para reações que condicionam ou preparam outra ação, e "conhecimento propriamente dito" para reações que apenas orientam a pessoa em relação a um objeto ou situação, mesmo sem desembocar em nenhuma ação performativa imediata.',
+    fonte:'Kantor (1924, cap. XIII, p. 388).',
+    dica:'Uma serve para preparar outra ação; a outra existe por si mesma, só para orientar.' }
+  ]
+},
+
 /* ---------------------------------------------------------------- */
 'bori-biografia': {
   "autor": "bori",
@@ -3403,7 +4110,8 @@ const QUIZZES = {
         "Depois da UnB, Keller seguiu formalizando e exportando o PSI para os Estados Unidos; Bori redirecionou boa parte de sua energia para construir instituições científicas brasileiras (SBPC, SBP, ANPEPP)."
       ]
     },
-    "impacto": "Bori se tornou a primeira presidente da Sociedade Brasileira de Psicologia quando esta se tornou uma entidade nacional, em 1991, e teve papel central na fundação da ANPEPP, em 1983 — duas instituições que ainda organizam a psicologia brasileira. Em 1994, ano de sua aposentadoria compulsória pela USP, recebeu o título de Professora Emérita. O livro de Gabriel Cândido é, em boa medida, um esforço para tirar essa trajetória da sombra do nome de Fred Keller e situá-la como um projeto próprio, ligado à ideia de que ciência e educação deveriam servir ao desenvolvimento do país."
+    "impacto": "Bori se tornou a primeira presidente da Sociedade Brasileira de Psicologia quando esta se tornou uma entidade nacional, em 1991, e teve papel central na fundação da ANPEPP, em 1983 — duas instituições que ainda organizam a psicologia brasileira. Em 1994, ano de sua aposentadoria compulsória pela USP, recebeu o título de Professora Emérita. O livro de Gabriel Cândido é, em boa medida, um esforço para tirar essa trajetória da sombra do nome de Fred Keller e situá-la como um projeto próprio, ligado à ideia de que ciência e educação deveriam servir ao desenvolvimento do país.",
+    "mascoteFala": "Um plano com nome trocado por décadas. Este livro devolve o nome certo a ele."
   },
   "perguntas": [
     {
@@ -4058,7 +4766,7 @@ function abrirGuia(){
       flWrap.hidden = false;
       $('#guiaFigurasLivro').innerHTML = g.figurasLivro.map(x=>`<li><b>${esc(x.figura)}</b>${esc(x.legenda)}</li>`).join('');
     } else { flWrap.hidden = true; }
-  } else { fotosSec.hidden = true; }
+  } else { fotosSec.hidden = true; $('#guiaFotos').innerHTML = ''; $('#guiaFigurasLivroWrap').hidden = true; }
   const comparSec = $('#guiaComparSec');
   if (g.comparacaoSkinner){
     comparSec.hidden = false;
