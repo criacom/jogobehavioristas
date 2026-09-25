@@ -368,6 +368,45 @@ a.btn{text-decoration:none;display:inline-block}
 .cartridge .thumb span{display:block;font-family:var(--f-pix);font-size:10px;text-align:center;color:var(--void);background:var(--steel);padding:1px 0}
 
 
+
+/* ---------- box bônus: guia de leitura ---------- */
+.bonus{
+  position:relative;margin:20px 0 4px;max-width:64ch;border:2px dashed var(--ice);background:var(--deep);
+  padding:16px 16px 14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+}
+.bonus[hidden]{display:none}
+.bonus .cab{position:absolute;left:12px;top:-11px;font-family:var(--f-pix);font-size:11px;background:var(--ice);color:var(--void);padding:2px 9px}
+.bonus .tx{flex:1;min-width:220px}
+.bonus h4{font-family:var(--f-disp);font-weight:800;font-size:22px;margin:0 0 3px}
+.bonus p{margin:0;font-size:15px;color:var(--steel)}
+.bonus .btn{font-size:19px;padding:8px 18px;white-space:nowrap}
+
+/* ---------- tela do guia de leitura ---------- */
+.guide{max-width:920px}
+.guide-head{display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px}
+.guide-head h2{font-size:clamp(32px,5vw,50px);text-shadow:var(--glow)}
+.guide .lede{max-width:70ch}
+.guide section{margin-top:30px}
+.guide h3{font-size:26px;border-bottom:2px solid var(--slate);padding-bottom:5px;margin-bottom:14px}
+.trilha{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:trilha}
+.trilha li{counter-increment:trilha;position:relative;padding-left:40px;border-left:2px solid var(--slate)}
+.trilha li::before{content:counter(trilha);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:var(--ice);color:var(--void);font-family:var(--f-disp);font-weight:800;display:grid;place-items:center;font-size:15px}
+.trilha .tt{font-family:var(--f-disp);font-weight:800;font-size:19px;display:block}
+.trilha .pg{font-family:var(--f-pix);font-size:12px;color:var(--steel);display:block;margin:2px 0 5px}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.gloss dt{font-family:var(--f-disp);font-weight:800;font-size:17px;color:var(--ice)}
+.gloss dd{margin:2px 0 12px;font-size:15px;color:var(--steel)}
+.temas-grid{display:grid;gap:14px}
+.temas-grid .saiba{margin:0;max-width:none}
+.skinner-box{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.skinner-box .col h4{font-family:var(--f-disp);font-weight:800;font-size:18px;margin:0 0 8px}
+.skinner-box .col.ok h4{color:var(--ice)}
+.skinner-box .col.no h4{color:var(--rose)}
+.skinner-box ul{margin:0;padding-left:18px}
+.skinner-box li{margin-bottom:9px;font-size:15px}
+.impacto p{max-width:74ch}
+@media (max-width:700px){ .skinner-box{grid-template-columns:1fr} }
+
 /* ---------- Para saber mais (estímulo à leitura) ---------- */
 .saiba{position:relative;margin:26px 0 8px;max-width:64ch;border:2px solid var(--steel);background:var(--deep);padding:18px 16px 12px}
 .saiba .cab{position:absolute;left:12px;top:-11px;font-family:var(--f-pix);font-size:11px;background:var(--ice);color:var(--void);padding:2px 9px}
@@ -586,6 +625,7 @@ a.btn{text-decoration:none;display:inline-block}
         <ul class="rules" id="briefRules"></ul>
         <aside class="saiba" id="briefLeitura" hidden></aside>
         <p class="f-book" id="briefRef"></p>
+        <div class="bonus" id="briefBonus" hidden><span class="cab">EXTRA</span><div class="tx"><h4 id="bonusTitle"></h4><p id="bonusSub"></p></div><button class="btn ghost" id="btnGuia">Abrir guia de leitura</button></div>
         <div class="brief-talk">
           <img id="briefNpc" alt="Boatacon">
           <div class="bubble" style="max-width:420px"><span class="who">BOATACON</span><span id="briefTalk"></span></div>
@@ -596,6 +636,46 @@ a.btn{text-decoration:none;display:inline-block}
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- TELA: guia de leitura (bônus) -->
+  <section class="screen guide" id="sGuia" hidden>
+    <div class="guide-head">
+      <h2 id="guiaTitulo">Guia de leitura</h2>
+    </div>
+    <p class="lede" id="guiaSubtitulo"></p>
+    <p class="lede" id="guiaIntro"></p>
+
+    <section>
+      <h3>Por onde começar</h3>
+      <ol class="trilha" id="guiaTrilha"></ol>
+    </section>
+
+    <section>
+      <h3>Glossário</h3>
+      <dl class="gloss" id="guiaGlossario"></dl>
+    </section>
+
+    <section>
+      <h3>Temas principais</h3>
+      <div class="temas-grid" id="guiaTemas"></div>
+    </section>
+
+    <section>
+      <h3 id="guiaSkinnerTitulo">Tolman × Skinner</h3>
+      <div class="skinner-box">
+        <div class="col ok"><h4>Onde concordam</h4><ul id="guiaAcordos"></ul></div>
+        <div class="col no"><h4>Onde divergem</h4><ul id="guiaDivergem"></ul></div>
+      </div>
+    </section>
+
+    <section class="impacto">
+      <h3>Por que isso ainda importa</h3>
+      <p id="guiaImpacto"></p>
+    </section>
+
+    <p class="f-book" id="guiaRef" style="margin-top:24px"></p>
+    <div class="next-row"><button class="btn ghost" id="btnGuiaBack">Voltar ao quiz</button></div>
   </section>
 
   <!-- TELA: quiz -->
@@ -733,18 +813,94 @@ const IMG_SILHUETA = 'img/sel-silhueta.png';
    --------------------------------------------------------------------- */
 const BEHAVIORISTAS = [
   /* ---------- RAÍZES ---------- */
-  { id:'watson', grupo:'raizes', nome:'John B. Watson', prenome:'John B.', sobrenome:'Watson', curto:'Watson', anos:'1878–1958', ativo:false,
+  { id:'watson', grupo:'raizes', nome:'John B. Watson', prenome:'John B.', sobrenome:'Watson', curto:'Watson', anos:'1878–1958', ativo:true,
     escola:'Behaviorismo clássico', palavra:'CLÁSSICO',
     lema:'A psicologia como ramo experimental objetivo das ciências naturais, com predição e controle do comportamento.',
-    livro:{ texto:'Aparece nos caps. 3, 7 e 11.' } },
-  { id:'tolman', grupo:'raizes', nome:'Edward C. Tolman', prenome:'Edward C.', sobrenome:'Tolman', curto:'Tolman', anos:'1886–1959', ativo:false,
+    livro:{ texto:'Aparece nos caps. 3, 7 e 11.' },
+    foto:'img/sel-watson.png', fotoPos:'center 15%', fotoAlt:'John B. Watson, de paletó, com as mãos entrelaçadas, em preto e azul-gelo',
+    tile:'img/tile-watson.png',
+    retrato:'img/watson-retrato.png',
+    resultadoFotos:{
+      bom:[
+        { src:'img/watson-jovem.png',  alt:'Watson jovem, de gravata-borboleta, no início da carreira' },
+        { src:'img/watson-retrato.png', alt:'Watson de paletó, com as mãos entrelaçadas' }
+      ],
+      ruim:[
+        { src:'img/watson-oculos.png', alt:'Watson de óculos redondos, olhando de lado' },
+        { src:'img/watson-close.png',  alt:'Retrato de perto de Watson, de óculos redondos' },
+        { src:'img/watson-chapeu.png', alt:'Watson de chapéu e óculos, ao ar livre' }
+      ]
+    },
+    /* Arquivo de fotos (dossiê) */
+    galeria:[
+      { src:'img/watson-retrato.png', leg:'RETRATO',        alt:'Watson de paletó, com as mãos entrelaçadas' },
+      { src:'img/watson-jovem.png',   leg:'JOVEM',          alt:'Watson jovem, de gravata-borboleta' },
+      { src:'img/watson-oculos.png',  leg:'DE PERFIL',      alt:'Watson de óculos redondos, olhando de lado' },
+      { src:'img/watson-close.png',   leg:'CLOSE',          alt:'Retrato de perto de Watson, de óculos redondos' },
+      { src:'img/watson-chapeu.png',  leg:'AO AR LIVRE',    alt:'Watson de chapéu e óculos, ao ar livre' }
+    ],
+    bio:'Publicou em 1913 o manifesto que deu nome ao behaviorismo: a psicologia deveria abandonar a consciência como objeto e tratar o comportamento, humano ou animal, por métodos inteiramente objetivos. Foi professor em Johns Hopkins e presidente da American Psychological Association em 1915. Em 1920, um escândalo envolvendo sua assistente de pesquisa, Rosalie Rayner, com quem depois se casou, encerrou sua carreira acadêmica; ele passou o resto da vida na publicidade, na J. Walter Thompson.',
+    quizzes:['watson-manifesto'],
+    embreve:[
+      { titulo:'Uma biografia de Watson', ano:'', rotulo:'LIVRO' }
+    ]
+  },
+  { id:'tolman', grupo:'raizes', nome:'Edward C. Tolman', prenome:'Edward C.', sobrenome:'Tolman', curto:'Tolman', anos:'1886–1959', ativo:true,
     escola:'Behaviorismo propositivo', palavra:'PROPOSITIVO',
     lema:'Mapas cognitivos e variáveis intervenientes, estudados em ratos e labirintos.',
-    livro:{ texto:'Aparece nos caps. 2 e 5, sobre comportamento propositivo e visão molar.' } },
-  { id:'hull', grupo:'raizes', nome:'Clark L. Hull', prenome:'Clark L.', sobrenome:'Hull', curto:'Hull', anos:'1884–1952', ativo:false,
+    livro:{ texto:'Aparece nos caps. 2 e 5, sobre comportamento propositivo e visão molar.' },
+    foto:'img/sel-tolman.png', fotoPos:'center 12%', fotoAlt:'Edward C. Tolman, de óculos redondos e bigode, em preto e azul-gelo',
+    tile:'img/tile-tolman.png',
+    retrato:'img/tolman-retrato.png',
+    resultadoFotos:{
+      bom:[
+        { src:'img/tolman-lab-rato.png', alt:'Tolman, de jaleco, segurando um rato de laboratório' },
+        { src:'img/tolman-retrato.png',  alt:'Retrato de Tolman, de óculos redondos e bigode' }
+      ],
+      ruim:[
+        { src:'img/tolman-perfil.png', alt:'Tolman de perfil, de óculos redondos' }
+      ]
+    },
+    /* Arquivo de fotos (dossiê) */
+    galeria:[
+      { src:'img/tolman-retrato.png',  leg:'RETRATO',        alt:'Retrato de Tolman, de óculos redondos e bigode' },
+      { src:'img/tolman-lab-rato.png', leg:'COM O RATO',     alt:'Tolman, de jaleco, segurando um rato de laboratório' },
+      { src:'img/tolman-perfil.png',   leg:'DE PERFIL',      alt:'Tolman de perfil, de óculos redondos' }
+    ],
+    bio:'Professor em Berkeley por mais de três décadas, defendeu um behaviorismo "propositivo": mesmo em ratos correndo labirintos, o comportamento é organizado em torno de metas, não reduzido a reflexos isolados. Seus experimentos com ratos sugeriram que a aprendizagem constrói algo parecido com um mapa cognitivo do ambiente, e não apenas uma cadeia de hábitos entre estímulo e resposta. Recusou-se a assinar um juramento de lealdade anticomunista exigido pela Universidade da Califórnia no início dos anos 1950 e foi afastado do cargo; a biblioteca de psicologia de Berkeley leva hoje o seu nome.',
+    quizzes:['tolman-cognitive'],
+    embreve:[
+      { titulo:'Uma biografia de Tolman', ano:'', rotulo:'LIVRO' }
+    ]
+  },
+  { id:'hull', grupo:'raizes', nome:'Clark L. Hull', prenome:'Clark L.', sobrenome:'Hull', curto:'Hull', anos:'1884–1952', ativo:true,
     escola:'Neobehaviorismo hipotético-dedutivo', palavra:'HIPOTÉTICO-DEDUTIVO',
     lema:'Uma teoria dedutiva da aprendizagem, com postulados e o reforço como redução de necessidade.',
-    livro:{ texto:'Aparece nos caps. 7 e 10, sobre teoria e biologia do reforço.' } },
+    livro:{ texto:'Aparece nos caps. 7 e 10, sobre teoria e biologia do reforço.' },
+    foto:'img/sel-hull.png', fotoPos:'center 12%', fotoAlt:'Clark L. Hull, de óculos redondos, em preto e azul-gelo',
+    tile:'img/tile-hull.png',
+    retrato:'img/hull-retrato.png',
+    resultadoFotos:{
+      bom:[
+        { src:'img/hull-mesa.png',    alt:'Retrato pintado de Hull, sentado à mesa com um livro aberto' },
+        { src:'img/hull-retrato.png', alt:'Retrato de Hull, de óculos redondos' }
+      ],
+      ruim:[
+        { src:'img/hull-perfil.png', alt:'Hull de perfil, mais velho, de óculos' }
+      ]
+    },
+    /* Arquivo de fotos (dossiê) */
+    galeria:[
+      { src:'img/hull-retrato.png', leg:'RETRATO',    alt:'Retrato de Hull, de óculos redondos' },
+      { src:'img/hull-mesa.png',    leg:'À MESA',      alt:'Retrato pintado de Hull, sentado à mesa com um livro aberto' },
+      { src:'img/hull-perfil.png',  leg:'DE PERFIL',   alt:'Hull de perfil, mais velho, de óculos' }
+    ],
+    bio:'Professor de psicologia no Institute of Human Relations de Yale, tentou dar à análise do comportamento a forma de um sistema hipotético-dedutivo, nos moldes da geometria: um pequeno conjunto de postulados, cada um expresso também em fórmula matemática, dos quais fenômenos observados pudessem ser deduzidos como teoremas. Teve poliomielite na juventude e caminhava com o auxílio de uma bengala; mesmo com a saúde debilitada nos últimos anos, manteve um caderno de ideias de pesquisa até morrer, em 1952. Formou uma geração de alunos influentes, entre eles Kenneth Spence, Neal Miller e O. H. Mowrer.',
+    quizzes:['hull-principles'],
+    embreve:[
+      { titulo:'Uma biografia de Hull', ano:'', rotulo:'LIVRO' }
+    ]
+  },
   { id:'kantor', grupo:'raizes', nome:'J. R. Kantor', prenome:'J. R.', sobrenome:'Kantor', curto:'Kantor', anos:'1888–1984', ativo:false,
     escola:'Interbehaviorismo', palavra:'INTERBEHAVIORISMO',
     lema:'O campo psicológico: a interação entre organismo e objeto de estímulo, com componentes interdependentes.',
@@ -815,34 +971,140 @@ const BEHAVIORISTAS = [
   },
 
   /* ---------- CONTEMPORÂNEOS (livro-base, Partes I a VII) ---------- */
-  { id:'rachlin', grupo:'contemporaneos', nome:'Howard Rachlin', prenome:'Howard', sobrenome:'Rachlin', curto:'Rachlin', filiacao:'Stony Brook University', ativo:false,
+  { id:'rachlin', grupo:'contemporaneos', nome:'Howard Rachlin', prenome:'Howard', sobrenome:'Rachlin', curto:'Rachlin', filiacao:'Stony Brook University', ativo:true,
     escola:'Behaviorismo teleológico', palavra:'TELEOLÓGICO',
     lema:'O comportamento como padrão de atividade estendido no tempo: a "causa final ampla" explica cada ato.',
-    livro:{ parte:'I', caps:'1–3', com:'Filipe Lazzeri' } },
-  { id:'baum', grupo:'contemporaneos', nome:'William M. Baum', prenome:'William M.', sobrenome:'Baum', curto:'Baum', filiacao:'University of California, Davis', ativo:false,
+    livro:{ parte:'I', caps:'1–3', com:'Filipe Lazzeri' },
+    foto:'img/sel-rachlin.png', fotoPos:'center 12%', fotoAlt:'Howard Rachlin sorrindo, de bigode, em preto e azul-gelo',
+    tile:'img/tile-rachlin.png',
+    retrato:'img/rachlin-retrato.png',
+    resultadoFotos:{
+      bom:[
+        { src:'img/rachlin-retrato.png', alt:'Howard Rachlin sorrindo, de camisa vinho' },
+        { src:'img/rachlin-sentado.png', alt:'Rachlin sentado, de camisa xadrez, gesticulando' }
+      ],
+      ruim:[
+        { src:'img/rachlin-sentado.png', alt:'Rachlin sentado, de camisa xadrez' }
+      ]
+    },
+    /* Arquivo de fotos (dossiê) */
+    galeria:[
+      { src:'img/rachlin-retrato.png', leg:'RETRATO',  alt:'Howard Rachlin sorrindo, de camisa vinho' },
+      { src:'img/rachlin-sentado.png', leg:'SENTADO',  alt:'Rachlin sentado, de camisa xadrez, gesticulando' }
+    ],
+    bio:'Fez doutorado em Harvard nos anos 1960, no laboratório de condicionamento operante de Richard Herrnstein, ao lado de colegas como William Baum e John Staddon. É professor em Stony Brook e ficou conhecido pelas pesquisas sobre autocontrole e escolha intertemporal, além de propor o behaviorismo teleológico, que trata a mente como padrão de comportamento manifesto, nunca como evento interno.',
+    quizzes:['rachlin-teleologico']
+  },
+  { id:'baum', grupo:'contemporaneos', nome:'William M. Baum', prenome:'William M.', sobrenome:'Baum', curto:'Baum', filiacao:'University of New Hampshire (aposentado)', ativo:true,
     escola:'Behaviorismo molar', palavra:'MOLAR',
     lema:'A visão molar multiescala: o que conta como comportamento são atividades estendidas no tempo.',
-    livro:{ parte:'II', caps:'4–6', com:'Carolina Laurenti' } },
-  { id:'staddon', grupo:'contemporaneos', nome:'John Staddon', prenome:'John', sobrenome:'Staddon', curto:'Staddon', filiacao:'Duke University', ativo:false,
+    livro:{ parte:'II', caps:'4–6', com:'Carolina Laurenti' },
+    foto:'img/sel-baum.png', fotoPos:'center 15%', fotoAlt:'William M. Baum, de barba grisalha, em preto e azul-gelo',
+    tile:'img/tile-baum.png',
+    retrato:'img/baum-retrato.png',
+    resultadoFotos:{
+      bom:[
+        { src:'img/baum-sorrindo.png', alt:'Baum sorrindo, de barba branca' },
+        { src:'img/baum-retrato.png',  alt:'Retrato de Baum, sério, de barba grisalha' }
+      ],
+      ruim:[
+        { src:'img/baum-jovem.png', alt:'Baum mais jovem, de óculos, em entrevista' }
+      ]
+    },
+    /* Arquivo de fotos (dossiê) */
+    galeria:[
+      { src:'img/baum-retrato.png',  leg:'RETRATO',   alt:'Retrato de Baum, sério, de barba grisalha' },
+      { src:'img/baum-sorrindo.png', leg:'SORRINDO',  alt:'Baum sorrindo, de barba branca' },
+      { src:'img/baum-jovem.png',    leg:'JOVEM',     alt:'Baum mais jovem, de óculos, em entrevista' }
+    ],
+    bio:'Colega de turma de Rachlin em Harvard, colaborou com ele nos primeiros artigos sobre a visão molar do comportamento, entre eles "Choice as Time Allocation" (1969). Passou por Jackson Laboratory, University of New Hampshire e, mais tarde, San Francisco, desenvolvendo a lei da alocação e depois a visão molar multiescala: comportamento como atividades aninhadas, umas dentro das outras, em diferentes tamanhos de tempo.',
+    quizzes:['baum-molar']
+  },
+  { id:'staddon', grupo:'contemporaneos', nome:'John Staddon', prenome:'John', sobrenome:'Staddon', curto:'Staddon', filiacao:'Duke University', ativo:true,
     escola:'Behaviorismo teórico', palavra:'TEÓRICO',
     lema:'Trazer a psicologia behaviorista de volta à ciência convencional, entre o simplismo ateórico e o mentalismo cientificista.',
-    livro:{ parte:'III', caps:'7–9', com:'Carlos Eduardo Lopes' } },
-  { id:'donahoe', grupo:'contemporaneos', nome:'John W. Donahoe', prenome:'John W.', sobrenome:'Donahoe', curto:'Donahoe', filiacao:'University of Massachusetts Amherst', ativo:false,
+    livro:{ parte:'III', caps:'7–9', com:'Carlos Eduardo Lopes' },
+    foto:'img/sel-staddon.png', fotoPos:'center 10%', fotoAlt:'John Staddon, de óculos, em preto e azul-gelo',
+    tile:'img/tile-staddon.png',
+    retrato:'img/staddon-retrato.png',
+    resultadoFotos:{
+      bom:[ { src:'img/staddon-retrato.png', alt:'Retrato de John Staddon, de óculos' } ],
+      ruim:[ { src:'img/staddon-retrato.png', alt:'Retrato de John Staddon, de óculos' } ]
+    },
+    galeria:[
+      { src:'img/staddon-retrato.png', leg:'RETRATO', alt:'Retrato de John Staddon, de óculos' }
+    ],
+    bio:'Também formado em Harvard, no mesmo grupo de estudantes que incluía Rachlin e Baum, é professor de psicologia e biologia na Duke University. Defende o "behaviorismo teórico": uma correção ao behaviorismo radical de Skinner, que teria sido experimentalmente brilhante, mas hostil demais à construção de teoria para explicar os próprios fenômenos que descobriu.',
+    quizzes:['staddon-teorico']
+  },
+  { id:'donahoe', grupo:'contemporaneos', nome:'John W. Donahoe', prenome:'John W.', sobrenome:'Donahoe', curto:'Donahoe', filiacao:'University of Massachusetts Amherst', ativo:true,
     escola:'Behaviorismo biológico', palavra:'BIOLÓGICO',
     lema:'Integrar a análise do comportamento à neurociência, como a seleção natural foi integrada à hereditariedade.',
-    livro:{ parte:'IV', caps:'10–12', com:'Marcus Bentes de Carvalho Neto' } },
-  { id:'foxall', grupo:'contemporaneos', nome:'Gordon R. Foxall', prenome:'Gordon R.', sobrenome:'Foxall', curto:'Foxall', filiacao:'Cardiff University', ativo:false,
+    livro:{ parte:'IV', caps:'10–12', com:'Marcus Bentes de Carvalho Neto' },
+    foto:'img/sel-donahoe.png', fotoPos:'center 8%', fotoAlt:'John W. Donahoe sorrindo, em preto e azul-gelo',
+    tile:'img/tile-donahoe.png',
+    retrato:'img/donahoe-retrato.png',
+    resultadoFotos:{
+      bom:[ { src:'img/donahoe-retrato.png', alt:'Retrato de John W. Donahoe, sorrindo' } ],
+      ruim:[ { src:'img/donahoe-retrato.png', alt:'Retrato de John W. Donahoe, sorrindo' } ]
+    },
+    galeria:[
+      { src:'img/donahoe-retrato.png', leg:'RETRATO', alt:'Retrato de John W. Donahoe, sorrindo' }
+    ],
+    bio:'Formou-se pela Thomas Hunt Morgan School of Biological Sciences, com campo secundário em neurofisiologia, numa época em que a psicologia da aprendizagem ainda era dominada por Clark Hull. Professor emérito na University of Massachusetts Amherst, propõe o behaviorismo biológico: um princípio de reforçamento unificado, baseado em contiguidade temporal e discrepância comportamental, testado também em modelos de redes neurais.',
+    quizzes:['donahoe-biologico']
+  },
+  { id:'foxall', grupo:'contemporaneos', nome:'Gordon R. Foxall', prenome:'Gordon R.', sobrenome:'Foxall', curto:'Foxall', filiacao:'Cardiff University', ativo:true,
     escola:'Behaviorismo intencional', palavra:'INTENCIONAL',
     lema:'Um programa de pesquisa sobre escolha do consumidor: o que faz do agir uma ação, e não apenas comportamento.',
-    livro:{ parte:'V', caps:'13–15', com:'Jorge M. Oliveira-Castro' } },
-  { id:'hayes', grupo:'contemporaneos', nome:'Steven C. Hayes', prenome:'Steven C.', sobrenome:'Hayes', curto:'Hayes', filiacao:'University of Nevada, Reno', ativo:false,
+    livro:{ parte:'V', caps:'13–15', com:'Jorge M. Oliveira-Castro' },
+    foto:'img/sel-foxall.png', fotoPos:'center 8%', fotoAlt:'Gordon R. Foxall, em preto e azul-gelo',
+    tile:'img/tile-foxall.png',
+    retrato:'img/foxall-retrato.png',
+    resultadoFotos:{
+      bom:[ { src:'img/foxall-retrato.png', alt:'Retrato de Gordon R. Foxall' } ],
+      ruim:[ { src:'img/foxall-retrato.png', alt:'Retrato de Gordon R. Foxall' } ]
+    },
+    galeria:[
+      { src:'img/foxall-retrato.png', leg:'RETRATO', alt:'Retrato de Gordon R. Foxall' }
+    ],
+    bio:'Professor na Cardiff Business School, construiu o Modelo de Perspectiva Comportamental para explicar a escolha do consumidor. A partir dele, desenvolveu o behaviorismo intencional: um procedimento de três etapas (interpretação behaviorista, intencional e cognitiva) para explicar o que separa uma ação de consumo de um comportamento qualquer.',
+    quizzes:['foxall-intencional']
+  },
+  { id:'hayes', grupo:'contemporaneos', nome:'Steven C. Hayes', prenome:'Steven C.', sobrenome:'Hayes', curto:'Hayes', filiacao:'University of Nevada, Reno', ativo:true,
     escola:'Behaviorismo contextual', palavra:'CONTEXTUAL',
     lema:'Ciência comportamental contextual: contextualismo funcional, teoria das molduras relacionais e ACT.',
-    livro:{ parte:'VI', caps:'16–18', com:'Julio C. de Rose' } },
-  { id:'ribes', grupo:'contemporaneos', nome:'Emilio Ribes-Iñesta', prenome:'Emilio', sobrenome:'Ribes-Iñesta', curto:'Ribes', filiacao:'Universidad Veracruzana', ativo:false,
+    livro:{ parte:'VI', caps:'16–18', com:'Julio C. de Rose' },
+    foto:'img/sel-hayes.png', fotoPos:'center 12%', fotoAlt:'Steven C. Hayes sorrindo, careca, de terno escuro, em preto e azul-gelo',
+    tile:'img/tile-hayes.png',
+    retrato:'img/hayes-retrato.png',
+    resultadoFotos:{
+      bom:[ { src:'img/hayes-retrato.png', alt:'Retrato de Steven C. Hayes sorrindo' } ],
+      ruim:[ { src:'img/hayes-retrato.png', alt:'Retrato de Steven C. Hayes sorrindo' } ]
+    },
+    galeria:[
+      { src:'img/hayes-retrato.png', leg:'RETRATO', alt:'Retrato de Steven C. Hayes sorrindo' }
+    ],
+    bio:'Professor na University of Nevada, Reno, ajudou a lançar a Teoria das Molduras Relacionais (RFT) e a Terapia de Aceitação e Compromisso (ACT), hoje reunidas sob o guarda-chuva da ciência comportamental contextual (CBS). A CBS tem associação científica e revista próprias, e é hoje moldada por centenas de pesquisadores ao redor do mundo, não só por ele.',
+    quizzes:['hayes-contextual']
+  },
+  { id:'ribes', grupo:'contemporaneos', nome:'Emilio Ribes-Iñesta', prenome:'Emilio', sobrenome:'Ribes-Iñesta', curto:'Ribes', filiacao:'Universidad Veracruzana', ativo:true,
     escola:'Behaviorismo de campo', palavra:'CAMPO',
     lema:'Uma teoria da psicologia, e não só do comportamento: um modelo de campo para todos os fenômenos psicológicos.',
-    livro:{ parte:'VII', caps:'19–21', com:'Hernando Borges Neves Filho e Tiago de Oliveira Magalhães' } }
+    livro:{ parte:'VII', caps:'19–21', com:'Hernando Borges Neves Filho e Tiago de Oliveira Magalhães' },
+    foto:'img/sel-ribes.png', fotoPos:'center 15%', fotoAlt:'Emilio Ribes-Iñesta em preto e azul-gelo, retrato formal',
+    tile:'img/tile-ribes.png',
+    retrato:'img/ribes-retrato.png',
+    resultadoFotos:{
+      bom:[ { src:'img/ribes-retrato.png', alt:'Ribes-Iñesta em traços holográficos azul-gelo' } ],
+      ruim:[ { src:'img/ribes-retrato.png', alt:'Ribes-Iñesta em traços holográficos azul-gelo' } ]
+    },
+    galeria:[
+      { src:'img/ribes-retrato.png', leg:'RETRATO', alt:'Emilio Ribes-Iñesta, fundador do behaviorismo de campo' }
+    ],
+    bio:'Formado pela UNAM em 1960, ajudou a fundar o programa de psicologia da Universidad Veracruzana, em Xalapa, onde segue como professor. A partir do interbehaviorismo de J. R. Kantor, propõe um modelo de campo com três meios de contato (físico-químico, ecológico, convencional) que pretende explicar toda a psicologia, não só o comportamento observável.',
+    quizzes:['ribes-campo']
+  }
 ];
 
 /* ---------------------------------------------------------------------
@@ -1588,6 +1850,1075 @@ const QUIZZES = {
       conceitos:['contingência acidental','comportamento supersticioso','reforço sem “compreensão”'] }) }
   ]
 }
+,
+
+/* ---------------------------------------------------------------- */
+'watson-manifesto': {
+  autor:'watson', tipo:'livro', categoria:'Artigo',
+  titulo:'A psicologia como o behaviorista a vê', ano:1913, edicao:'trad. 2008',
+  subtitulo:'Complete o raciocínio de Watson, passo a passo',
+  rotuloCartucho:'ARTIGO 1913',
+  rotuloAbertura:'Artigo de John B. Watson · 1913 (trad. 2008)',
+  arte:'img/watson-jovem.png',
+  arteAlt:'Retrato de John B. Watson jovem, de gravata-borboleta, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Watson, J. B. (2008). A psicologia como o behaviorista a vê (F. K. Gerab, L. E. V. Moreira, M. Z. Castelli, P. E. S. Ambra, T. P. Gehm, &amp; M. B. Carvalho Neto, trads.). <i>Temas em Psicologia</i>, 16(2), 289–301. (Trabalho original publicado em 1913)',
+  leituraInicial:'O texto ficou conhecido como o "manifesto behaviorista": curto, mas denso, e vale a leitura inteira antes de jogar. Preste atenção especial ao resumo de cinco pontos que Watson escreve no final (pp. 300–301): ele repete, de forma mais direta, quase tudo que foi argumentado ao longo do artigo.',
+  intro:'Este quiz não pergunta datas nem nomes soltos. Cada questão pega o raciocínio de Watson no meio do caminho e pede que você complete o próximo passo, do jeito que ele mesmo o daria. A resposta certa é a que segue a lógica do texto, não a que soa melhor sozinha.',
+  conquistas:{ aprovado:'Leitor(a) do manifesto behaviorista', perfeito:'Sem linha divisória entre homens e animais' },
+  perguntas:[
+  { tipo:'complete',
+    enunciado:'Watson abre o artigo definindo o objetivo teórico da nova psicologia. Complete: a psicologia do behaviorista é um ramo experimental puramente objetivo das ciências naturais, cujo objetivo teórico é a ___.',
+    opcoes:['previsão e o controle do comportamento','descrição dos estados de consciência','classificação dos processos mentais em elementos simples','análise introspectiva dos sentimentos'],
+    explicacao:'É a frase de abertura do artigo, e ela já contrasta com a psicologia tradicional: para Watson, o alvo não é descrever a experiência consciente, mas prever e controlar o que o organismo faz. Todo o resto do texto deriva dessa troca de objetivo.',
+    fonte:'Watson (1913/2008, p. 289).',
+    dica:'É a primeira frase do artigo inteiro.' },
+  { tipo:'contraste',
+    enunciado:'Diante de um animal que aprendeu a distinguir duas luzes coloridas, o psicólogo tradicional perguntaria se ele as vê como cores distintas, do jeito que nós vemos. Watson reformula a mesma pergunta em termos observáveis. Complete como o behaviorista a colocaria: "meu animal está respondendo com base numa diferença de ___, ou de ___?"',
+    opcoes:['intensidade; comprimento de onda','memória; instinto','prazer; desprazer','atenção; percepção'],
+    explicacao:'Watson nunca pergunta como o animal "vê" as luzes, porque isso supõe acesso à experiência dele. A pergunta behaviorista fica inteiramente do lado de fora: qual variável física, intensidade ou comprimento de onda, está de fato controlando a resposta diferencial.',
+    fonte:'Watson (1913/2008, pp. 296–297).',
+    dica:'As duas lacunas são propriedades físicas da luz, não da experiência.' },
+  { tipo:'raciocinio',
+    enunciado:'Watson observa que os dados obtidos com animais raramente lançavam luz direta sobre a psicologia humana tal como ela era praticada, e por isso os psicólogos "puros" costumavam duvidar do valor desse trabalho. Diante desse impasse, ele enxerga só duas saídas possíveis. Complete a segunda: "ou a psicologia muda de rumo para incluir os fatos do comportamento, tenham eles ou não relação com a consciência, ou então ___."',
+    opcoes:['o comportamento segue sozinho, como ciência completamente separada e independente','os estudos com animais devem ser abandonados de vez','a introspecção passa a ser aplicada também aos animais','a psicologia humana e a animal se fundem numa única disciplina, sem distinção de método'],
+    explicacao:'É o ultimato que abre o artigo: ou a psicologia tradicional se abre para o comportamento, aceito ou não como caminho para a consciência, ou o estudo do comportamento vira uma ciência à parte. Watson já avisa que, se a segunda opção prevalecer, os behavioristas passarão a estudar seres humanos com os mesmos métodos usados com animais.',
+    fonte:'Watson (1913/2008, pp. 289–290).',
+    dica:'A alternativa é uma separação completa, não uma fusão.' },
+  { tipo:'complete',
+    enunciado:'Depois de mapear a capacidade de aprendizagem de um animal, seus métodos e os estímulos a que ele responde, a psicologia tradicional ainda se sentiria insatisfeita até conseguir ___.',
+    opcoes:['interpretar esses resultados por analogia, adivinhando o conteúdo consciente do animal','repetir o experimento com um número maior de sujeitos','comparar os resultados com os de outra espécie','obter uma medida estatística da variabilidade das respostas'],
+    explicacao:'Watson ironiza esse hábito com um exemplo: um animal sem olhos "não pode" ter sensações de cor, mas, como responde a calor e tato, deve ter sensações dessas coisas, "se é que tem alguma consciência". Para ele, essa exigência de adivinhar por analogia é o verdadeiro problema, não uma etapa legítima da pesquisa.',
+    fonte:'Watson (1913/2008, pp. 290–291).',
+    dica:'A insatisfação vem de faltar um passo que nada tem a ver com o comportamento observado.' },
+  { tipo:'raciocinio',
+    enunciado:'Watson compara o impasse da psicologia ao que a biologia viveu na época de Darwin, quando o movimento evolucionista inteiro era julgado por sua relevância para a origem do homem. Ele descreve o que aconteceu quando a zoologia passou a estudar a evolução experimentalmente, espécie por espécie. Complete: o homem deixou de ser ___, e hoje um biólogo pode estudar a herança da cor do pelo em camundongos sem precisar justificar o achado pela sua relevância para a espécie humana.',
+    opcoes:['o centro de referência','a única espécie mencionada nos manuais','objeto de estudo da genética','sujeito experimental nos laboratórios de Darwin'],
+    explicacao:'É a analogia central do artigo: assim como a biologia amadureceu quando parou de medir cada achado pela distância até o ser humano, a psicologia amadureceria se parasse de medir cada dado comportamental pela distância até a consciência humana.',
+    fonte:'Watson (1913/2008, pp. 291–292).',
+    dica:'Pense no que muda quando uma ciência deixa de ter uma espécie como padrão obrigatório de comparação.' },
+  { tipo:'complete',
+    enunciado:'Watson compara a física e a química, onde uma falha experimental é atribuída ao aparato ou à técnica, com a psicologia da sua época. Complete o contraste: em psicologia, quando um resultado não se repete, a culpa recai não sobre o arranjo experimental, mas sobre ___.',
+    opcoes:['a introspecção destreinada do observador','a variabilidade natural dos sujeitos humanos','o tamanho reduzido da amostra','erros de cálculo estatístico'],
+    explicacao:'É uma das passagens mais citadas do texto: se um físico erra, revisa-se o aparato; se um psicólogo introspeccionista erra, diz-se que ele "não sabe introspeccionar". Watson usa esse dado como sintoma de uma ciência que ainda não aprendeu a duvidar de si mesma do jeito certo.',
+    fonte:'Watson (1913/2008, p. 292).',
+    dica:'A culpa recai sobre uma pessoa, não sobre um instrumento.' },
+  { tipo:'contraste',
+    enunciado:'No resumo final, Watson admite um uso "não reflexivo e ingênuo" da palavra consciência: todo cientista a usa para pensar, sem fazer dela objeto de estudo. Complete a comparação que ele propõe: "consciência pode ser dita como sendo o ___ com o qual todos os cientistas trabalham."',
+    opcoes:['instrumento ou ferramenta','objeto central de investigação','produto final da pesquisa','critério de validade dos experimentos'],
+    explicacao:'É o segundo ponto do resumo: negar a consciência como objeto especial de estudo não é o mesmo que negar que ela exista ou que sirva de instrumento de trabalho, do mesmo jeito que um físico pensa sem fazer do próprio pensar o assunto da física.',
+    fonte:'Watson (1913/2008, p. 300).',
+    dica:'Uma ferramenta se usa; não se estuda a si mesma no processo.' },
+  { tipo:'raciocinio',
+    enunciado:'Watson lista o que a nova psicologia deveria deixar de usar (consciência, estados mentais, mente, conteúdo, imagem mental) e diz que isso pode ser feito em termos de outra coisa. Complete: "isso pode ser feito em termos de ___, formação de hábito e integração de hábito."',
+    opcoes:['estímulo e resposta','sensação e percepção','atenção e memória','emoção e volição'],
+    explicacao:'É a proposta construtiva do artigo: trocar o vocabulário inteiro da consciência por um vocabulário de estímulo, resposta e hábito, sem jamais voltar atrás na definição, nem "por um momento", como ele mesmo insiste.',
+    fonte:'Watson (1913/2008, p. 294).',
+    dica:'É o par de termos que dá nome ao método behaviorista.' },
+  { tipo:'complete',
+    enunciado:'Watson descreve dois fatos que servem de ponto de partida para a psicologia que propõe. Complete o segundo: primeiro, organismos se ajustam ao ambiente por meio de equipamentos de hábito e hereditários; segundo, certos estímulos levam os organismos a ___.',
+    opcoes:['gerar respostas, de modo que, num sistema completo, dada a resposta o estímulo possa ser previsto, e dado o estímulo a resposta possa ser prevista','acumular experiências conscientes que moldam a personalidade','desenvolver processos mentais cada vez mais complexos','formar imagens internas do ambiente'],
+    explicacao:'É a definição operacional que Watson propõe para o próprio programa de pesquisa: uma psicologia madura seria aquela em que estímulo e resposta se preveem mutuamente, sem precisar de nenhum termo mentalista no meio do caminho.',
+    fonte:'Watson (1913/2008, pp. 294–295).',
+    dica:'A previsão funciona nos dois sentidos: do estímulo para a resposta e da resposta para o estímulo.' },
+  { tipo:'raciocinio',
+    enunciado:'Watson descreve seu próprio estudo de campo com pássaros em Tortuga: primeiro observou o comportamento do grupo, depois o de cada indivíduo, e por fim criou filhotes separados dos pais. Complete o motivo desse último passo: ele criou os filhotes à parte para poder distinguir ___.',
+    opcoes:['o que era hábito, aprendido, do que era hereditário no comportamento das aves','quais aves eram mais dóceis para o manejo em cativeiro','a diferença de comportamento entre machos e fêmeas','o efeito da dieta sobre o crescimento dos filhotes'],
+    explicacao:'Criar os filhotes isolados dos adultos é o expediente clássico para separar o que a ave já traz ao nascer do que ela aprende observando ou interagindo com outras aves; sem isso, hábito e herança ficam misturados na mesma resposta.',
+    fonte:'Watson (1913/2008, pp. 294–295).',
+    dica:'Separar os filhotes dos pais isola uma das duas fontes possíveis do comportamento.' },
+  { tipo:'complete',
+    enunciado:'Watson diz que, se tivesse de estudar nativos de uma tribo australiana em vez de pássaros, usaria o mesmo método geral, mas o problema seria mais difícil. Complete um dos motivos: os hábitos seriam mais complexos, e a resposta de cada indivíduo seria mais influenciada ___.',
+    opcoes:['pelas respostas dos outros indivíduos do grupo','pela variação sazonal do clima','pela disponibilidade de alimento no território','por instintos territoriais mais fortes'],
+    explicacao:'Watson nota que, num grupo humano, o comportamento de cada pessoa reage ao comportamento das outras muito mais do que acontece entre pássaros, o que torna o "arranjo social" da vida do grupo uma variável que precisa ser mapeada com cuidado maior.',
+    fonte:'Watson (1913/2008, p. 295).',
+    dica:'A dificuldade extra vem de outras pessoas, não do ambiente físico.' },
+  { tipo:'complete',
+    enunciado:'Watson descreve, de forma quase irônica, o tipo de relato que a introspecção tradicional buscaria sobre um estado de consciência: algo como "isto consiste na sensação cinza número 350, de tal extensão, ocorrendo junto com uma sensação de frio de tal intensidade". Ele diz que seu próprio objetivo é outro. Complete: "meu objetivo não é a descrição e a explicação dos estados de consciência enquanto tais, mas sim aprender os métodos gerais e particulares pelos quais eu possa ___."',
+    opcoes:['controlar o comportamento','classificar os tipos de personalidade','medir a intensidade das sensações','explicar a origem da linguagem'],
+    explicacao:'A frase resume o desvio de meta do artigo inteiro: descrever a experiência interna dá lugar a controlar o que o organismo faz, e é esse deslocamento, não uma descoberta específica, que Watson chama de behaviorismo.',
+    fonte:'Watson (1913/2008, p. 295).',
+    dica:'É o mesmo verbo do primeiro parágrafo do artigo.' },
+  { tipo:'raciocinio',
+    enunciado:'Watson lista áreas que já haviam se afastado parcialmente da introspecção e estavam prosperando: pedagogia experimental, psicologia das drogas, da propaganda, legal, dos testes, psicopatologia. Ele nota, porém, um problema recorrente nelas. Complete: "muito do material dessas disciplinas ainda é apresentado em termos de ___, quando uma formulação em resultados objetivos seria muito mais valiosa."',
+    opcoes:['introspecção','estatística','faixa etária','classe social'],
+    explicacao:'Mesmo os ramos mais "aplicados" da psicologia, que Watson via como prova de que seu programa era viável, ainda carregavam relatos introspectivos onde bastariam medidas objetivas de comportamento, e é essa sobra que ele quer eliminar.',
+    fonte:'Watson (1913/2008, p. 296).',
+    dica:'É o mesmo método que Watson quer abolir do resto da psicologia.' },
+  { tipo:'contraste',
+    enunciado:'Watson antecipa uma acusação: ao pedir que um sujeito humano ajuste um aparato até não notar diferença entre dois estímulos, ele não estaria, na prática, recorrendo à introspecção? Ele nega, dando outro nome ao recurso. Complete: "não é introspecção; é apenas um ___, que funciona porque experimentador e sujeito compartilham um sistema de sinais verbais abreviados."',
+    opcoes:['método comportamental resumido, um atalho linguístico','experimento de laboratório controlado','teste padronizado de inteligência','processo de condicionamento clássico'],
+    explicacao:'Watson admite usar a linguagem do sujeito como atalho prático, mas insiste que isso não muda o estatuto do experimento: a linguagem funciona ali como um comportamento a mais, compartilhado entre as duas pessoas, não como uma janela para a mente.',
+    fonte:'Watson (1913/2008, p. 297).',
+    dica:'Ele dá um nome ao método que evita a palavra "introspecção".' },
+  { tipo:'raciocinio',
+    enunciado:'Watson imagina duvidar da precisão de um instrumento e, em vez de aceitar o relato verbal do sujeito ("não há diferença, as duas cores são idênticas"), alterna as posições do padrão e do controle e pune a resposta errada repetidas vezes. Complete a conclusão: se o sujeito aprende a diferenciar depois de muitas tentativas, isso mostra que ___.',
+    opcoes:['os dois estímulos fornecem, de fato, uma base para uma resposta diferencial, mesmo que o sujeito dissesse não perceber diferença nenhuma','o sujeito estava mentindo deliberadamente sobre sua percepção','o instrumento de fato estava com defeito','a introspecção do sujeito era, afinal, confiável'],
+    explicacao:'O comportamento acaba contradizendo o relato verbal: o sujeito diz não notar diferença, mas aprende a responder diferente aos dois estímulos quando isso é reforçado ou punido, o que basta para Watson: o comportamento, não a palavra, decide a questão.',
+    fonte:'Watson (1913/2008, p. 297).',
+    dica:'O que decide aqui é o que o sujeito faz, não o que ele diz sentir.' },
+  { tipo:'complete',
+    enunciado:'Watson observa que os métodos já usados nos laboratórios de memória (listas de sílabas sem sentido, curvas de aprendizagem, erros, permanência do hábito) já produzem exatamente o tipo de dado que ele defende. O problema está no propósito declarado desses estudos. Complete: "esses experimentos são feitos com o propósito de discutir a ___ envolvida em aprender e esquecer, e não de mostrar como o ser humano molda suas respostas ao ambiente."',
+    opcoes:['maquinaria mental','capacidade fisiológica do cérebro','diferença individual de inteligência','influência da motivação'],
+    explicacao:'O método já era, na prática, behaviorista; faltava só trocar a interpretação: em vez de tratar os dados como pista de uma "maquinaria mental" escondida, bastaria descrevê-los como ajuste do organismo a um ambiente complexo.',
+    fonte:'Watson (1913/2008, p. 298).',
+    dica:'É uma metáfora de engrenagem, algo "por trás" do comportamento.' },
+  { tipo:'raciocinio',
+    enunciado:'Na conclusão, Watson se pergunta se sobrará algum "mundo de puro psiquismo" fora do alcance do behaviorismo. Ele confessa não saber, mas propõe uma condição sob a qual aceita conviver com a palavra "consciência". Complete: "se você garantir ao behaviorista o direito de usar a palavra consciência do mesmo jeito que os outros cientistas naturais a usam, sem torná-la ___, isso é tudo que a minha tese exige."',
+    opcoes:['um objeto de observação especial','parte do vocabulário científico','sinônimo de comportamento','um conceito mensurável'],
+    explicacao:'É a concessão final do artigo: Watson não exige que ninguém pare de falar em consciência no dia a dia, só que ela deixe de ser tratada como algo a observar e medir diretamente, o mesmo tratamento que um físico dá à própria mente enquanto pensa sobre física.',
+    fonte:'Watson (1913/2008, p. 299).',
+    dica:'A condição é sobre o papel da palavra na pesquisa, não sobre proibi-la.' },
+  { tipo:'contraste',
+    enunciado:'Watson não se considera hostil só ao estruturalismo de Titchener; ele também tem uma "querela" com a psicologia funcional, que ao menos tentava dar função aos processos mentais. Segundo ele, ao tentar fazer os estados mentais parecerem realmente atuar no ajustamento do organismo, o funcionalista cai quase sempre na mesma armadilha terminológica. Complete: ele recorre a termos de ___, ainda que se defenda dizendo que é só conveniência de linguagem.',
+    opcoes:['interação, entre mente e corpo','paralelismo psicofísico','associação de ideias','reflexo condicionado'],
+    explicacao:'Watson argumenta que, para descrever um estado mental "funcionando", o funcionalista escorrega para uma linguagem de interação entre mente e corpo, mesmo quando professa o paralelismo; para ele, só o behaviorismo evita as duas armadilhas por completo.',
+    fonte:'Watson (1913/2008, p. 298).',
+    dica:'É o tipo de linguagem que sugere a mente agindo diretamente sobre o corpo.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'tolman-cognitive': {
+  autor:'tolman', tipo:'livro', categoria:'Coletânea',
+  titulo:'Behavior and Psychological Man', ano:1951, edicao:'4ª impr., 1966',
+  subtitulo:'Complete o raciocínio de Tolman, do formulário de 1922 aos mapas de 1948',
+  rotuloCartucho:'LIVRO 1951',
+  rotuloAbertura:'Coletânea de Tolman · 1951 (4ª impr., 1966)',
+  arte:'img/tolman-lab-rato.png',
+  arteAlt:'Edward C. Tolman, de jaleco, segurando um rato de laboratório, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Tolman, E. C. (1966). <i>Behavior and psychological man: Essays in motivation and learning</i>. University of California Press. (Coletânea publicada originalmente em 1951 como <i>Collected Papers in Psychology</i>; reúne artigos de 1922 a 1948)',
+  leituraInicial:'Este é um livro de ensaios, não um só argumento contínuo. Duas peças bastam para acompanhar este quiz: "A New Formula for Behaviorism" (1922, pp. 1–6), onde Tolman ainda está discutindo com Watson sobre o que conta como behaviorismo, e "Cognitive Maps in Rats and Men" (1948, pp. 243–264), sua conferência mais famosa, sobre o que ratos em labirintos e seres humanos frustrados têm em comum.',
+  intro:'Tolman escreve mudando de ideia em voz alta: ele levanta uma posição, testa até onde ela aguenta e só então avança. As perguntas aqui pegam esse movimento no meio e pedem que você complete o próximo passo, sem citar nada de cor.',
+  conquistas:{ aprovado:'Leitor(a) de Behavior and Psychological Man', perfeito:'Mapa cognitivo amplo' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Behavior and Psychological Man — por onde entrar, o vocabulário e por que isso ficou famoso',
+    intro:'O livro reúne 23 anos de artigos de Tolman, de 1922 a 1948, e não precisa ser lido na ordem em que foi encadernado. Este guia sugere um caminho mais curto, direto aos dois ensaios que sustentam o quiz, fecha o vocabulário que aparece nas perguntas e situa o livro na história da psicologia, inclusive na disputa dele com Skinner.',
+    trilha:[
+      { titulo:'A New Formula for Behaviorism (1922)', paginas:'pp. 1–9',
+        texto:'Comece aqui. É o texto mais curto e mais argumentativo do livro: Tolman ainda está debatendo com Watson sobre o que conta como behaviorismo, e por isso apresenta com calma os quatro conceitos que organizam todo o sistema dele: agência estimuladora, pista comportamental, objeto comportamental e ato comportamental.' },
+      { titulo:'Behaviorism and Purpose (1925)', paginas:'pp. 33–40',
+        texto:'Um ensaio curto que funciona como ponte: mostra como Tolman trata "propósito" como um aspecto objetivo do comportamento, a persistência de uma atividade até um certo resultado, e não como um estado mental escondido atrás dela. É a peça que dá nome ao "behaviorismo propositivo".' },
+      { titulo:'Cognitive Maps in Rats and Men (1948)', paginas:'pp. 243–264',
+        texto:'O texto mais citado da carreira de Tolman, e o coração deste quiz: uma conferência que resume décadas de experimentos com ratos em labirintos e termina, sem pedir desculpas, discutindo preconceito, regressão e saúde mental humana com o mesmo vocabulário usado para descrever ratos.' },
+      { titulo:'Psychological Man (1941)', paginas:'pp. 207–218',
+        texto:'Se sobrar tempo: é o discurso de posse de Tolman na presidência da American Psychological Association, mais pessoal e ensaístico que o resto do livro, e uma boa amostra do lado menos técnico do autor.' }
+    ],
+    glossario:[
+      { termo:'Behaviorismo propositivo', def:'A posição de Tolman: comportamento só se descreve por completo quando se nota que ele persiste até um resultado, mesmo que os movimentos específicos mudem de uma tentativa para outra.' },
+      { termo:'Variável interveniente', def:'Um termo colocado entre o estímulo e a resposta para representar processos não observados diretamente (fome, expectativa, mapa cognitivo), desde que definido por relações observáveis, nunca por introspecção.' },
+      { termo:'Mapa cognitivo', def:'A representação interna, provisória e revisável, das relações espaciais do ambiente que, para Tolman, se forma durante a aprendizagem, mesmo sem reforço.' },
+      { termo:'Pista comportamental (behavior cue)', def:'O equivalente comportamental da "qualidade sensorial": o que um estímulo é capaz de diferenciar no comportamento de um organismo, não o que esse estímulo "parece" para ele.' },
+      { termo:'Objeto comportamental (behavior object)', def:'O equivalente comportamental do "significado percebido": o conjunto de tendências de ação que um grupo de pistas comportamentais desperta numa situação específica.' },
+      { termo:'VTE (vicarious trial and error)', def:'A hesitação visível de um animal diante de duas alternativas, olhando de um lado para o outro antes de escolher; para Tolman, sinal de que o organismo ainda está descobrindo as instruções da tarefa.' },
+      { termo:'Aprendizagem latente', def:'Aprendizagem que ocorre sem reforço aparente e só aparece no desempenho quando surge um motivo para usá-la.' },
+      { termo:'Mapa estreito / mapa amplo', def:'A distinção que fecha o texto de 1948: mapas estreitos, presos a um único caminho, tendem a aparecer sob motivação ou frustração excessivas; mapas amplos, em ambientes ricos em sinais e livres para explorar.' }
+    ],
+    temas:[
+      { titulo:'Um behaviorismo não fisiológico', pp:'pp. 1–3',
+        texto:'O primeiro tema do livro é uma discordância de família: Tolman se declara behaviorista, mas recusa a exigência de Watson de definir estímulo e resposta nos termos estritos da fisiologia (músculos, glândulas, nervos). Ele quer um nível de análise tão real quanto a fisiologia, mas que não precise ser traduzido para ela.' },
+      { titulo:'Propósito sem mentalismo', pp:'pp. 33–34',
+        texto:'Tolman trata "propósito" como algo observável no próprio comportamento, a persistência de uma atividade até certo resultado, e não como uma causa mental escondida atrás dele. É a peça que sustenta o nome "behaviorismo propositivo" e o que o aproxima e o afasta de Skinner ao mesmo tempo: os dois recusam o mentalismo, mas divergem sobre o que substitui a explicação mentalista.' },
+      { titulo:'Da central telefônica ao mapa', pp:'pp. 243–245',
+        texto:'O tema mais citado do livro. Tolman contrapõe duas imagens do que se passaria no cérebro de um rato: a escola estímulo-resposta o compara a uma central telefônica antiquada, que liga estímulos a respostas; a escola de campo, à qual ele pertence, prefere pensá-lo como uma',
+        trecho:{ en:'"a map control room"', pt:'"uma sala de controle com um mapa" (tradução livre)', ref:'Tolman, 1948/1966, p. 244' } },
+      { titulo:'Mapas estreitos e vida social', pp:'pp. 260–263',
+        texto:'O tema mais ousado do livro: Tolman estende o vocabulário de "mapas estreitos" a fenômenos clínicos e sociais, regressão, fixação, deslocamento de agressão a grupos externos, tratando-os como o mesmo tipo de restrição cognitiva encontrada em ratos sob motivação excessiva.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Tolman × Skinner: onde concordam, onde divergem',
+      acordos:[
+        'Nenhum dos dois aceita a introspecção como método central, nem trata a consciência como uma substância especial a ser descrita por dentro.',
+        'Os dois recusam um "agente autônomo" livre de causas ambientais: para ambos, o comportamento tem determinantes que podem, em princípio, ser identificados de fora.',
+        'Os dois se apresentam como herdeiros do projeto de Watson de fazer da psicologia uma ciência natural objetiva; a disputa é sobre como levar esse projeto adiante.'
+      ],
+      divergem:[
+        'Variáveis intervenientes: Tolman aceita construtos hipotéticos (mapa cognitivo, expectativa, demanda), desde que definidos por relações observáveis; Skinner rejeita qualquer construto colocado entre o estímulo e a resposta, preferindo uma análise funcional direta entre variáveis ambientais e comportamento.',
+        'Unidade de análise: Tolman trabalha no nível molar, o comportamento inteiro dirigido a uma meta, como "o rato correndo até a caixa-alvo"; Skinner trabalha no nível do operante, a classe de respostas definida pelo efeito que produz no ambiente, sem precisar referência a nenhum objetivo.',
+        'O rótulo "cognitivo": Skinner acusa os mapas cognitivos de reintroduzir, por uma porta lateral, a mesma explicação mentalista que o behaviorismo deveria ter abolido; para ele, dizer que o rato "consulta um mapa" empurra o problema um passo para trás, sem explicar o comportamento observável em si.',
+        'Essa disputa já aparece dentro do próprio jogo: uma das perguntas do quiz de teoria geral do Skinner cita "Are Theories of Learning Necessary?" (1950), o artigo em que ele contesta diretamente teorias do tipo que Tolman defendia.'
+      ]
+    },
+    impacto:'A ideia do "mapa cognitivo" saiu do papel décadas depois. Em 1971, o neurocientista John O\'Keefe descreveu, no hipocampo de ratos, células que disparam conforme o animal muda de posição no espaço, as células de lugar. Em 2014, O\'Keefe dividiu o Prêmio Nobel de Fisiologia ou Medicina com May-Britt e Edvard Moser, descobridores das células de grade, por um trabalho que a própria Fundação Nobel descreveu como a base biológica de um sistema de posicionamento interno do cérebro, próxima de uma confirmação física da hipótese de Tolman. O conceito de variável interveniente também deixou herança: virou ferramenta padrão da psicologia experimental e ajudou a preparar o terreno para a "revolução cognitiva" das décadas de 1950 e 1960.'
+  },
+  perguntas:[
+  { tipo:'raciocinio',
+    enunciado:'Watson define estímulo e resposta em termos estritamente fisiológicos: raios de luz, ondas sonoras, contrações musculares, secreções glandulares. Mas, numa nota de rodapé do próprio livro, ele admite que alguém totalmente ignorante do sistema nervoso e das glândulas poderia escrever um estudo completo e preciso sobre as emoções. Tolman aponta a contradição logo no início do seu artigo. Complete: como isso é possível, se comportamento é, por definição, uma questão de ___?',
+    opcoes:['contrações musculares e secreções glandulares','sensações e percepções conscientes','reflexos condicionados','hábitos aprendidos'],
+    explicacao:'É a contradição que abre "A New Formula for Behaviorism": se behaviorismo é definido nos termos exatos da fisiologia, ninguém ignorante de fisiologia deveria conseguir escrever sobre ele. Tolman usa essa fresta para argumentar que precisa existir um behaviorismo não fisiológico, com seus próprios termos.',
+    fonte:'Tolman (1922/1966, pp. 1–2).',
+    dica:'A contradição está na própria definição física que Watson usou.' },
+  { tipo:'complete',
+    enunciado:'Tolman quer um behaviorismo que não dependa de saber o que se passa fisicamente dentro do sistema nervoso, mas que também não vire mera fisiologia. Complete o que ele propõe: uma ciência do comportamento tão real e irredutível quanto a fisiologia, mas ___.',
+    opcoes:['definida nos seus próprios termos, não nos da fisiologia','ainda assim explicada, no fundo, por reflexos condicionados','estudada exclusivamente pela introspecção treinada','reduzida, no fim, a sensações elementares'],
+    explicacao:'É a tese central do artigo de 1922: existe um nível de análise, o comportamental, que não precisa ser traduzido para nervos e músculos para ser científico, do mesmo jeito que a fisiologia não precisa ser traduzida para química.',
+    fonte:'Tolman (1922/1966, p. 3).',
+    dica:'A resposta preserva a autonomia do nível comportamental de análise.' },
+  { tipo:'contraste',
+    enunciado:'Tolman propõe quatro conceitos vagamente análogos aos da fisiologia (estímulo externo, receptor, condutor, efetor), mas pensados em termos de comportamento observável. Complete a correspondência: onde a psicologia tradicional falava em "qualidade sensorial", ele fala em ___; onde ela falava em "significado percebido", ele fala em ___.',
+    opcoes:['pista comportamental (behavior cue); objeto comportamental (behavior object)','estímulo condicionado; resposta condicionada','variável independente; variável dependente','mapa cognitivo; expectativa'],
+    explicacao:'É a troca de vocabulário que Tolman propõe no artigo de 1922: cada conceito mentalista da psicologia tradicional ganha um equivalente comportamental, definido pelo que o organismo faz, não pelo que ele "sente".',
+    fonte:'Tolman (1922/1966, pp. 4–6).',
+    dica:'Os dois termos novos têm "behavior" no nome original em inglês.' },
+  { tipo:'raciocinio',
+    enunciado:'Um camundongo aprende a se comportar diferente diante do azul e do amarelo, mas não diante do vermelho e do verde. Tolman insiste no que esse resultado permite concluir, e no que ele não permite. Complete: o experimento não diz nada sobre a consciência do animal quanto a essas cores; diz apenas que azul e amarelo produzem nele ___.',
+    opcoes:['pistas comportamentais diferentes, enquanto vermelho e verde produzem só uma','sensações agradáveis, enquanto vermelho e verde produzem desconforto','reflexos condicionados incompatíveis entre si','memórias associativas mais fortes'],
+    explicacao:'É o exemplo que Tolman usa para mostrar o que uma "pista comportamental" é e não é: um resultado assim fala da capacidade do animal de discriminar, nunca de como a cor "parece" para ele por dentro.',
+    fonte:'Tolman (1922/1966, p. 5).',
+    dica:'A pista comportamental é definida pelo que o animal faz, não pelo que ele "vê".' },
+  { tipo:'contraste',
+    enunciado:'Em "Cognitive Maps in Rats and Men", Tolman contrapõe duas imagens do que aconteceria no cérebro de um rato aprendendo um labirinto. Complete: a escola estímulo-resposta compara o cérebro a uma ___; a escola de campo, à qual ele pertence, prefere compará-lo a uma ___.',
+    opcoes:['central telefônica antiquada; sala de controle com um mapa','biblioteca de reflexos; galeria de imagens mentais','fábrica de hábitos; oficina de hipóteses','máquina de calcular; painel de instrumentos musicais'],
+    explicacao:'É a metáfora central da conferência de 1948: numa central telefônica, cada estímulo simplesmente se liga a uma resposta; numa sala de controle com mapa, os estímulos são primeiro elaborados num mapa provisório do ambiente, que só então decide qual resposta sai.',
+    fonte:'Tolman (1948/1966, pp. 243–245).',
+    dica:'Uma imagem liga fios diretamente; a outra consulta um mapa antes de decidir.' },
+  { tipo:'raciocinio',
+    enunciado:'No experimento de Blodgett, ratos passam vários dias percorrendo um labirinto sem encontrar comida no final; nesses dias, o número de erros deles quase não cai. No dia em que a comida finalmente aparece, porém, acontece algo notável. Complete: nos dias seguintes, a curva de erros ___, revelando que os ratos já haviam aprendido boa parte do labirinto antes mesmo de serem recompensados por isso.',
+    opcoes:['despenca de forma surpreendente','sobe ainda mais, por causa da novidade da comida','se mantém estável, sem grandes mudanças','volta ao nível dos primeiros dias de treino'],
+    explicacao:'É o experimento que batizou a "aprendizagem latente": o desempenho só melhora visivelmente depois que a recompensa aparece, mas a queda é rápida demais para ter sido aprendida só naquele momento, o que sugere que o mapa já estava pronto antes.',
+    fonte:'Tolman (1948/1966, pp. 247–248).',
+    dica:'O nome do fenômeno já dá a resposta: a aprendizagem estava escondida, "latente".' },
+  { tipo:'complete',
+    enunciado:'No experimento de Spence e Lippitt, ratos treinados num labirinto em Y, saciados de comida e água, corriam mesmo sem precisar da recompensa, só para voltar à gaiola com outros animais. Depois, alguns ficaram com fome e outros com sede. Complete o resultado: na primeira tentativa, os ratos com fome foram mais para o lado onde ___, e os com sede, mais para o lado onde ___.',
+    opcoes:['estava a comida; estava a água','havia mais luz; havia menos luz','ficava a gaiola de volta; ficava o início do labirinto','eles tinham corrido mais vezes; eles tinham corrido menos vezes'],
+    explicacao:'Mesmo satisfeitos durante o treino, os ratos já tinham montado um mapa de onde ficava cada coisa; a motivação, quando finalmente apareceu, só revelou um conhecimento que já estava lá.',
+    fonte:'Tolman (1948/1966, pp. 248–250).',
+    dica:'A motivação não ensina o mapa; ela só decide qual parte do mapa importa agora.' },
+  { tipo:'raciocinio',
+    enunciado:'Tolman esperava que os ratos fizessem mais "VTE" (olhar de um lado para o outro antes de escolher) quando a discriminação entre dois estímulos fosse mais difícil, como uma pessoa hesitaria mais diante de uma escolha difícil. Os dados, porém, mostraram o oposto durante a fase de aprendizagem: ratos mais espertos, e discriminações mais fáceis, produziam mais VTE, não menos. A explicação está no que falta ao rato, e não à pessoa, no início da tarefa. Complete: nós já sabemos de antemão o que estamos procurando; o rato, ao contrário, primeiro precisa descobrir ___.',
+    opcoes:['quais são as instruções da própria tarefa, isto é, que a cor importa e não o lado','onde fica a saída do labirinto','que o experimentador está observando seu comportamento','como associar qualquer estímulo a uma recompensa'],
+    explicacao:'O VTE aparece justamente quando o rato está "descobrindo as instruções", isto é, percebendo qual dimensão do estímulo importa; por isso ratos mais espertos e discriminações mais fáceis produzem mais VTE nessa fase, o oposto do que a intuição sugeriria.',
+    fonte:'Tolman (1948/1966, pp. 252–253).',
+    dica:'O rato não sabe, de saída, o que o experimentador quer que ele note.' },
+  { tipo:'complete',
+    enunciado:'No fim do texto, Tolman resume quatro condições que tendem a produzir "mapas estreitos", tanto em ratos quanto em pessoas: cérebro danificado, poucos sinais disponíveis no ambiente, excesso de repetição do mesmo caminho treinado e uma quarta. Complete: ___.',
+    opcoes:['condições fortemente motivadoras ou frustrantes demais','excesso de descanso entre uma tentativa e outra','estímulos visuais complexos demais para o organismo','grupos sociais muito numerosos ao redor do indivíduo'],
+    explicacao:'É a lista com que Tolman fecha a parte experimental da conferência, antes de aplicá-la a fenômenos humanos como regressão, fixação e preconceito.',
+    fonte:'Tolman (1948/1966, pp. 260–261).',
+    dica:'A quarta condição é emocional, não sensorial nem motora.' },
+  { tipo:'raciocinio',
+    enunciado:'Tolman interpreta a "regressão" descrita pelos clínicos, alguém que, diante de um problema difícil demais, volta a se comportar de um jeito mais infantil, em termos de mapas cognitivos, não como mistério de personalidade. Complete sua explicação: a pessoa volta a um mapa mais antigo e mais estreito porque ___.',
+    opcoes:['esse mapa antigo foi gravado com força demais, por frustração ou motivação excessiva na infância','todo ser humano guarda, intacto, um mapa infantil que nunca desaparece','o cérebro perde, com a idade, a capacidade de formar mapas novos','a pessoa escolhe deliberadamente parecer mais jovem'],
+    explicacao:'Regredir, para Tolman, é recorrer a um mapa antigo porque ele foi impresso com força demais quando ainda era o único disponível; a situação presente, frustrante, empurra a pessoa de volta a ele.',
+    fonte:'Tolman (1948/1966, pp. 261–262).',
+    dica:'O mapa antigo não desapareceu; ele só ficou gravado fundo demais.' },
+  { tipo:'complete',
+    enunciado:'Tolman nota que a fixação já foi demonstrada em ratos: se um rato foi motivado com força demais durante o treino original, ele tem muita dificuldade para reaprender quando o caminho certo muda. E, mesmo depois de reaprender, um choque elétrico faz esse rato ___.',
+    opcoes:['regredir, escolhendo de novo o caminho antigo','aprender o novo caminho ainda mais depressa','parar de explorar o labirinto por completo','generalizar a resposta para outros labirintos'],
+    explicacao:'Fixação e regressão andam juntas: o choque, uma nova frustração, empurra o rato de volta ao mapa antigo e fixado, do mesmo jeito que a crise empurra a mulher do exemplo clínico de volta a um comportamento mais jovem.',
+    fonte:'Tolman (1948/1966, p. 263).',
+    dica:'É o mesmo mecanismo da pergunta anterior, agora demonstrado em laboratório.' },
+  { tipo:'raciocinio',
+    enunciado:'Tolman também explica o "deslocamento de agressão para grupos externos" em termos de mapas cognitivos. A pessoa frustrada aprende que não deve descontar a raiva nos membros do próprio grupo. Complete o raciocínio: ela desloca a agressão para um grupo de fora porque, num mapa cognitivo estreito demais, ela ___.',
+    opcoes:['deixa de distinguir o verdadeiro local da causa da própria frustração','identifica com precisão quem causou o problema, mas evita enfrentá-lo','aprende, desde cedo, a odiar grupos diferentes do seu','perde por completo a capacidade de sentir frustração'],
+    explicacao:'Para Tolman, o preconceito contra um grupo de fora costuma ser um mapa que perdeu o rastro da causa real da frustração e a substituiu por um alvo mais acessível, ainda que errado.',
+    fonte:'Tolman (1948/1966, p. 263).',
+    dica:'O grupo de fora quase nunca é a verdadeira origem do problema.' },
+  { tipo:'complete',
+    enunciado:'Tolman define behavior act como o menor tipo de unidade comportamental observável, coisas como "farejar", "sentar", "arranhar", "andar", "falar". Ele afirma algo forte sobre o que esses atos revelam, mesmo quando o organismo é outro ser humano capaz de introspeccionar. Complete: são eles, e não o relato introspectivo, que nos dizem tudo o que sabemos sobre a ___ desse organismo.',
+    opcoes:['"mentalidade"','genética','fisiologia interna','idade biológica'],
+    explicacao:'Tolman chega a tratar a própria introspecção como só mais um behavior act: o relato verbal também é comportamento, não uma janela especial para dentro da mente.',
+    fonte:'Tolman (1922/1966, p. 6).',
+    dica:'Mesmo quando o organismo consegue falar sobre si mesmo, o que conta é o que ele faz.' },
+  { tipo:'raciocinio',
+    enunciado:'Tolman monta um pequeno experimento mental sobre cores: mesmo que eu introspeccione e relate minha experiência de cor para você, o que você aprende com isso não é como as cores realmente "parecem" para mim. Complete o que, segundo ele, de fato atravessa de uma pessoa para outra: você só descobre se eu vou ___.',
+    opcoes:['me comportar diante das cores do mesmo jeito que você','sentir prazer ou desprazer ao vê-las','lembrar dessas cores no futuro','conseguir nomeá-las corretamente em qualquer idioma'],
+    explicacao:'É o argumento epistemológico que sustenta toda a proposta de 1922: a experiência privada de cada um nunca "atravessa" para o outro; o que atravessa é sempre comportamento, incluindo o comportamento de nomear e apontar.',
+    fonte:'Tolman (1922/1966, p. 4).',
+    dica:'A palavra "comportar-se" já está dentro da resposta certa.' },
+  { tipo:'contraste',
+    enunciado:'Tolman lista três razões para a ascensão do behaviorismo: a introspecção mostrando-se inadequada desde os experimentos de Ebbinghaus sobre memória, o método sendo trabalhoso e pouco produtivo, e uma terceira, de natureza lógica. Complete essa terceira razão: como construir uma ciência sobre elementos que, por definição, são ___?',
+    opcoes:['privados e incomunicáveis','mensuráveis apenas em laboratório','exclusivos dos seres humanos','invariáveis de um indivíduo para outro'],
+    explicacao:'A objeção lógica é a mais forte das três para Tolman: se o objeto de estudo é, por definição, privado a cada indivíduo, nenhuma ciência pode se apoiar nele do mesmo jeito que se apoia em dados públicos e verificáveis.',
+    fonte:'Tolman (1922/1966, p. 1).',
+    dica:'É um problema de definição, não de falta de técnica.' },
+  { tipo:'raciocinio',
+    enunciado:'Tolman lista quatro condições que favorecem mapas cognitivos estreitos: cérebro danificado, poucos sinais no ambiente, excesso de repetição do mesmo caminho e motivação ou frustração fortes demais. Ele não lista explicitamente o oposto, mas o raciocínio do texto inteiro aponta na mesma direção. Complete o que, por essa lógica, favoreceria mapas amplos: um ambiente ___, sem motivação nem frustração excessivas.',
+    opcoes:['rico em sinais, que permita variar de caminho e explorar livremente','silencioso, com o mínimo possível de estímulos','que force a repetição de um único percurso até a automatização','que elimine toda fonte de motivação do organismo'],
+    explicacao:'Basta inverter as quatro condições que produzem mapas estreitos para chegar ao retrato de um ambiente que produziria mapas amplos: rico, variado, explorável, sem pressão emocional excessiva.',
+    fonte:'Tolman (1948/1966, pp. 260–261, por inferência).',
+    dica:'Inverta, um por um, os quatro itens da lista anterior.' },
+  { tipo:'complete',
+    enunciado:'Tolman dá um nome ao comportamento de um rato que, diante de duas alternativas num labirinto, olha repetidas vezes de um lado para o outro antes de finalmente escolher um caminho. Complete o nome que ele dá a esse comportamento de hesitação: "trial and error" ___.',
+    opcoes:['vicário (vicarious trial and error, ou VTE)','invertido','condicionado','latente'],
+    explicacao:'VTE é o nome que Tolman dá a essa espécie de tentativa e erro feita "por procuração", com o olhar, antes que o corpo se comprometa com uma escolha.',
+    fonte:'Tolman (1948/1966, pp. 250–252).',
+    dica:'É a sigla que dá nome a boa parte da segunda metade do texto.' },
+  { tipo:'raciocinio',
+    enunciado:'Para a escola de campo, à qual Tolman pertence, os estímulos que chegam ao cérebro do rato não se ligam direto às respostas de saída, como fios num painel simples. Complete o que acontece no meio do caminho, segundo essa visão: os estímulos são primeiro elaborados numa espécie de ___, que só então determina qual resposta, se alguma, o animal vai finalmente liberar.',
+    opcoes:['mapa tentativo e provisório do ambiente','lista fixa de reflexos condicionados','banco de hábitos já consolidados','registro de todas as recompensas recebidas até ali'],
+    explicacao:'É o núcleo da proposta de 1948: entre o estímulo e a resposta existe um processamento intermediário, um mapa provisório, e é esse mapa, não o estímulo isolado, que decide o comportamento final.',
+    fonte:'Tolman (1948/1966, pp. 244–245).',
+    dica:'O mapa é "tentativo": pode mudar conforme chegam novos sinais.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'hull-principles': {
+  autor:'hull', tipo:'livro', categoria:'Sistema',
+  titulo:'Principles of Behavior', ano:1943, edicao:'1ª ed.',
+  subtitulo:'Complete os postulados de Hull, um por um, do robô à competição de respostas',
+  rotuloCartucho:'LIVRO 1943',
+  rotuloAbertura:'Livro de Clark L. Hull · 1943',
+  arte:'img/hull-mesa.png',
+  arteAlt:'Retrato pintado de Clark L. Hull, sentado à mesa com um livro aberto, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Hull, C. L. (1943). <i>Principles of behavior: An introduction to behavior theory</i>. Appleton-Century.',
+  leituraInicial:'É o livro mais técnico do elenco: Hull escreve como um físico, com postulados numerados e fórmulas matemáticas ao lado de cada um. Não precisa entender a matemática para acompanhar o quiz. Vale ler o capítulo I (pp. 1–15), onde ele explica que tipo de ciência está tentando construir, e depois folhear os dezesseis postulados formais, espalhados dos capítulos III a XVIII.',
+  intro:'Hull constrói a teoria dele como quem empilha blocos: cada postulado novo depende dos anteriores, e cada um tenta resolver um problema que o anterior deixou em aberto. As perguntas aqui pedem que você complete essa construção, postulado por postulado, sem citar número ou fórmula de cor.',
+  conquistas:{ aprovado:'Leitor(a) de Principles of Behavior', perfeito:'Dezesseis postulados' },
+  perguntas:[
+  { tipo:'complete',
+    enunciado:'Hull abre o livro comparando o que ele quer fazer pela psicologia ao método já consolidado nas ciências físicas: um pequeno conjunto de definições e postulados, dos quais fenômenos observados podem ser deduzidos como teoremas. Complete o que ele recusa como método científico de verdade: generalizações soltas, tiradas caso a caso da observação, sem nunca se organizarem num sistema de ___.',
+    opcoes:['postulados amplos, testáveis e derivados uns dos outros','experimentos de laboratório, replicáveis por terceiros','relatos clínicos, reunidos por especialidade','leis estatísticas, obtidas por correlação entre variáveis'],
+    explicacao:'É a tese do capítulo I: subsumir um caso novo sob uma generalização empírica já feita não é, para Hull, uma explicação teórica de verdade. Teoria de verdade parte de postulados, dos quais teoremas particulares podem ser deduzidos e depois testados.',
+    fonte:'Hull (1943, cap. I, pp. 1–4).',
+    dica:'Pense no método de Euclides ou de Newton, não no de um catálogo de casos.' },
+  { tipo:'contraste',
+    enunciado:'Hull recomenda um exercício mental para escapar do erro de explicar o comportamento por analogia com a própria experiência: imaginar o organismo como um ___, construído com materiais bem diferentes dos nossos, e perguntar que problemas de engenharia seriam precisos resolver para ele se manter vivo sozinho.',
+    opcoes:['robô completamente autossustentável','espelho da mente humana','computador programado por um engenheiro','animal domesticado e obediente'],
+    explicacao:'A imagem do robô autossustentável aparece bem cedo no livro como um antídoto contra o hábito de imaginar "o que eu faria se fosse um rato": ao pensar numa máquina feita de outro material, some a tentação de emprestar a ela a própria experiência subjetiva.',
+    fonte:'Hull (1943, p. 27).',
+    dica:'A palavra-chave descreve uma máquina que cuida de si mesma.' },
+  { tipo:'raciocinio',
+    enunciado:'Hull usa o robô para criticar um hábito comum entre teóricos: dar nome a uma função do comportamento e depois tratar esse nome como se fosse uma coisa que explica a própria função, o erro que ele chama de reificação. Ele ilustra com a tentação de colocar dentro do robô algo como uma "entelequia" ou uma "alma". Complete por que essa saída não resolve nada: porque ainda restaria o problema de ___.',
+    opcoes:['projetar a própria entelequia, o mesmo problema original, apenas adiado','testar experimentalmente se o robô tem consciência','ensinar a entelequia a se comportar como um humano','provar que entelequias não existem na natureza'],
+    explicacao:'Colocar uma entelequia dentro do robô não elimina o problema de explicar o comportamento; apenas o empurra para dentro da entelequia, que também precisaria, ela mesma, de um projeto e de uma explicação.',
+    fonte:'Hull (1943, pp. 27–28).',
+    dica:'Nomear algo não é o mesmo que explicá-lo.' },
+  { tipo:'complete',
+    enunciado:'O primeiro postulado formal do livro descreve o que acontece quando um estímulo atinge um receptor: nasce um impulso nervoso aferente que sobe rápido a um máximo e depois cai devagar. Complete o que Hull acrescenta sobre o fim do estímulo: mesmo depois que ele para de agir sobre o receptor, o impulso nervoso ___.',
+    opcoes:['continua ativo por alguns segundos, diminuindo aos poucos até zero','cessa imediatamente, sem deixar nenhum traço','se transforma automaticamente num hábito permanente','dispara um segundo impulso, de intensidade maior que o primeiro'],
+    explicacao:'Esse traço residual do estímulo, ativo por alguns segundos depois que ele já parou, é o que mais tarde permite explicar aprendizagens em que resposta e reforço não são estritamente simultâneos.',
+    fonte:'Hull (1943, Postulado 1, p. 47).',
+    dica:'O impulso sobrevive um pouco ao estímulo que o gerou.' },
+  { tipo:'raciocinio',
+    enunciado:'O segundo postulado nega que impulsos nervosos aferentes diferentes viajem por canais independentes até o cérebro. Complete o que Hull propõe no lugar disso: todos os impulsos aferentes ativos num mesmo instante ___, de modo que cada um sai um pouco diferente do que entrou.',
+    opcoes:['interagem entre si, misturando-se parcialmente uns com os outros','competem entre si até que só um sobreviva','se cancelam mutuamente, anulando o efeito de todos','permanecem isolados, sem nenhuma influência mútua'],
+    explicacao:'Hull nota que o próprio Pavlov já havia descrito algo parecido ao falar em fusão de excitações corticais; a diferença é que Hull eleva essa interação a postulado formal do sistema inteiro.',
+    fonte:'Hull (1943, Postulado 2, p. 47).',
+    dica:'Nenhum impulso viaja sozinho até o fim.' },
+  { tipo:'complete',
+    enunciado:'O terceiro postulado trata do repertório com que um organismo já nasce. Complete: diante de um estímulo e um estado de necessidade, ele já possui de saída uma hierarquia de respostas inatas que, tomadas em conjunto, têm mais chance de ___ do que uma resposta escolhida ao acaso.',
+    opcoes:['encerrar a necessidade em curso','produzir prazer imediato','chamar a atenção de outros membros da espécie','conservar energia metabólica'],
+    explicacao:'É o ponto de partida herdado, antes de qualquer aprendizagem: um leque de respostas inatas que já favorece, estatisticamente, a sobrevivência do organismo diante de cada tipo de necessidade.',
+    fonte:'Hull (1943, Postulado 3, p. 66).',
+    dica:'Pense em reflexos e respostas de espécie, ainda sem nenhum aprendizado.' },
+  { tipo:'complete',
+    enunciado:'Logo depois do terceiro postulado, Hull comenta o papel da evolução biológica no próprio sistema dele. Ele admite que pensar em termos adaptativos ajuda a escolher quais postulados propor, mas faz uma ressalva. Complete: uma vez escolhido, um postulado precisa se sustentar sozinho, e nenhuma dose de plausibilidade adaptativa vai salvá-lo se ele ___.',
+    opcoes:['não conseguir gerar deduções de acordo com os fenômenos observados','parecer contraintuitivo à primeira vista','for difícil de expressar em fórmula matemática','contradizer uma teoria mais antiga e consagrada'],
+    explicacao:'A evolução serve de bússola na busca por postulados plausíveis, mas quem decide se um postulado fica ou sai é sempre o teste empírico contra os dados, não o quanto ele soa razoável do ponto de vista adaptativo.',
+    fonte:'Hull (1943, p. 66).',
+    dica:'A palavra que falta descreve o próprio teste empírico.' },
+  { tipo:'raciocinio',
+    enunciado:'O quarto postulado é o núcleo da teoria da aprendizagem de Hull. Ele exige que uma resposta e um estímulo ocorram em contiguidade próxima, e que isso esteja associado à diminuição de uma necessidade. Complete o que se acumula, reforço após reforço: um incremento na tendência daquele impulso evocar aquela reação depois, formando uma ___ que cresce como função do número de reforços.',
+    opcoes:['força de hábito combinada','expectativa cognitiva do resultado','memória consciente do episódio de reforço','sensação de prazer associada ao estímulo'],
+    explicacao:'É o postulado que define a força de hábito (sHr) como grandeza central do sistema: ela cresce a cada reforço, até um limite superior que depende da magnitude da necessidade reduzida e do atraso entre resposta e reforço.',
+    fonte:'Hull (1943, Postulado 4, p. 178).',
+    dica:'É a variável que dá nome ao conceito mais citado do livro.' },
+  { tipo:'contraste',
+    enunciado:'O quinto postulado explica por que um organismo reage a um estímulo parecido, mas não idêntico, ao que foi reforçado. Complete: a força efetiva do hábito nesse novo estímulo é tanto maior quanto ___ a diferença entre ele e o estímulo original de reforço, medida em unidades de limiar de discriminação.',
+    opcoes:['menor for','maior for','mais antiga for','mais consciente for'],
+    explicacao:'É o gradiente de generalização: a força do hábito se espalha para estímulos vizinhos ao original, mas cai à medida que a diferença entre eles aumenta.',
+    fonte:'Hull (1943, Postulado 5, pp. 178–180).',
+    dica:'Quanto mais parecido, mais força; quanto mais diferente, menos.' },
+  { tipo:'raciocinio',
+    enunciado:'Os postulados sexto e sétimo introduzem a motivação na equação. Primeiro, cada impulso (drive) tem um estímulo característico associado a ele. Depois, Hull explica como a força de hábito se transforma em ação de fato. Complete: a força de hábito só vira potencial de reação quando é "sensibilizada" pelos impulsos ativos no organismo, resultado que se obtém ___.',
+    opcoes:['multiplicando uma função crescente da força de hábito por uma função crescente do impulso','somando a força de hábito ao impulso, sem multiplicar','subtraindo o impulso da força de hábito já acumulada','dividindo a força de hábito pela intensidade do impulso'],
+    explicacao:'É a combinação multiplicativa mais citada do sistema: hábito sem impulso nenhum não produz ação, e impulso sem nenhum hábito correspondente também não. Os dois precisam estar presentes ao mesmo tempo para haver potencial de reação.',
+    fonte:'Hull (1943, Postulados 6 e 7, pp. 253–254).',
+    dica:'Zero de um lado zera o resultado inteiro, o que só acontece na multiplicação.' },
+  { tipo:'complete',
+    enunciado:'O oitavo postulado explica por que um organismo se cansa de repetir a mesma resposta. Toda vez que uma reação é evocada, ela gera, como subproduto, um estado que inibe aquela mesma reação. Complete: essa inibição reativa cresce com o número de repetições e com o esforço da resposta, mas ___.',
+    opcoes:['se dissipa sozinha com o passar do tempo, como uma fadiga que passa com o descanso','permanece constante para sempre, sem nunca diminuir','só desaparece se um novo reforço for aplicado','se transfere automaticamente para as outras respostas do organismo'],
+    explicacao:'A inibição reativa funciona como um modelo de fadiga: acumula-se com o uso e se dissipa espontaneamente com o descanso, independente de qualquer reforço novo.',
+    fonte:'Hull (1943, Postulado 8, cap. XV, p. 258 e ss.).',
+    dica:'Pense em cansaço muscular, não em esquecimento.' },
+  { tipo:'raciocinio',
+    enunciado:'O nono postulado dá um passo além da fadiga simples. Estímulos associados ao momento em que uma resposta parou de ocorrer passam a carregar, eles mesmos, uma parte dessa inibição. Complete: essa inibição condicionada se soma à inibição reativa do mesmo jeito que ___.',
+    opcoes:['as tendências positivas de hábito se somam entre si','os impulsos motivacionais se cancelam mutuamente','as memórias conscientes se substituem umas às outras','os estímulos generalizados se anulam ao se sobrepor'],
+    explicacao:'Hull trata a inibição condicionada como um espelho simétrico do hábito positivo: ela se soma fisiologicamente à inibição reativa exatamente pela mesma regra de soma usada para as tendências positivas de hábito.',
+    fonte:'Hull (1943, Postulado 9, cap. XV.)',
+    dica:'A regra de soma é a mesma; só o sinal, positivo ou negativo, muda.' },
+  { tipo:'complete',
+    enunciado:'O décimo postulado introduz o acaso dentro de um sistema, até ali, quase inteiramente determinístico. Associado a cada potencial de reação existe uma ___ que varia de instante a instante segundo a lei do acaso, o que explica por que o mesmo organismo, na mesma situação, às vezes responde e às vezes não.',
+    opcoes:['potencialidade inibitória oscilante','memória de curto prazo','expectativa cognitiva variável','sensação subjetiva de esforço'],
+    explicacao:'É a oscilação comportamental: mesmo mantendo tudo o mais constante, esse componente aleatório garante que a resposta de um organismo nunca seja perfeitamente previsível de uma tentativa para a outra.',
+    fonte:'Hull (1943, Postulado 10, cap. XVII, pp. 304–321).',
+    dica:'É a fonte interna de imprevisibilidade do sistema, não algo externo ao organismo.' },
+  { tipo:'raciocinio',
+    enunciado:'O décimo primeiro postulado estabelece uma condição mínima para que qualquer coisa aconteça. Complete: por maior que seja o potencial de reação associado a um estímulo, a resposta só é de fato evocada se esse potencial ultrapassar ___.',
+    opcoes:['o limiar de reação daquele organismo','a força de hábito de uma resposta concorrente','o número mínimo de reforços já recebidos','a duração média de uma tentativa'],
+    explicacao:'É o piso do sistema: potencial de reação abaixo do limiar não produz resposta nenhuma, por maior que seja a força de hábito ou o impulso envolvidos.',
+    fonte:'Hull (1943, Postulado 11, cap. XVIII, p. 322 e ss.).',
+    dica:'Todo sistema com limiar exige superar um patamar mínimo antes de disparar.' },
+  { tipo:'complete',
+    enunciado:'O último dos dezesseis postulados resolve o que acontece quando duas respostas incompatíveis têm potencial de reação ativo ao mesmo tempo no mesmo organismo. Complete: só é de fato evocada a reação cujo ___.',
+    opcoes:['potencial de reação efetivo naquele instante for o maior entre as concorrentes','hábito for o mais antigo, independente da força atual','reforço original tiver sido o mais intenso','estímulo for percebido conscientemente primeiro'],
+    explicacao:'É uma regra de "o vencedor leva tudo": entre respostas incompatíveis, vence sempre a que tiver, naquele instante específico, o maior potencial de reação efetivo, e as outras simplesmente não ocorrem.',
+    fonte:'Hull (1943, Postulado 16, pp. 344–347).',
+    dica:'Só uma resposta pode vencer a disputa a cada instante.' },
+  { tipo:'contraste',
+    enunciado:'Hull abre o capítulo II descrevendo uma relação dinâmica entre organismo e ambiente, em que os dois lados agem um sobre o outro. Complete o que torna essa interação previsível, segundo ele: o fato de ambos, organismo e ambiente, fazerem parte da natureza e, por isso, se comportarem segundo ___.',
+    opcoes:['leis naturais conhecíveis, iguais em princípio às leis da física','intenções e propósitos individuais de cada organismo','regras sociais estabelecidas por convenção','acordos implícitos entre indivíduos da mesma espécie'],
+    explicacao:'A previsibilidade da interação organismo-ambiente não vem de nenhuma intenção especial; vem do fato de os dois lados pertencerem à mesma natureza física, sujeita às mesmas leis conhecíveis.',
+    fonte:'Hull (1943, cap. II, pp. 16–17).',
+    dica:'A resposta certa não menciona intenção nem consciência de nenhum dos lados.' },
+  { tipo:'raciocinio',
+    enunciado:'No capítulo I, Hull distingue duas atividades intelectuais que costumam ser confundidas: a teoria científica genuína, que parte de postulados a serem testados contra os fatos, e uma atividade mais antiga, baseada em princípios tidos como evidentes por si mesmos, no estilo da geometria clássica. Complete o nome que ele dá a essa segunda atividade: ___.',
+    opcoes:['argumentação, a partir de axiomas autoevidentes','experimentação, sob condições controladas','observação naturalística, sem manipulação','indução estatística, a partir de correlações'],
+    explicacao:'Hull chega a imaginar Newton como um "Robinson Crusoé científico": alguém que, isolado, chegaria às mesmas conclusões só por argumentação lógica a partir de axiomas. É exatamente esse método que ele quer distinguir da teoria empírica que está propondo.',
+    fonte:'Hull (1943, cap. I, pp. 8–10).',
+    dica:'Pense em geometria euclidiana, deduzida de axiomas, sem precisar de experimento.' },
+  { tipo:'complete',
+    enunciado:'No capítulo final, Hull define formalmente um termo que já vinha usando desde o início do livro: "mecanismo". Complete a definição: um mecanismo é um agregado físico cujo comportamento ocorre sob condições identificáveis, de acordo com ___.',
+    opcoes:['regras ou leis definidas e enunciáveis','intenções e propósitos próprios','uma consciência rudimentar, ainda que limitada','instruções programadas por um projetista externo'],
+    explicacao:'A definição fecha o círculo aberto pelo robô do capítulo II: um organismo, do ponto de vista da evolução biológica, é um mecanismo mais ou menos bem-sucedido em se manter vivo, sem que isso exija nenhum agente interno guiando o processo.',
+    fonte:'Hull (1943, cap. XX, p. 384.)',
+    dica:'É a mesma definição que já estava implícita no exercício do robô.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'rachlin-teleologico': {
+  autor:'rachlin', tipo:'livro', categoria:'Capítulo + réplica',
+  titulo:'Behaviorismo teleológico', ano:2021, edicao:'caps. 1–3',
+  subtitulo:'Instrução programada: leia o quadro, complete com calma',
+  rotuloCartucho:'CAP. 1–3',
+  rotuloAbertura:'Rachlin em Zilio & Carrara (2021) · caps. 1–3',
+  arte:'img/rachlin-retrato.png',
+  arteAlt:'Howard Rachlin sorrindo, de camisa vinho, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Rachlin, H. (2021). Teleological behaviorism: Origins and present status. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 3–19). Springer. Réplica de Lazzeri, F. (pp. 21–32); resposta de Rachlin (pp. 33–41).',
+  leituraInicial:'Este quiz segue o formato de instrução programada: cada quadro ensina um pedaço pequeno da ideia e pede que você complete uma lacuna quase óbvia, para aprender com o mínimo de erro possível. Não é um teste de memória, é um percurso guiado pelos três capítulos da Parte I do livro: o texto de Rachlin, o comentário de Filipe Lazzeri e a resposta de Rachlin a ele.',
+  intro:'Como pouca gente no Brasil tem acesso fácil a este livro, cada quadro aqui ensina antes de perguntar. Leia o texto inteiro do quadro; a resposta certa quase sempre já apareceu nele, só de outro jeito.',
+  conquistas:{ aprovado:'Leitor(a) do behaviorismo teleológico', perfeito:'Causa final, sem erro' },
+  perguntas:[
+  { tipo:'quadro',
+    enunciado:'Rachlin chama sua posição de behaviorismo teleológico (TEB). Para o TEB, a mente não é um conjunto de eventos internos escondidos; a mente É o próprio padrão de comportamento manifesto (overt), observável em princípio por qualquer outra pessoa. Complete: para o TEB, a mente se identifica com o ___.',
+    opcoes:['padrão de comportamento manifesto','conjunto de processos neurais internos','fluxo de pensamentos privados','conjunto de emoções sentidas por dentro'],
+    explicacao:'É a definição com que Rachlin abre o capítulo: uma "teoria da identidade comportamental da mente". Mente e comportamento manifesto não são duas coisas ligadas por uma causa; para o TEB, são a mesma coisa.',
+    fonte:'Rachlin (2021, cap. 1, p. 4).',
+    dica:'A resposta certa repete quase a mesma frase do quadro.' },
+  { tipo:'quadro',
+    enunciado:'Rachlin recorre a Aristóteles para separar dois tipos de pergunta "por quê". Uma causa eficiente responde "como" algo aconteceu (o mecanismo). Uma causa final responde "por que" algo aconteceu (o propósito, o "para quê"). Para o TEB, a mente pode ser uma causa final do comportamento, mas nunca uma causa eficiente. Complete: a mente responde à pergunta ___, não à pergunta "como".',
+    opcoes:['"por quê" (o propósito do ato)','"quando" (o momento do ato)','"onde" (o lugar do ato)','"quem" (o autor do ato)'],
+    explicacao:'A distinção entre causa eficiente e causa final é o alicerce do TEB: ela permite falar em "propósito" sem recorrer a nenhum mecanismo mental interno.',
+    fonte:'Rachlin (2021, cap. 1, p. 5).',
+    dica:'O quadro já disse: causa final responde a essa pergunta específica.' },
+  { tipo:'quadro',
+    enunciado:'Rachlin distingue causas finais estreitas de causas finais amplas. Uma causa final estreita é o mesmo que reforço: um ato de valor mais alto (comer a comida) explica por que ocorreu um ato de valor mais baixo (pressionar a barra). Complete: a causa final estreita corresponde, na linguagem já conhecida da análise do comportamento, ao conceito de ___.',
+    opcoes:['reforço','punição','extinção','discriminação'],
+    explicacao:'Rachlin faz questão de mostrar que seu vocabulário não é totalmente estranho ao behaviorismo tradicional: causa final estreita é só um novo nome para reforço.',
+    fonte:'Rachlin (2021, cap. 1, p. 8).',
+    dica:'É o conceito mais básico da análise do comportamento, o mesmo de sempre.' },
+  { tipo:'quadro',
+    enunciado:'Já a causa final ampla descreve a relação entre um padrão de atividade abstrato e estendido no tempo e os atos particulares que compõem esse padrão. O exemplo de Rachlin: dançar é a causa final ampla de dar os passos da dança. Pergunte "por que você está dando esses passos?" e a resposta aponta para o padrão inteiro, não para o passo isolado. Complete: a causa final ampla explica um ato apontando para o ___ do qual ele faz parte.',
+    opcoes:['padrão de atividade mais amplo, estendido no tempo','reflexo condicionado que o precedeu','estado emocional momentâneo do agente','estímulo discriminativo mais próximo'],
+    explicacao:'"Wide" (ampla) é a palavra-chave: o padrão inteiro, como dançar, é que explica cada passo individual, não o contrário.',
+    fonte:'Rachlin (2021, cap. 1, p. 8).',
+    dica:'Pense no exemplo da dança: o padrão inteiro explica o passo, não o passo isolado.' },
+  { tipo:'quadro',
+    enunciado:'Rachlin aplica a causa final ampla ao autocontrole. Em vez de descrever o autocontrole como uma força de vontade interna vencendo uma tentação externa, ele o descreve como um conflito entre um padrão comportamental amplo e saudável (por exemplo, "ter uma alimentação equilibrada") e um ato particular e impulsivo (comer o doce agora). Complete: para o TEB, autocontrole é o conflito entre um ato impulsivo e um ___.',
+    opcoes:['padrão comportamental mais amplo e saudável','desejo inconsciente reprimido','traço fixo de personalidade','instinto herdado geneticamente'],
+    explicacao:'Essa é uma das aplicações mais citadas do TEB: trocar "vontade contra tentação" (dois agentes internos) por "padrão amplo contra ato particular" (só comportamento, em duas escalas de tempo diferentes).',
+    fonte:'Rachlin (2021, cap. 1, p. 9).',
+    dica:'A explicação troca duas forças internas por dois comportamentos, um maior e um menor.' },
+  { tipo:'quadro',
+    enunciado:'Rachlin lembra que os antigos gregos, sobretudo Aristóteles, já pensavam nas "almas" como modos de viver, como padrões de comportamento manifesto dos organismos. Ele sugere que Skinner, sem usar essa palavra, também propôs uma nova forma de conceber a alma. Complete: para Rachlin, a proposta de Skinner é, no fundo, uma forma nova de pensar sobre um problema ___.',
+    opcoes:['muito antigo, já tratado pelos gregos','exclusivo da psicologia do século XX','impossível de formular sem neurociência','estranho a qualquer tradição filosófica'],
+    explicacao:'Rachlin gosta de mostrar que o problema mente-corpo, que o behaviorismo tenta resolver, já era tema de reflexão bem antes da psicologia existir como disciplina.',
+    fonte:'Rachlin (2021, cap. 1, p. 3).',
+    dica:'A resposta liga o problema a uma tradição bem mais antiga que Skinner.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 2, o comentarista Filipe Lazzeri situa o behaviorismo teleológico dentro de uma linhagem maior: ele herda pressupostos do behaviorismo radical de Skinner, como a ideia de que o comportamento é um fenômeno regido por leis e de que ações devem ser entendidas em termos de comportamento operante. Complete: para Lazzeri, o TEB tenta aumentar o poder do behaviorismo radical de resolver problemas, combinando uma visão teleológica e molar do operante com uma explicação das categorias psicológicas (emoções, pensamentos) em termos de ___.',
+    opcoes:['padrões públicos de comportamento operante','estados internos inferidos por introspecção','processos cerebrais medidos por neuroimagem','relatos verbais tomados ao pé da letra'],
+    explicacao:'Lazzeri não trata o TEB como um behaviorismo rival de Skinner, mas como uma tentativa de reforçar o projeto radical, cobrindo categorias psicológicas (como emoções) sem sair do vocabulário do comportamento observável.',
+    fonte:'Lazzeri (2021, cap. 2, p. 21).',
+    dica:'A resposta certa continua dentro do vocabulário behaviorista: nada de estados internos.' },
+  { tipo:'quadro',
+    enunciado:'Lazzeri não aceita passivamente o TEB: ele questiona os "contornos" do comportamento operante e o lugar das categorias psicológicas comuns na análise do comportamento, e discute o assunto ao longo de três pontos específicos do capítulo. Complete: a discordância de Lazzeri não é sobre se o comportamento é legal (regido por leis); é sobre ___.',
+    opcoes:['onde exatamente traçar os limites do operante e das categorias psicológicas','se o método experimental deve ou não ser usado','se Skinner deveria ser considerado um behaviorista','se emoções realmente existem'],
+    explicacao:'Lazzeri concorda com o pano de fundo radical de Rachlin; a disputa é sobre detalhes de fronteira dentro desse mesmo pano de fundo, não sobre os fundamentos.',
+    fonte:'Lazzeri (2021, cap. 2, pp. 21–22).',
+    dica:'O quadro já descartou várias opções: acordo no geral, discordância em detalhes.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 3, ao responder a Lazzeri, Rachlin conta que revisitou o livro de 1938 de Skinner, The Behavior of Organisms, e nota que um conceito daquele livro caiu em desuso (a "reserva reflexa"), mas outro princípio geral resistiu ao tempo: a psicologia como o estudo do organismo como um todo. Complete: Rachlin usa esse relato para argumentar que o TEB não é uma ruptura com Skinner, e sim uma forma de levar adiante essa ideia de estudar o organismo ___.',
+    opcoes:['como um todo, e não em pedaços separados','apenas em condições de laboratório controladas','somente através de seus reflexos herdados','unicamente pelos relatos verbais que ele produz'],
+    explicacao:'Rachlin recorre à própria autoridade de Skinner para defender o TEB: a ideia de "organismo como um todo" já estava lá desde 1938, e é exatamente essa ideia que sustenta a causa final ampla.',
+    fonte:'Rachlin (2021, cap. 3, pp. 33–34).',
+    dica:'É a mesma frase, quase literal, que abre a resposta de Rachlin.' },
+  { tipo:'quadro',
+    enunciado:'Rachlin observa que Skinner, mesmo tendo se formado em psicologia, teve como principal orientador de tese o biólogo W. J. Crozier, estudioso de tropismos em mamíferos. Complete o que essa origem sugere, segundo Rachlin: que a formação de Skinner já vinha de uma tradição interessada no comportamento do organismo ___, e não em processos isolados dentro dele.',
+    opcoes:['inteiro, em sua relação com o ambiente','apenas em nível celular','apenas em nível verbal','apenas em nível emocional'],
+    explicacao:'Rachlin usa esse detalhe biográfico para reforçar seu argumento histórico: a ênfase no organismo inteiro não é uma invenção do TEB, vem de longe na própria formação de Skinner.',
+    fonte:'Rachlin (2021, cap. 3, p. 34).',
+    dica:'O que interessa aqui é a escala: o organismo inteiro, não uma parte dele.' },
+  { tipo:'quadro',
+    enunciado:'Nesse mesmo capítulo, Rachlin cita Skinner tratando termos "subjetivos", como "meu dente dói", como respostas verbais que dependem, em parte, de um estado de coisas ao qual só quem fala tem acesso direto: um estímulo privado. Complete: mesmo tratando de estímulos privados, Skinner continua exigindo que a análise seja feita em termos de ___, e não de introspecção sobre um conteúdo mental.',
+    opcoes:['respostas verbais observáveis e suas condições de controle','experiências subjetivas relatadas em primeira pessoa','processos neurais medidos em laboratório','sensações comparadas entre diferentes indivíduos'],
+    explicacao:'Mesmo diante de eventos privados, o método continua behaviorista: o que se analisa é a resposta verbal e o histórico que a colocou sob controle daquele estímulo, não um "olhar para dentro" do falante.',
+    fonte:'Rachlin (2021, cap. 3, p. 35).',
+    dica:'Mesmo falando de algo privado, a análise continua sendo sobre comportamento, não sobre introspecção.' },
+  { tipo:'quadro',
+    enunciado:'Depois de percorrer os três capítulos da Parte I, fica um resumo simples: Rachlin quer explicar a mente sem recorrer a nenhum evento interno, usando causas finais estreitas (reforço) e amplas (padrões extensos no tempo), e defende que essa ideia já estava latente em Skinner. Complete a frase-resumo: para o TEB, explicar o comportamento é sempre apontar para ___, nunca para um evento escondido dentro do organismo.',
+    opcoes:['um padrão de comportamento, estreito ou amplo','uma emoção sentida no momento do ato','uma memória guardada no cérebro','um traço de personalidade do indivíduo'],
+    explicacao:'É o resumo de tudo o que os três capítulos constroem: causa final estreita e causa final ampla são as duas escalas de um mesmo tipo de explicação, sempre comportamental, nunca mentalista no sentido tradicional.',
+    fonte:'Rachlin (2021, caps. 1–3.)',
+    dica:'A resposta certa é a mesma ideia central repetida ao longo de todo o quadro.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'baum-molar': {
+  autor:'baum', tipo:'livro', categoria:'Capítulo + réplica',
+  titulo:'Behaviorismo molar', ano:2021, edicao:'caps. 4–6',
+  subtitulo:'Instrução programada: leia o quadro, complete com calma',
+  rotuloCartucho:'CAP. 4–6',
+  rotuloAbertura:'Baum em Zilio & Carrara (2021) · caps. 4–6',
+  arte:'img/baum-sorrindo.png',
+  arteAlt:'William M. Baum sorrindo, de barba branca, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Baum, W. M. (2021). Introduction to molar behaviorism and multiscale behavior analysis. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 43–61). Springer. Réplica de Laurenti, C. (pp. 63–70); resposta de Baum (pp. 71–79).',
+  leituraInicial:'Mesmo formato do quiz do Rachlin: cada quadro ensina antes de perguntar, e a lacuna quase sempre repete algo que o próprio quadro acabou de dizer. Os três capítulos aqui são o texto de Baum, o comentário de Carolina Laurenti e a resposta de Baum a ela.',
+  intro:'Baum construiu sua visão molar ao longo de décadas, mudando de ideia algumas vezes no caminho. Os quadros seguem essa mesma ordem: dos primeiros axiomas até a resposta mais recente sobre genes e seleção.',
+  conquistas:{ aprovado:'Leitor(a) do behaviorismo molar', perfeito:'Atividade em toda escala, sem erro' },
+  perguntas:[
+  { tipo:'quadro',
+    enunciado:'O primeiro axioma de Baum diz que o comportamento de um organismo é composto pelas próprias ações do organismo. O segundo, chamado "estar vivo é se comportar", diz que, enquanto um organismo está vivo, ele se comporta o tempo todo, sem parar. Complete a implicação direta do segundo axioma: observar um organismo por uma hora é observar ___.',
+    opcoes:['uma hora inteira de comportamento','apenas os momentos de resposta ativa','só o tempo em que ele se moveu','apenas o início e o fim da hora'],
+    explicacao:'Se estar vivo é se comportar, então não existe "tempo morto" sem comportamento: toda a hora observada é, integralmente, comportamento distribuído entre diferentes atividades.',
+    fonte:'Baum (2021, cap. 4, Axioma 2, p. 52).',
+    dica:'O quadro já disse: comportamento ocupa todo o tempo disponível.' },
+  { tipo:'quadro',
+    enunciado:'Baum argumenta que uma "resposta momentânea" é uma ideia logicamente falha: uma foto de uma pessoa segurando um livro aberto não diz quase nada sobre o que ela está fazendo. Só observando um tempo antes e depois é possível saber se ela está lendo, procurando algo no livro ou só fingindo ler. Complete: para Baum, nenhuma atividade pode ser identificada num único ___.',
+    opcoes:['momento (instante isolado)','ambiente (contexto físico)','organismo (indivíduo)','experimento (procedimento)'],
+    explicacao:'É o argumento central contra a ideia tradicional de "resposta momentânea": identificar uma atividade exige olhar para um intervalo de tempo, nunca para um instante congelado.',
+    fonte:'Baum (2021, cap. 4, p. 52).',
+    dica:'A foto parada do quadro é exatamente o exemplo de um instante isolado.' },
+  { tipo:'quadro',
+    enunciado:'O terceiro axioma diz que toda atividade é composta de partes que são, elas mesmas, atividades menores. No exemplo de Baum, jogar tênis por uma hora é composto de sacar, rebater, marcar o placar, conversar com o adversário, e assim por diante; juntas, essas atividades menores tomam a hora inteira do jogo. Complete: cada atividade ampla pode ser dividida em atividades de escala ___.',
+    opcoes:['menor, que juntas somam o tempo da atividade maior','maior, que envolvem outros organismos','igual, repetidas seguidamente','aleatória, sem relação com o todo'],
+    explicacao:'É o conceito de "multiescala": a mesma atividade pode ser descrita em diferentes tamanhos de tempo, do jogo inteiro até o saque isolado, sem que nenhuma dessas descrições seja "a errada".',
+    fonte:'Baum (2021, cap. 4, Axioma 3, pp. 52–53).',
+    dica:'O exemplo do tênis já mostra partes menores somando o total do jogo.' },
+  { tipo:'quadro',
+    enunciado:'Baum generaliza a lei da igualação (matching law) de Herrnstein, segundo a qual a proporção de comportamento dedicada a uma alternativa tende a igualar a proporção de reforçadores obtidos nela. Ele chama essa generalização de lei da alocação. Complete: a lei da alocação trata a questão central da análise do comportamento como a explicação de como o tempo do organismo é ___ entre suas atividades.',
+    opcoes:['distribuído (alocado)','memorizado','sentido subjetivamente','classificado por categoria'],
+    explicacao:'Alocação é a palavra-chave: em vez de perguntar "por que essa resposta ocorreu", a pergunta molar é "como o tempo total do organismo se distribui entre todas as suas atividades possíveis".',
+    fonte:'Baum (2021, cap. 4, pp. 49–50).',
+    dica:'A lei já tem o nome da resposta certa no próprio título.' },
+  { tipo:'quadro',
+    enunciado:'Ao longo dos anos 1970, Baum passou a considerar a visão molecular do comportamento (que trata de respostas discretas e momentâneas) incompatível com a visão baseada em tempo. Um experimento de escolha com ratos, de 1976, o convenceu de que cronometrar atividades fazia mais sentido do que contar respostas isoladas. Complete: Baum deixou de achar as duas visões complementares e passou a considerá-las ___.',
+    opcoes:['incompatíveis entre si','idênticas na prática','aplicáveis só a humanos','irrelevantes para a análise do comportamento'],
+    explicacao:'É uma mudança de posição que o próprio Baum reconhece na autobiografia do capítulo: primeiro achava que molar e molecular podiam conviver, depois concluiu que representam visões incompatíveis do que conta como dado.',
+    fonte:'Baum (2021, cap. 4, p. 51).',
+    dica:'A palavra oposta a "complementares" é a resposta certa.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 5, a comentarista Carolina Laurenti trata a visão molar como um novo paradigma científico, no sentido de Thomas Kuhn: uma mudança que envolve afirmações ontológicas e epistemológicas incomensuráveis com as da visão molecular. Complete: para avaliar essa mudança, Laurenti propõe examinar o "nível de profundidade" das implicações da visão molar, isto é, o quanto ela realmente ___ a forma de fazer análise do comportamento.',
+    opcoes:['transforma','ilustra','memoriza','contradiz sem exceção'],
+    explicacao:'"Profundidade" é o critério que Laurenti usa: ela não nega que a proposta de Baum seja interessante, mas avalia, ponto por ponto, o quanto cada implicação realmente muda a prática da área.',
+    fonte:'Laurenti (2021, cap. 5, p. 63).',
+    dica:'A pergunta de Laurenti é sobre o tamanho real da mudança, não sobre se ela existe.' },
+  { tipo:'quadro',
+    enunciado:'Laurenti considera de "alta profundidade" a capacidade da visão molar de integrar filosofia e ciência dentro da análise do comportamento, recuperando um sentido mais genuíno de behaviorismo. Já considera de "profundidade média" o contraste entre visão molar e molecular, porque o próprio modelo de Skinner já vinha mudando com o tempo. Complete: para Laurenti, quanto menos o modelo skinneriano original se mantém fixo, menos ___ fica o contraste entre molar e molecular.',
+    opcoes:['nítido (afiado)','importante','documentado','antigo'],
+    explicacao:'O argumento de Laurenti é sutil: se o próprio Skinner já vinha se afastando de uma leitura estritamente molecular, então a "ruptura" que Baum anuncia é menos radical do que parece à primeira vista.',
+    fonte:'Laurenti (2021, cap. 5, p. 63).',
+    dica:'Pense no oposto de "nítido": um contraste que fica mais embaçado.' },
+  { tipo:'quadro',
+    enunciado:'Laurenti também descreve o comportamento, na visão molar, como um agregado de atividades, que são ao mesmo tempo processos (porque se estendem no tempo) e indivíduos (porque suas partes operam juntas, de forma integrada, cumprindo uma função). Complete: mesmo mudando ao longo do tempo, esse "indivíduo" comportamental não perde sua ___.',
+    opcoes:['identidade','velocidade','origem genética','localização espacial'],
+    explicacao:'Comportamento muda, mas continua sendo reconhecível como a mesma atividade ao longo da mudança, do mesmo jeito que um rio muda de água a cada instante sem deixar de ser o mesmo rio.',
+    fonte:'Laurenti (2021, cap. 5, pp. 63–64).',
+    dica:'O ponto é sobre continuidade: o que permanece o mesmo apesar da mudança.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 6, ao responder a Laurenti, Baum corrige um detalhe de vocabulário: ele prefere não chamar uma atividade de "agregado", palavra que sugere apenas uma coleção solta de partes. Complete a palavra que ele prefere no lugar: uma atividade é melhor descrita como um ___ com partes, algo mais parecido com uma Gestalt.',
+    opcoes:['todo integrado','conjunto aleatório','sistema fechado','processo isolado'],
+    explicacao:'Baum quer deixar claro que as partes de uma atividade não estão só uma ao lado da outra; elas formam uma unidade organizada, do menor até o maior nível de escala, e é essa organização que a palavra "agregado" deixaria escapar.',
+    fonte:'Baum (2021, cap. 6, p. 75).',
+    dica:'A resposta certa evoca a ideia de Gestalt, mencionada no próprio quadro.' },
+  { tipo:'quadro',
+    enunciado:'Ainda no capítulo 6, Baum discute como um gene sem efeito aparente (um "gene críptico") pode se tornar vantajoso quando o ambiente muda, um mecanismo conhecido como efeito Baldwin. Seu exemplo: tentilhões das Galápagos com bicos de certo formato só levaram vantagem quando uma seca mudou o tipo de semente disponível. Complete: o efeito Baldwin mostra que um gene pode ficar "invisível" à seleção até que uma mudança no ambiente o torne ___.',
+    opcoes:['vantajoso (útil para a sobrevivência)','inútil de vez','dominante sobre os demais','impossível de herdar'],
+    explicacao:'O gene não muda; o que muda é o ambiente, e é essa mudança externa que revela uma vantagem que estava latente o tempo todo no gene.',
+    fonte:'Baum (2021, cap. 6, pp. 71–72).',
+    dica:'A seca revelou uma vantagem que já existia, escondida, no bico dos tentilhões.' },
+  { tipo:'quadro',
+    enunciado:'Baum encerra sua resposta a Laurenti afirmando algo importante sobre o próprio pensamento "centrado no gene": reconhecer que organismos constroem nichos que beneficiam sua prole não nega a centralidade da herança genética; ao contrário, os próprios genes que favorecem a construção de nicho são selecionados por isso. Complete: para Baum, construção de nicho e seleção genética não são ideias opostas, mas ___.',
+    opcoes:['complementares (uma explica a outra)','incompatíveis entre si','irrelevantes uma para a outra','idênticas, dois nomes para o mesmo processo'],
+    explicacao:'É a última peça do argumento de Baum: ele não abandona a genética ao adotar a visão molar; mostra como a construção de nicho é, ela mesma, um comportamento que pode ser selecionado geneticamente.',
+    fonte:'Baum (2021, cap. 6, p. 79).',
+    dica:'Uma ideia reforça a outra, em vez de competir com ela.' },
+  { tipo:'quadro',
+    enunciado:'Juntando os três capítulos: para Baum, comportamento é atividade que ocupa todo o tempo de um organismo vivo, organizada em partes aninhadas de diferentes escalas, e distribuída entre alternativas segundo a lei da alocação; para Laurenti, essa proposta é significativa, mas nem toda parte dela é igualmente "profunda". Complete a palavra que dá nome ao behaviorismo de Baum, sempre que o comportamento é tratado como atividade estendida no tempo, e não como resposta isolada: behaviorismo ___.',
+    opcoes:['molar','molecular','radical','metodológico'],
+    explicacao:'É o nome que dá título ao capítulo inteiro e resume, numa palavra, a ideia central: tratar unidades grandes e estendidas no tempo como o verdadeiro objeto da análise do comportamento.',
+    fonte:'Baum (2021, caps. 4–6.)',
+    dica:'É a mesma palavra que abre o título do capítulo 4.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'staddon-teorico': {
+  autor:'staddon', tipo:'livro', categoria:'Capítulo + réplica',
+  titulo:'Behaviorismo teórico', ano:2021, edicao:'caps. 7–9',
+  subtitulo:'Instrução programada: leia o quadro, complete com calma',
+  rotuloCartucho:'CAP. 7–9',
+  rotuloAbertura:'Staddon em Zilio & Carrara (2021) · caps. 7–9',
+  arte:'img/staddon-retrato.png',
+  arteAlt:'Retrato de John Staddon, de óculos, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Staddon, J. (2021). Theoretical behaviorism. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 79–95). Springer. Réplica de Lopes, C. E. (pp. 97–109); resposta de Staddon (pp. 111–114).',
+  leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Staddon, o comentário de Carlos Eduardo Lopes e a resposta de Staddon a ele.',
+  intro:'Staddon escreve criticando os dois extremos que quer evitar: o behaviorismo sem teoria de Skinner, de um lado, e o mentalismo cientificista, do outro. Os quadros seguem essa disputa de perto.',
+  conquistas:{ aprovado:'Leitor(a) do behaviorismo teórico', perfeito:'Nem Cila, nem Caríbdis' },
+  perguntas:[
+  { tipo:'quadro',
+    enunciado:'Staddon apresenta seu behaviorismo teórico (ThB) como uma emenda necessária ao behaviorismo radical de Skinner. Para ele, o movimento skinneriano foi muito bem-sucedido produzindo experimentos e descobrindo fenômenos novos, mas muito menos bem-sucedido explicando esses fenômenos, porque foi ativamente hostil à teoria. Complete: para Staddon, faltou ao behaviorismo radical não experimentos, mas ___.',
+    opcoes:['teoria','pacientes voluntários','financiamento','equipamentos de laboratório'],
+    explicacao:'Staddon não questiona o sucesso experimental de Skinner; questiona a recusa dele em construir teorias que expliquem os próprios dados que o método produziu em abundância.',
+    fonte:'Staddon (2021, cap. 7, p. 80).',
+    dica:'O quadro já contrasta dois tipos de sucesso: um Skinner teve, o outro não.' },
+  { tipo:'quadro',
+    enunciado:'Staddon atribui parte do sucesso de Skinner a duas invenções técnicas: a caixa de Skinner, que permitia experimentos automatizados de longa duração, e o registrador cumulativo, que mostrava o comportamento de um único sujeito em tempo real, em vez de médias estáticas de grupo. Complete: a taxa de resposta aparece, no registro cumulativo, como a ___ da curva.',
+    opcoes:['inclinação (slope)','cor','largura','altura máxima'],
+    explicacao:'É uma leitura gráfica simples: quanto mais inclinada a linha do registro cumulativo, mais rápido o organismo está respondendo naquele trecho.',
+    fonte:'Staddon (2021, cap. 7, p. 80).',
+    dica:'Pense em como se lê a velocidade numa linha que sobe: pela inclinação dela.' },
+  { tipo:'quadro',
+    enunciado:'Staddon cita o próprio Skinner (1950) dizendo que a taxa de resposta "não é uma medida de probabilidade", mas é o único dado apropriado disponível numa formulação nesses termos. Complete o problema que Staddon vê nessa frase: Skinner reconhece que taxa de resposta não é exatamente o que se quer medir (probabilidade), mas a usa mesmo assim, por falta de ___.',
+    opcoes:['algo melhor (uma alternativa teórica)','tempo para fazer mais experimentos','pesquisadores dispostos a colaborar','organismos disponíveis em laboratório'],
+    explicacao:'É exatamente esse tipo de remendo, aceitar uma medida imperfeita por falta de teoria melhor, que Staddon usa como evidência de que faltava uma teoria mais desenvolvida ao sistema de Skinner.',
+    fonte:'Staddon (2021, cap. 7, p. 84).',
+    dica:'Skinner admite a limitação, mas segue em frente sem resolvê-la.' },
+  { tipo:'quadro',
+    enunciado:'Staddon descreve seu projeto como uma tentativa de evitar dois exageros ao mesmo tempo, usando a imagem grega de Cila e Caríbdis, dois perigos opostos entre os quais um navegante precisa passar. Complete: de um lado fica o "simplismo ateórico" (Skinner sem teoria); do outro, o "mentalismo cientificista", um exagero na direção ___.',
+    opcoes:['oposta, recorrendo demais a estados mentais internos','igual, recusando também qualquer teoria','neutra, sem relação com nenhum dos dois','intermediária, misturando as duas posições'],
+    explicacao:'A imagem de Cila e Caríbdis marca a posição de Staddon como um meio-termo: nem behaviorismo sem teoria nenhuma, nem uma psicologia que devolve a explicação para estados mentais não observáveis.',
+    fonte:'Staddon (2021, cap. 7, p. 81).',
+    dica:'É o mesmo tipo de imagem que Watson usa entre paralelismo e interação, só que aplicada a outro par de perigos.' },
+  { tipo:'quadro',
+    enunciado:'Staddon avalia John Watson como "realista e ingênuo" ao mesmo tempo. A parte realista estava em rejeitar relatos subjetivos e em primeira pessoa como dado científico. Complete a frase de Staddon sobre isso: para ele, "qualia" (experiências subjetivas) não são ___.',
+    opcoes:['dados (não servem de evidência científica)','importantes para a vida cotidiana','mencionadas por nenhum psicólogo','fáceis de definir com precisão'],
+    explicacao:'Staddon concorda com Watson nesse ponto específico: relatos de experiência consciente não constituem, por si só, dado científico aceitável.',
+    fonte:'Staddon (2021, cap. 7, p. 81).',
+    dica:'A frase segue o mesmo padrão de recusa que Watson já defendia.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 8, o comentarista Carlos Eduardo Lopes começa perguntando o que exatamente significa "teórico" na expressão "behaviorismo teórico" de Staddon, já que a palavra "teoria" tem sentidos diferentes na filosofia, na ciência e na psicologia. Complete: para Lopes, antes de aceitar ou recusar a proposta de Staddon, é preciso primeiro ___ o que ele quer dizer com "teoria".',
+    opcoes:['definir com clareza','memorizar de cor','filmar em laboratório','traduzir para o inglês'],
+    explicacao:'Lopes começa pelo tipo de pergunta mais básico possível: antes de debater se o behaviorismo precisa ser "teórico", é preciso saber que sentido de "teórico" está em jogo.',
+    fonte:'Lopes (2021, cap. 8, p. 97).',
+    dica:'É o primeiro passo de qualquer análise conceitual: definir os termos antes de discutir.' },
+  { tipo:'quadro',
+    enunciado:'Staddon critica o uso de "teoria" como sufixo "-ismo" (como em "behaviorismo"), dizendo que esses "ismos" soam políticos, não acrescentam nada à ciência e têm só função retórica. Lopes discorda: para ele, a palavra "behaviorismo" nasceu para marcar os limites da investigação psicológica, algo tão científico quanto político. Complete: para Lopes, a função original do termo "behaviorismo" foi ___ o campo de investigação da psicologia.',
+    opcoes:['delimitar (traçar os limites de)','abolir por completo','esconder dos leigos','patentear comercialmente'],
+    explicacao:'Lopes rejeita a ideia de que nomear uma escola de pensamento seja um gesto puramente político: para ele, delimitar um campo de investigação é parte do próprio trabalho científico.',
+    fonte:'Lopes (2021, cap. 8, p. 97).',
+    dica:'É o mesmo verbo que aparece logo na primeira frase do quadro.' },
+  { tipo:'quadro',
+    enunciado:'Lopes também questiona a imagem de um cientista isolado em seu laboratório, absorvido só nos próprios dados, como se essa fosse "a atividade científica de verdade". Complete: para Lopes, a atividade científica real depende de uma articulação entre cientistas e pessoas de fora do laboratório, como governantes, militares, empresários e líderes religiosos, e não de um cientista ___.',
+    opcoes:['isolado e alheio a esse contexto','financiado por agências públicas','treinado numa única universidade','especializado em um único método'],
+    explicacao:'Lopes usa essa imagem para reforçar seu argumento: ciência é uma prática social, não um exercício solitário, e isso já contradiz a ideia de que nomear escolas de pensamento seja "só política", separada da ciência de verdade.',
+    fonte:'Lopes (2021, cap. 8, p. 97).',
+    dica:'O contraste é entre um cientista sozinho e a ciência como atividade social.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 9, ao responder a Lopes, Staddon reconhece que se arrependeu do comentário inicial sobre "ismos", que rendeu uma lista longa demais de exemplos citados por Lopes. Ele tenta justificar a observação original notando algo sobre ciências maduras, como a física. Complete: segundo Staddon, "ismos" proliferam sobretudo enquanto uma ciência ainda está ___; numa ciência madura como a física, resta só o nome "física", sem sufixo nenhum.',
+    opcoes:['em desenvolvimento (não totalmente madura)','sendo ensinada em escolas','sendo financiada por governos','sendo traduzida para outros idiomas'],
+    explicacao:'É a defesa de Staddon para seu comentário original: "ismos" seriam sinal de uma disciplina ainda em formação, e ele espera que um dia a psicologia dispense rótulos como "behaviorismo" ou "cognitivismo" e vire, simplesmente, "psicologia".',
+    fonte:'Staddon (2021, cap. 9, p. 111).',
+    dica:'Pense no oposto de uma ciência já consolidada, como a física de hoje.' },
+  { tipo:'quadro',
+    enunciado:'Staddon concorda com uma afirmação de Lopes: que não existe ciência sem teoria. Ele então pergunta como isso aparece no próprio trabalho científico de Skinner, e cita o biólogo Francisco Ayala, para quem a melhor forma de entender o método científico é examinar o trabalho de grandes cientistas. Complete: Staddon usa o exemplo de Charles Darwin, que, durante sua viagem no navio Beagle, coletava espécimes por pura curiosidade, sem nenhuma ___ prévia.',
+    opcoes:['teoria','anotação','amostra','permissão'],
+    explicacao:'O exemplo de Darwin serve ao argumento de Staddon: teoria pode nascer depois da observação cuidadosa, não precisa vir antes dela, o que reforça sua defesa de uma ciência que também começa sem teoria pronta.',
+    fonte:'Staddon (2021, cap. 9, pp. 111–112).',
+    dica:'É a mesma palavra que falta a Darwin no início da viagem, segundo o próprio Staddon.' },
+  { tipo:'quadro',
+    enunciado:'Juntando os três capítulos: Staddon defende que o behaviorismo precisa de teoria para explicar os dados que já produziu; Lopes questiona o que "teoria" significa nessa proposta e defende que nomear escolas de pensamento já é, em si, um ato científico; Staddon responde citando ciências maduras e o exemplo de Darwin. Complete: no centro dessa disputa está uma pergunta sobre o papel da ___ na prática científica.',
+    opcoes:['teoria','estatística','tecnologia','burocracia'],
+    explicacao:'É o fio condutor dos três capítulos: quanto de teoria a ciência do comportamento precisa, e em que momento essa teoria deve entrar no processo de pesquisa.',
+    fonte:'Staddon (2021, caps. 7–9.)',
+    dica:'É a mesma palavra que dá nome ao behaviorismo de Staddon.' },
+  { tipo:'quadro',
+    enunciado:'Vale reforçar uma distinção que atravessa os três capítulos: para Staddon, ser "teórico" não é o mesmo que ser mentalista. Ele quer teoria científica testável, não explicações por estados internos inobserváveis. Complete: o behaviorismo teórico de Staddon aceita construir teoria, mas continua recusando, do mesmo jeito que Skinner, explicar o comportamento por ___.',
+    opcoes:['estados mentais inobserváveis, tomados como causa','experimentos de laboratório','registros cumulativos de dados','esquemas de reforçamento'],
+    explicacao:'É o ponto que evita confundir "behaviorismo teórico" com "mentalismo": Staddon quer mais teoria, mas ainda dentro dos limites do que pode ser observado e testado, não um retorno a causas mentais escondidas.',
+    fonte:'Staddon (2021, cap. 7, p. 81.)',
+    dica:'A resposta certa é justamente o "Caríbdis" que Staddon também quer evitar.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'donahoe-biologico': {
+  autor:'donahoe', tipo:'livro', categoria:'Capítulo + réplica',
+  titulo:'Behaviorismo biológico', ano:2021, edicao:'caps. 10–12',
+  subtitulo:'Instrução programada: leia o quadro, complete com calma',
+  rotuloCartucho:'CAP. 10–12',
+  rotuloAbertura:'Donahoe em Zilio & Carrara (2021) · caps. 10–12',
+  arte:'img/donahoe-retrato.png',
+  arteAlt:'Retrato de John W. Donahoe, sorrindo, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Donahoe, J. W. (2021). Biological behaviorism. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 113–136). Springer. Réplica de Carvalho Neto, M. B. (pp. 137–145); resposta de Donahoe (pp. 147–148).',
+  leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Donahoe, o comentário de Marcus Bentes de Carvalho Neto e a resposta de Donahoe a ele.',
+  intro:'Donahoe quer aproximar a análise do comportamento da neurociência, sem que uma vire refém da outra. Os quadros seguem essa aproximação de perto, com bastante cuidado nos dois conceitos técnicos centrais do capítulo.',
+  conquistas:{ aprovado:'Leitor(a) do behaviorismo biológico', perfeito:'Reforço unificado, sem erro' },
+  perguntas:[
+  { tipo:'quadro',
+    enunciado:'Donahoe identifica duas variáveis como críticas para o processo de reforçamento. A primeira, já bem conhecida, é a contiguidade temporal: o intervalo de tempo entre o estímulo e a resposta que precedem o reforçador. Complete: a contiguidade temporal é necessária para o reforçamento, mas, segundo experimentos recentes que Donahoe cita, ela sozinha não é ___.',
+    opcoes:['suficiente','observável','mensurável','relevante'],
+    explicacao:'É o ponto de partida do capítulo: contiguidade no tempo continua sendo importante, mas os dados mostram que ela não basta, sozinha, para explicar quando o reforçamento realmente ocorre.',
+    fonte:'Donahoe (2021, cap. 10, p. 119).',
+    dica:'O quadro já diz que a contiguidade é necessária, mas falta uma segunda condição.' },
+  { tipo:'quadro',
+    enunciado:'A segunda variável identificada por Donahoe é a discrepância comportamental: uma mudança no comportamento em curso, provocada pelo reforçador. Segundo ele, tanto no procedimento pavloviano quanto no operante, estímulos presentes no momento dessa discrepância ganham controle sobre as respostas próximas dali. Complete: essa ideia é chamada de princípio do reforçamento ___.',
+    opcoes:['unificado','condicionado','molar','vicário'],
+    explicacao:'É o conceito central do capítulo: um único princípio, baseado em contiguidade temporal e discrepância comportamental, explicaria tanto o condicionamento pavloviano quanto o operante, daí o nome "unificado".',
+    fonte:'Donahoe (2021, cap. 10, p. 119).',
+    dica:'O nome do princípio aparece logo depois da explicação, como título de seção.' },
+  { tipo:'quadro',
+    enunciado:'Donahoe chama seu princípio de "unificado" porque ele se aplica igualmente aos dois grandes procedimentos da aprendizagem: o pavloviano (no qual o estímulo condicionado e o contexto em que aparece funcionam como a parte "estímulo") e o operante. Complete: o mérito que Donahoe atribui ao princípio unificado é explicar os dois procedimentos com ___.',
+    opcoes:['o mesmo mecanismo, em vez de dois mecanismos separados','experimentos completamente diferentes para cada um','apenas animais de laboratório, nunca humanos','apenas estímulos visuais, nunca sonoros'],
+    explicacao:'A economia teórica é o ponto forte do argumento: em vez de precisar de duas explicações diferentes para pavloviano e operante, o mesmo princípio, baseado nas mesmas duas variáveis, dá conta dos dois.',
+    fonte:'Donahoe (2021, cap. 10, p. 119).',
+    dica:'A palavra "unificado" já indica que dois processos viram um só.' },
+  { tipo:'quadro',
+    enunciado:'Donahoe compara o momento atual da análise do comportamento a um episódio importante da história da biologia: só depois que os mecanismos genéticos da hereditariedade foram descobertos é que a seleção natural se tornou amplamente aceita, na síntese entre darwinismo e mendelismo. Complete: para Donahoe, integrar análise do comportamento e neurociência hoje é parecido com integrar, no passado, a seleção natural com a ___.',
+    opcoes:['hereditariedade (genética)','estatística','fisiologia digestiva','psicanálise'],
+    explicacao:'É a analogia histórica central do capítulo: assim como a genética deu uma base mecanística à seleção natural, a neurociência pode dar uma base mecanística ao princípio de reforçamento.',
+    fonte:'Donahoe (2021, cap. 10, p. 115).',
+    dica:'Pense no encontro clássico entre Darwin e Mendel, mencionado no próprio quadro.' },
+  { tipo:'quadro',
+    enunciado:'Donahoe nota que, apesar de a análise do comportamento considerar a seleção pelo reforço a explicação central da aprendizagem individual, a maioria dos demais psicólogos não compartilha dessa visão. Complete: para ele, isso é comparável à situação da seleção natural antes de ela encontrar uma base em ___.',
+    opcoes:['mecanismos genéticos conhecidos','testes de laboratório replicáveis','uma editora disposta a publicá-la','apoio de outros biólogos famosos'],
+    explicacao:'Antes de a genética explicar como a hereditariedade funciona, a seleção natural encontrava resistência; Donahoe espera que a neurociência faça, pelo princípio de reforçamento, o mesmo papel que a genética fez pela seleção natural.',
+    fonte:'Donahoe (2021, cap. 10, pp. 115–116).',
+    dica:'É a mesma resposta da pergunta anterior, revisitada de outro ângulo.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 11, o comentarista Marcus Bentes de Carvalho Neto lembra que a relação entre psicologia e biologia tem uma história longa e turbulenta, citando Auguste Comte, para quem não haveria justificativa para uma ciência psicológica independente, já que seus fenômenos pertenceriam sempre à sociologia ou à biologia. Complete: mesmo depois de a psicologia conquistar independência como disciplina, o behaviorismo continuou oscilando entre as influências da biologia e da ___.',
+    opcoes:['sociologia (ciências sociais)','química','matemática','arquitetura'],
+    explicacao:'Carvalho Neto situa o debate biológico versus social como uma tensão antiga, que atravessa a própria história da psicologia como disciplina, não uma novidade trazida pelo capítulo de Donahoe.',
+    fonte:'Carvalho Neto (2021, cap. 11, p. 137).',
+    dica:'São as duas influências mencionadas logo no início do quadro.' },
+  { tipo:'quadro',
+    enunciado:'Carvalho Neto lembra que Skinner criticou o behaviorismo de Watson por preencher artificialmente, com conhecimento biológico (anatomia e fisiologia), a falta de dados sobre comportamento. Mas Carvalho Neto acha que Skinner deixou passar um ponto importante da proposta de Watson. Complete: para Carvalho Neto, a função de um estímulo não é intrínseca a ele, mas ___, dependendo da constituição biológica do organismo.',
+    opcoes:['relacional (depende da relação com o organismo)','fixa e universal para qualquer espécie','determinada só pela intensidade física dele','irrelevante para a análise do comportamento'],
+    explicacao:'É a defesa que Carvalho Neto faz de Watson: um estímulo só "funciona" de um jeito porque o organismo que o recebe tem uma constituição física e uma história evolutiva específicas; a função não está no estímulo isolado.',
+    fonte:'Carvalho Neto (2021, cap. 11, p. 137).',
+    dica:'A resposta certa é sobre relação, não sobre uma propriedade fixa do estímulo.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 12, ao responder a Carvalho Neto, Donahoe agradece por situar o princípio de reforçamento unificado num contexto histórico mais amplo e por levantar questões sobre o tratamento da punição. Ele nota que a relação entre análise do comportamento e seus mecanismos biológicos tem sido uma relação difícil. Complete: alguns analistas do comportamento temeram, equivocadamente, que construir pontes com a neurociência pudesse ___ a análise do comportamento como empreendimento científico independente.',
+    opcoes:['enfraquecer (minar)','fortalecer demais','atrasar por décadas','tornar obsoleta imediatamente'],
+    explicacao:'Donahoe descreve esse receio como um mal-entendido sobre a posição de Skinner: buscar mecanismos biológicos não ameaça a independência da análise do comportamento, do mesmo jeito que a fisiologia não ameaça a independência da biologia celular.',
+    fonte:'Donahoe (2021, cap. 12, p. 147).',
+    dica:'É o medo que Donahoe considera um mal-entendido sobre a posição de Skinner.' },
+  { tipo:'quadro',
+    enunciado:'Donahoe compara a relação entre análise do comportamento e neurociência à relação entre outras disciplinas biológicas vizinhas: fisiologia e neurociência celular, neurociência celular e biologia molecular, biologia molecular e genética. Complete: para ele, essas disciplinas são, ao mesmo tempo, independentes umas das outras e ___.',
+    opcoes:['interdependentes (precisam umas das outras)','idênticas na prática','isoladas por completo','hierárquicas, com uma dominando as demais'],
+    explicacao:'É a fórmula que resume a posição de Donahoe: cada disciplina tem seu próprio nível de análise, mas nenhuma delas funciona isolada das disciplinas vizinhas.',
+    fonte:'Donahoe (2021, cap. 12, p. 147).',
+    dica:'O quadro já apresenta a lista de pares de disciplinas vizinhas como exemplo.' },
+  { tipo:'quadro',
+    enunciado:'Donahoe também rejeita a posição oposta: a ideia de que, uma vez conhecidos os processos de nível mais baixo (como os genes), os processos de nível mais alto (como o organismo inteiro) se tornariam supérfluos. Ele cita um estudo mostrando que, mesmo sabendo muito sobre genes, inferir as estruturas que esses genes constroem continua sendo algo ___.',
+    opcoes:['desafiador (difícil de fazer)','trivial e já resolvido','impossível por princípio','irrelevante para a biologia'],
+    explicacao:'É o contra-argumento de Donahoe à ideia de que "tudo se reduz ao nível mais baixo": mesmo com o mapa genético em mãos, prever o organismo inteiro a partir dele continua sendo, na prática, muito difícil.',
+    fonte:'Donahoe (2021, cap. 12, p. 147).',
+    dica:'A resposta certa mostra que o conhecimento do nível baixo não resolve tudo automaticamente.' },
+  { tipo:'quadro',
+    enunciado:'Juntando os três capítulos: Donahoe propõe que contiguidade temporal e discrepância comportamental, juntas, formam um princípio de reforçamento único para pavloviano e operante; Carvalho Neto lembra que a função de um estímulo depende da relação com um organismo biologicamente constituído; Donahoe responde que análise do comportamento e neurociência podem crescer juntas sem que uma substitua a outra. Complete: o fio condutor dos três capítulos é a proposta de aproximar a análise do comportamento da ___.',
+    opcoes:['neurociência (biologia do sistema nervoso)','sociologia','linguística','economia comportamental'],
+    explicacao:'É o tema que dá nome ao capítulo inteiro: um behaviorismo que se declara "biológico" porque busca, deliberadamente, mecanismos neurais para o que a análise do comportamento já descreve no nível do comportamento observável.',
+    fonte:'Donahoe (2021, caps. 10–12.)',
+    dica:'É a mesma disciplina que aparece no título do capítulo e na comparação com a genética.' },
+  { tipo:'quadro',
+    enunciado:'Vale reforçar a citação que Donahoe faz do próprio Skinner: uma ciência do comportamento deve buscar regularidades ("leis") em seu próprio nível de observação, não recorrendo a outros níveis, especialmente quando as entidades desses outros níveis forem meras inferências feitas a partir do comportamento observado. Complete: para Donahoe, isso significa que a análise do comportamento deve manter seu próprio nível de análise, mesmo enquanto dialoga com a ___.',
+    opcoes:['neurociência','psicanálise','filosofia da linguagem','sociologia crítica'],
+    explicacao:'É o equilíbrio que Donahoe busca: aceitar o diálogo com a neurociência sem abrir mão de que o comportamento também tem leis próprias, observáveis em seu próprio nível, sem depender de inferências sobre o que acontece "por dentro".',
+    fonte:'Donahoe (2021, cap. 12, p. 147.)',
+    dica:'É a mesma disciplina que já apareceu em quase todos os quadros deste quiz.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'foxall-intencional': {
+  autor:'foxall', tipo:'livro', categoria:'Capítulo + réplica',
+  titulo:'Behaviorismo intencional', ano:2021, edicao:'caps. 13–15',
+  subtitulo:'Instrução programada: leia o quadro, complete com calma',
+  rotuloCartucho:'CAP. 13–15',
+  rotuloAbertura:'Foxall em Zilio & Carrara (2021) · caps. 13–15',
+  arte:'img/foxall-retrato.png',
+  arteAlt:'Retrato de Gordon R. Foxall, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Foxall, G. R. (2021). Intentional behaviorism. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 155–188). Springer. Réplica de Oliveira-Castro, J. M. (pp. 189–207); resposta de Foxall (pp. 209–232).',
+  leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Foxall, o comentário de Jorge M. Oliveira-Castro e a resposta de Foxall a ele. O terreno aqui é a psicologia do consumidor, o campo de pesquisa em que Foxall construiu essa proposta.',
+  intro:'Foxall trabalha com escolha do consumidor, um terreno em que a análise do comportamento tradicional encontra limites práticos. Os quadros mostram como ele tenta ir além desses limites sem abandonar de vez o vocabulário behaviorista.',
+  conquistas:{ aprovado:'Leitor(a) do behaviorismo intencional', perfeito:'As três etapas, sem erro' },
+  perguntas:[
+  { tipo:'quadro',
+    enunciado:'Foxall pergunta o que faz de um comportamento de consumo uma ação, e não apenas um comportamento qualquer. Para responder, ele propõe um procedimento de três etapas: uma interpretação behaviorista, seguida de uma interpretação intencional, seguida de uma interpretação cognitiva. Complete: esse procedimento serve para relacionar o contexto da escolha do consumidor com processos cada vez mais ___.',
+    opcoes:['internos e complexos (intencionais, depois cognitivos)','externos e simples (apenas estímulos físicos)','antigos e históricos (apenas dados do passado)','coletivos e sociais (apenas normas do grupo)'],
+    explicacao:'As três etapas caminham na mesma direção: da descrição mais estritamente comportamental até uma leitura que incorpora intenção e, por fim, processamento cognitivo, sem abandonar a base behaviorista da primeira etapa.',
+    fonte:'Foxall (2021, cap. 13, p. 162).',
+    dica:'O quadro já lista as três etapas na ordem certa.' },
+  { tipo:'quadro',
+    enunciado:'Na primeira etapa, a interpretação behaviorista, Foxall explica a escolha do consumidor como função dos padrões de reforçamento e punição que se seguiram à atividade de consumo no passado. Complete: essa etapa não envolve nenhuma ___ na explicação do comportamento moldado por contingências.',
+    opcoes:['representação mental','contingência de reforço','história de aprendizagem','situação de estímulo'],
+    explicacao:'É um ponto que Foxall faz questão de marcar: na primeira etapa, puramente behaviorista, não há apelo a nenhuma representação interna; tudo se explica por contingências, sem passar pela mente.',
+    fonte:'Foxall (2021, cap. 13, p. 161).',
+    dica:'A primeira etapa é a mais "pura" do ponto de vista behaviorista, sem nada mentalista ainda.' },
+  { tipo:'quadro',
+    enunciado:'Na segunda etapa, a interpretação intencional, Foxall passa a descrever a situação do consumidor usando a linguagem da intencionalidade (desejos, crenças), em vez da linguagem puramente comportamental de campos de estímulo e histórias de aprendizagem. Complete: essa segunda etapa introduz um tipo de conflito temporal chamado, com um termo grego, ___, ou fraqueza de vontade.',
+    opcoes:['acrasia (akrasia)','catarse','anamnese','epistemologia'],
+    explicacao:'Acrasia nomeia a tendência de inverter preferências ao longo do tempo, escolhendo uma recompensa menor e mais próxima em vez de uma maior e mais distante, um fenômeno central para explicar a escolha do consumidor.',
+    fonte:'Foxall (2021, cap. 13, p. 157).',
+    dica:'É um termo filosófico antigo, usado para nomear a fraqueza de vontade.' },
+  { tipo:'quadro',
+    enunciado:'Foxall observa que, fora de ambientes experimentais bem restritos, as pessoas não respondem a um único estímulo isolado, mas a um subconjunto selecionado de todos os estímulos aos quais estão expostas. Complete: por isso, o que ele chama de "cenário comportamental do consumidor" não é um único estímulo, como na contingência de três ou quatro termos, mas um ___.',
+    opcoes:['conjunto mais amplo de estímulos relevantes','único produto exposto na prateleira','instante isolado de decisão','relato verbal do próprio consumidor'],
+    explicacao:'É uma ampliação da unidade de análise tradicional: em vez de um estímulo discriminativo isolado, Foxall trabalha com um cenário inteiro, mais parecido com um ambiente do que com um estímulo pontual.',
+    fonte:'Foxall (2021, cap. 13, p. 157).',
+    dica:'A palavra "cenário" já sugere algo mais amplo que um único estímulo.' },
+  { tipo:'quadro',
+    enunciado:'Segundo Foxall, reconhecer que o foco do programa de pesquisa passa a ser a "ação" do consumidor, e não apenas seu "comportamento", junto com a representação de contingências e a perspectiva temporal da escolha, mostra o caráter progressivo do programa de pesquisa do behaviorismo intencional. Complete: para Foxall, um programa de pesquisa progride quando incorpora, aos poucos, mais ___ sobre o próprio objeto de estudo.',
+    opcoes:['complexidade e nuance','financiamento externo','popularidade entre leigos','simplicidade e economia'],
+    explicacao:'Foxall usa a linguagem da filosofia da ciência (programas de pesquisa "progressivos") para justificar que ampliar a explicação, incorporando intenção e cognição, é um sinal de avanço, não de abandono do projeto behaviorista original.',
+    fonte:'Foxall (2021, cap. 13, p. 156).',
+    dica:'Um programa "progressivo" ganha em riqueza explicativa, não perde.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 14, o comentarista Jorge M. Oliveira-Castro nota que quase todo movimento que se autodenomina "behaviorismo" acaba enfrentando o velho problema filosófico mente-corpo, como formulado por Descartes. Complete: para Oliveira-Castro, o behaviorismo intencional de Foxall não é exceção a essa ___.',
+    opcoes:['tendência (de todo behaviorismo)','regra (de toda ciência)','crítica (feita por Skinner)','divisão (entre Brasil e Reino Unido)'],
+    explicacao:'Oliveira-Castro situa o projeto de Foxall dentro de uma linhagem maior: quase toda proposta behaviorista, mais cedo ou mais tarde, precisa se posicionar sobre a relação entre mente e corpo, e Foxall não foge dessa exigência.',
+    fonte:'Oliveira-Castro (2021, cap. 14, p. 189).',
+    dica:'A resposta certa nomeia algo que se repete em vários behaviorismos, não só no de Foxall.' },
+  { tipo:'quadro',
+    enunciado:'Oliveira-Castro descreve como o modelo de Foxall nasceu: uma adaptação da análise do comportamento e do behaviorismo radical, aplicada à interpretação do comportamento do consumidor, que depois, ao encontrar limites explicativos, passou a incorporar intencionalidade e explicação cognitiva. Complete: segundo Oliveira-Castro, Foxall incorporou intencionalidade porque encontrou os limites da explicação ___ insuficientes para certos fenômenos do consumo.',
+    opcoes:['puramente comportamental (behavior-analítica)','puramente neurológica','puramente estatística','puramente histórica'],
+    explicacao:'A leitura de Oliveira-Castro é a de um percurso: Foxall começou dentro da análise do comportamento tradicional e só ampliou o vocabulário quando essa base sozinha não dava conta de certos fenômenos de consumo.',
+    fonte:'Oliveira-Castro (2021, cap. 14, p. 191).',
+    dica:'O ponto de partida do modelo era estritamente behaviorista, antes de qualquer ampliação.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 15, ao responder a Oliveira-Castro, Foxall lembra que a análise funcional do comportamento é possível tanto em ambientes fechados, como a câmara operante, quanto em situações de campo, onde o controle ambiental também pode ser observado com clareza. Complete: mas, segundo Foxall, a análise operante não fica ___ a esses ambientes controlados.',
+    opcoes:['restrita (limitada)','disponível apenas','popular apenas','ensinada apenas'],
+    explicacao:'Foxall defende que os princípios do comportamento, estabelecidos em ambientes favoráveis ao controle experimental, também servem para interpretar comportamentos que não podem ser estudados com o mesmo rigor, como a escolha do consumidor no mundo real.',
+    fonte:'Foxall (2021, cap. 15, p. 211).',
+    dica:'A resposta certa nega que a análise só funcione dentro do laboratório.' },
+  { tipo:'quadro',
+    enunciado:'Foxall compara essa situação a outras ciências naturais, como a astronomia e o estudo da história filogenética das espécies, que também não se prestam facilmente à experimentação direta, mas ainda assim usam princípios científicos estabelecidos em outros contextos. Complete: para Foxall, o comportamento pode ser entendido por meio das contingências de reforço e punição mesmo quando o controle experimental do objeto de estudo não pode ser ___.',
+    opcoes:['alcançado (obtido)','descrito','nomeado','memorizado'],
+    explicacao:'É a defesa central da resposta de Foxall: falta de controle experimental direto não impede a aplicação dos princípios do comportamento, do mesmo jeito que a astronomia usa física sem poder manipular estrelas em laboratório.',
+    fonte:'Foxall (2021, cap. 15, p. 211).',
+    dica:'Astronomia e filogenia são os dois exemplos que o próprio quadro já deu.' },
+  { tipo:'quadro',
+    enunciado:'Foxall faz um ponto mais forte ainda: para ele, não é que às vezes precisamos interpretar nossas observações de comportamento; precisamos interpretá-las sempre, porque mesmo uma descrição puramente extensional (em termos de estímulos e respostas) já é, ela mesma, uma interpretação. Complete: segundo Foxall, não existem "estímulos e respostas" soltos no mundo; existem apenas ___, alguns dos quais precedem outros.',
+    opcoes:['eventos (acontecimentos)','números','palavras','sensações'],
+    explicacao:'É um argumento quase filosófico: chamar algo de "estímulo" ou "resposta" já é fazer uma escolha interpretativa sobre um evento bruto; não existe uma descrição totalmente neutra e livre de interpretação.',
+    fonte:'Foxall (2021, cap. 15, p. 211).',
+    dica:'A resposta certa é a categoria mais neutra e geral, antes de qualquer rótulo teórico.' },
+  { tipo:'quadro',
+    enunciado:'Juntando os três capítulos: Foxall propõe três etapas de interpretação (behaviorista, intencional, cognitiva) para explicar a escolha do consumidor; Oliveira-Castro situa esse projeto dentro do velho problema mente-corpo; Foxall responde que toda descrição de comportamento, mesmo a mais estritamente behaviorista, já envolve algum grau de interpretação. Complete: o fio condutor dos três capítulos é a pergunta sobre o que faz de um comportamento de consumo uma ___, e não apenas um comportamento qualquer.',
+    opcoes:['ação (com intenção reconhecível)','venda (com valor comercial)','hábito (repetido no tempo)','reflexo (automático e involuntário)'],
+    explicacao:'É a pergunta que abre o capítulo 13 e atravessa toda a discussão: distinguir ação de mero comportamento é o que justifica, para Foxall, ir além da análise puramente behaviorista.',
+    fonte:'Foxall (2021, caps. 13–15.)',
+    dica:'É a mesma pergunta que abre o primeiro quadro deste quiz.' },
+  { tipo:'quadro',
+    enunciado:'Vale reforçar uma diferença de vocabulário que atravessa os três capítulos: "comportamento do consumidor" é a categoria mais ampla e neutra; "ação do consumidor" é a categoria que já supõe intenção reconhecível por trás do ato. Complete: para o behaviorismo intencional, toda ação é comportamento, mas nem todo comportamento chega a ser considerado ___.',
+    opcoes:['ação (no sentido intencional)','reforçado','observável','mensurável'],
+    explicacao:'É a distinção final que resume o projeto inteiro de Foxall: ação é um subconjunto mais restrito e mais rico de comportamento, aquele que compensa ser analisado também em termos intencionais e cognitivos.',
+    fonte:'Foxall (2021, cap. 13, p. 156.)',
+    dica:'Pense em qual das duas categorias é mais ampla e qual é mais específica.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'hayes-contextual': {
+  autor:'hayes', tipo:'livro', categoria:'Capítulo + réplica',
+  titulo:'Behaviorismo contextual', ano:2021, edicao:'caps. 16–18',
+  subtitulo:'Instrução programada: leia o quadro, complete com calma',
+  rotuloCartucho:'CAP. 16–18',
+  rotuloAbertura:'Hayes em Zilio & Carrara (2021) · caps. 16–18',
+  arte:'img/hayes-retrato.png',
+  arteAlt:'Retrato de Steven C. Hayes sorrindo, de terno escuro, em preto e azul-gelo',
+  rodada:10,
+  referencia:'Hayes, S. C. (2021). Contextual behavioral science as a distinct form of behavioral research and practice. In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 235–250). Springer. Réplica de De Rose, J. C. (pp. 251–258); resposta de Hayes (pp. 259–265).',
+  leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Hayes, o comentário de Julio C. de Rose e a resposta de Hayes a ele.',
+  intro:'A ciência comportamental contextual (CBS) de Hayes é hoje um campo grande, com associação própria e revista própria. Os quadros percorrem as seis características que ele usa para defini-la e a disputa amistosa que se segue com De Rose.',
+  conquistas:{ aprovado:'Leitor(a) do behaviorismo contextual', perfeito:'Seis características, sem erro' },
+  perguntas:[
+  { tipo:'quadro',
+    enunciado:'Hayes define a ciência comportamental contextual (CBS) como uma forma de pensamento comportamental composta por seis características principais. A primeira delas é um refinamento do behaviorismo radical numa filosofia da ciência distinta, ainda que parecida. Complete o nome dessa filosofia: ___.',
+    opcoes:['contextualismo funcional','estruturalismo radical','mentalismo científico','operacionalismo lógico'],
+    explicacao:'Contextualismo funcional é a base filosófica que Hayes constrói a partir do behaviorismo radical: parecida o bastante para continuar sendo uma forma de behaviorismo, distinta o bastante para merecer nome próprio.',
+    fonte:'Hayes (2021, cap. 16, p. 235).',
+    dica:'É o mesmo termo que dá nome ao grupo inteiro de ideias de Hayes.' },
+  { tipo:'quadro',
+    enunciado:'A segunda característica da CBS é o desenvolvimento de uma teoria para abordar a linguagem e a cognição humanas. Complete a sigla dessa teoria: ___.',
+    opcoes:['RFT (Relational Frame Theory)','ACT (Acceptance and Commitment Therapy)','CBS (Contextual Behavioral Science)','VTE (vicarious trial and error)'],
+    explicacao:'RFT é a teoria da linguagem e da cognição que sustenta boa parte do edifício teórico de Hayes; ACT, citada mais adiante, é uma aplicação clínica construída sobre ela, não a teoria em si.',
+    fonte:'Hayes (2021, cap. 16, p. 235).',
+    dica:'Não confunda com a terapia (ACT), que vem depois na lista.' },
+  { tipo:'quadro',
+    enunciado:'Hayes lembra que, ao contrário de muitas formas de behaviorismo definidas por uma única pessoa ou por um pequeno grupo, a CBS reúne centenas de pesquisadores ao redor do mundo. Ele descreve seu próprio papel com modéstia: diz apenas que seu laboratório "pode ter dado o pontapé inicial". Complete: mesmo assim, Hayes reconhece que a CBS hoje é moldada por ___ pessoas ativamente.',
+    opcoes:['centenas de','apenas dez','uma única','nenhuma outra'],
+    explicacao:'É um ponto que Hayes faz questão de marcar: a CBS não é propriedade de um só autor, mesmo que ele tenha ajudado a iniciar boa parte dela.',
+    fonte:'Hayes (2021, cap. 16, p. 236).',
+    dica:'O quadro já contrasta a CBS com behaviorismos definidos por poucas pessoas.' },
+  { tipo:'quadro',
+    enunciado:'Hayes explica que cada visão de mundo filosófica (formismo, organicismo, mecanicismo, contextualismo) tem uma metáfora-raiz e um critério de verdade próprios. A metáfora-raiz do contextualismo é o "ato-em-contexto". Complete: para o contextualismo, entender um evento significa sempre entendê-lo dentro do seu ___, nunca isolado dele.',
+    opcoes:['contexto (a situação em que ocorre)','vocabulário técnico específico','laboratório de origem','autor que o descreveu primeiro'],
+    explicacao:'É a metáfora-raiz que dá nome à própria escola: nenhum evento, para o contextualismo, é compreendido isoladamente; ele só faz sentido dentro do contexto em que acontece.',
+    fonte:'Hayes (2021, cap. 16, p. 238).',
+    dica:'A palavra "contexto" já está no próprio nome da escola.' },
+  { tipo:'quadro',
+    enunciado:'A sexta característica da CBS é a busca de modelos e programas aplicados baseados na ciência evolutiva e em princípios comportamentais ampliados pela RFT, com precisão, alcance e profundidade. Um exemplo citado por Hayes é o modelo de flexibilidade psicológica, usado para entender e tratar o sofrimento psicológico. Complete: esse modelo deu origem a uma terapia conhecida pela sigla ___.',
+    opcoes:['ACT (Terapia de Aceitação e Compromisso)','RFT (Teoria das Molduras Relacionais)','CBS (Ciência Comportamental Contextual)','TCC (Terapia Cognitivo-Comportamental tradicional)'],
+    explicacao:'ACT é a aplicação clínica mais conhecida construída sobre o modelo de flexibilidade psicológica, que por sua vez se apoia na RFT.',
+    fonte:'Hayes (2021, cap. 16, p. 236).',
+    dica:'É a mesma sigla que apareceu como opção errada duas perguntas atrás.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 17, o comentarista Julio C. de Rose dá ao seu texto um título curioso: "A asa vai voar longe do corpo?". Complete o que essa pergunta sugere, no contexto do comentário: De Rose questiona se a RFT, ao crescer tanto, corre o risco de se afastar demais do restante da ___.',
+    opcoes:['análise do comportamento','psicologia cognitiva','filosofia da linguagem','neurociência comportamental'],
+    explicacao:'A "asa" é a RFT e o "corpo" é a análise do comportamento tradicional; a pergunta do título já resume a principal preocupação de De Rose no capítulo.',
+    fonte:'De Rose (2021, cap. 17, título e p. 251).',
+    dica:'O título do capítulo já contém a resposta, em forma de metáfora.' },
+  { tipo:'quadro',
+    enunciado:'De Rose reconhece o peso da contribuição de Hayes com generosidade, mas nota que Hayes se descreve, com modéstia, apenas como alguém que "pode ter dado o pontapé inicial" à CBS. Complete: De Rose duvida que alguém questione a ___ de Hayes nesse processo.',
+    opcoes:['liderança (papel de destaque)','honestidade','formação acadêmica','nacionalidade'],
+    explicacao:'De Rose usa esse comentário para elogiar Hayes antes de entrar nas ressalvas mais técnicas do capítulo, num gesto comum em textos de réplica acadêmica.',
+    fonte:'De Rose (2021, cap. 17, p. 251).',
+    dica:'É um elogio inicial, antes das críticas mais técnicas do capítulo.' },
+  { tipo:'quadro',
+    enunciado:'De Rose destaca que, depois de mais de três décadas e meia de trabalho, a RFT, a ACT e a CBS em geral ganharam reconhecimento sólido, com associação científica própria e uma revista de grande prestígio na área. Complete: De Rose usa esses dados para argumentar que a CBS é hoje um campo ___, não uma ideia marginal ou experimental.',
+    opcoes:['vigoroso e consolidado','ainda muito incerto','pouco citado','restrito a um único país'],
+    explicacao:'Antes de levantar sua preocupação com a "asa" se afastando do "corpo", De Rose reconhece que a CBS já não é um projeto pequeno: tem instituições, revista e impacto acadêmico reais.',
+    fonte:'De Rose (2021, cap. 17, p. 251).',
+    dica:'O quadro já lista os sinais de força institucional da CBS.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 18, ao responder a De Rose, Hayes conta uma pequena história inventada: uma planta preciosa recebeu um telhado e um círculo de assentos ao redor, construídos por admiradores bem-intencionados, mas o telhado bloqueava sol e chuva, e a planta foi enfraquecendo aos poucos. Complete o que um jardineiro fez, sem avisar ninguém: ele levou um ___ da planta e o replantou do lado de fora, ao sol.',
+    opcoes:['pedaço (uma muda, um corte)','vaso inteiro','grupo de admiradores','desenho técnico'],
+    explicacao:'É a parábola com que Hayes responde à preocupação de De Rose: a "muda" replantada representa a CBS crescendo fora da estrutura mais fechada da análise do comportamento tradicional, sem deixar de vir da mesma linhagem.',
+    fonte:'Hayes (2021, cap. 18, p. 259).',
+    dica:'É a mesma ação que dá início a toda a parábola do jardineiro.' },
+  { tipo:'quadro',
+    enunciado:'Na parábola de Hayes, a muda replantada cresce mais forte do que a planta original, mas os admiradores da planta original reclamam: "por que você se separou da planta-mãe? Sua planta nem tem telhado! Não tem assentos!" Complete a resposta do jardineiro: a planta cresce mais justamente porque ___.',
+    opcoes:['não tem mais o telhado bloqueando sol e chuva','foi plantada num vaso maior','recebeu um novo tipo de adubo','foi replantada por outra pessoa'],
+    explicacao:'É o ponto central da parábola: o "telhado e os assentos" (as convenções antigas) não eram propriedades originais da planta, e livrar-se deles permitiu um crescimento mais robusto, sem que isso significasse abandonar a linhagem original.',
+    fonte:'Hayes (2021, cap. 18, p. 259).',
+    dica:'O jardineiro explica que telhado e assentos nunca foram parte essencial da planta.' },
+  { tipo:'quadro',
+    enunciado:'O título do capítulo de resposta de Hayes é "O resultado final é progresso: todo o resto é comentário". Complete o que esse título sugere sobre a posição de Hayes diante da crítica de De Rose: para Hayes, o critério mais importante para avaliar a CBS não é sua fidelidade a formas antigas, mas seu ___ prático e científico.',
+    opcoes:['progresso (avanço mensurável)','tamanho institucional','número de citações','grau de popularidade'],
+    explicacao:'O título já anuncia a posição de Hayes: o que importa, no fim, é se a CBS continua avançando cientificamente, e tudo o mais (inclusive a preocupação com se afastar demais da tradição) é secundário diante desse critério.',
+    fonte:'Hayes (2021, cap. 18, título e p. 259.)',
+    dica:'A resposta certa é a mesma palavra que dá nome ao título do capítulo.' },
+  { tipo:'quadro',
+    enunciado:'Juntando os três capítulos: Hayes define a CBS por seis características, entre elas o contextualismo funcional e a RFT; De Rose reconhece o valor da CBS, mas teme que a RFT se afaste demais da análise do comportamento tradicional; Hayes responde com a parábola da planta, defendendo que crescer fora das velhas convenções não significa abandonar a linhagem original. Complete: o fio condutor dos três capítulos é a tensão entre continuidade com o behaviorismo radical e ___ em direção a novos territórios.',
+    opcoes:['expansão (crescimento para além dele)','rejeição completa','estagnação','retorno ao início'],
+    explicacao:'É a tensão que percorre o debate inteiro: o quanto a CBS pode se afastar do tronco radical skinneriano, e ainda assim continuar sendo reconhecida como parte da mesma linhagem.',
+    fonte:'Hayes (2021, caps. 16–18.)',
+    dica:'Pense na imagem da planta crescendo para fora do telhado antigo.' }
+  ]
+}
+,
+
+/* ---------------------------------------------------------------- */
+'ribes-campo': {
+  autor:'ribes', tipo:'livro', categoria:'Capítulo + réplica',
+  titulo:'Behaviorismo de campo', ano:2021, edicao:'caps. 19–21',
+  subtitulo:'Instrução programada: leia o quadro, complete com calma',
+  rotuloCartucho:'CAP. 19–21',
+  rotuloAbertura:'Ribes-Iñesta em Zilio & Carrara (2021) · caps. 19–21',
+  arte:'img/ribes-retrato.png',
+  arteAlt:'Emilio Ribes-Iñesta em traços holográficos azul-gelo',
+  rodada:10,
+  referencia:'Ribes-Iñesta, E. (2021). A theory of behavior or a theory of psychology? In D. Zilio &amp; K. Carrara (Eds.), <i>Contemporary behaviorisms in debate</i> (pp. 273–306). Springer. Réplica de Neves Filho, H. B., &amp; Magalhães, T. O. (pp. 307–318); resposta de Ribes-Iñesta (pp. 319–341).',
+  leituraInicial:'Mesmo formato dos quizzes anteriores: cada quadro ensina antes de perguntar. Os três capítulos são o texto de Ribes-Iñesta, o comentário assinado pelo próprio autor deste jogo (Hernando Borges Neves Filho) com Tiago de Oliveira Magalhães, e a resposta de Ribes a eles.',
+  intro:'Ribes-Iñesta parte da obra de J. R. Kantor para propor não uma teoria do comportamento, mas uma teoria da psicologia inteira. Os quadros seguem essa ambição de perto, dos meios de contato até a taxonomia dos contatos funcionais.',
+  conquistas:{ aprovado:'Leitor(a) do behaviorismo de campo', perfeito:'Três meios de contato, sem erro' },
+  perguntas:[
+  { tipo:'quadro',
+    enunciado:'Ribes-Iñesta pergunta, já no título do capítulo, se sua proposta é uma teoria do comportamento ou uma teoria da psicologia. Complete: ele defende a segunda opção, porque quer que seu modelo de campo sirva para explicar todos os fenômenos ___, não apenas o comportamento observável de organismos individuais.',
+    opcoes:['psicológicos','fisiológicos','sociológicos','estatísticos'],
+    explicacao:'É a ambição central do capítulo: em vez de mais uma teoria do comportamento entre outras, Ribes quer um modelo capaz de cobrir a psicologia inteira, incluindo fenômenos que outras teorias behavioristas deixam de fora.',
+    fonte:'Ribes-Iñesta (2021, cap. 19, título.)',
+    dica:'A pergunta do título já indica qual das duas opções ele escolhe.' },
+  { tipo:'quadro',
+    enunciado:'A base da proposta de Ribes vem do psicólogo J. R. Kantor, que descreveu três categorias para um campo psicológico: o meio de contato, o contato entre um organismo e um objeto de estímulo, e fatores situacionais ligados à história interconductual. Complete: Ribes ampliou o número de meios de contato identificados por Kantor, que havia descrito apenas o meio de contato ___.',
+    opcoes:['físico-químico','ecológico','convencional','linguístico'],
+    explicacao:'Kantor havia identificado só um tipo de meio de contato, o físico-químico; Ribes propôs ampliar essa categoria com mais dois tipos, que aparecem nos próximos quadros.',
+    fonte:'Ribes-Iñesta (2021, cap. 19, p. 276).',
+    dica:'É o meio mais básico, ligado às propriedades físicas do contato entre organismo e estímulo.' },
+  { tipo:'quadro',
+    enunciado:'Além do meio físico-químico, Ribes propõe dois meios de contato adicionais. Complete o primeiro deles: o meio ecológico, que possibilita a ___ do organismo.',
+    opcoes:['sobrevivência','comunicação verbal','educação formal','reprodução artificial'],
+    explicacao:'O meio ecológico cuida das condições de sobrevivência do organismo dentro de sua espécie e de seu ambiente natural; é um nível a mais além do simples contato físico entre estímulo e resposta.',
+    fonte:'Ribes-Iñesta (2021, cap. 19, p. 277).',
+    dica:'Pense na palavra "ecológico": sobrevivência dentro de um ambiente natural.' },
+  { tipo:'quadro',
+    enunciado:'O terceiro meio de contato proposto por Ribes é exclusivamente humano: o meio convencional, que possibilita a vida em sociedade, a cultura e as instituições. Complete: segundo Ribes, o meio convencional sempre requer o meio ___, do mesmo jeito que este requer o meio físico-químico.',
+    opcoes:['ecológico','estatístico','digital','educacional'],
+    explicacao:'Os três meios formam uma hierarquia de exigências: o convencional depende do ecológico, que por sua vez depende do físico-químico, mas nenhum deles substitui os outros dois.',
+    fonte:'Ribes-Iñesta (2021, cap. 19, p. 277).',
+    dica:'Pense na ordem: convencional precisa do ecológico, ecológico precisa do físico-químico.' },
+  { tipo:'quadro',
+    enunciado:'Ribes descreve três objetivos de sua proposta teórica: substituir a análise atomista e causal da teoria do condicionamento por uma análise de campo, determinista e molar; explicitar os pressupostos da teoria; e formular uma taxonomia dos tipos de organização funcional do comportamento. Complete: essa taxonomia vai além da simples dicotomia entre respondente e ___, já bem conhecida da análise do comportamento tradicional.',
+    opcoes:['operante','verbal','reforçado','inato'],
+    explicacao:'Ribes quer uma classificação mais rica do que apenas "respondente" e "operante"; a taxonomia dele inclui vários níveis de contato funcional, do mais simples ao mais complexo.',
+    fonte:'Ribes-Iñesta (2021, cap. 19, p. 275).',
+    dica:'É a dicotomia clássica da análise do comportamento: respondente e ___.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 20, os comentaristas Hernando Borges Neves Filho e Tiago de Oliveira Magalhães, citando Wittgenstein, notam que a existência de um método experimental muitas vezes nos faz pensar que já temos os meios de resolver os problemas que nos incomodam, quando, na verdade, problema e método "passam um pelo outro" sem se encontrar. Complete: os comentaristas usam essa ideia para valorizar o esforço de Ribes em priorizar a revisão ___ sobre o acúmulo empírico de dados.',
+    opcoes:['conceitual (dos pressupostos teóricos)','estatística (das amostras coletadas)','histórica (dos experimentos antigos)','institucional (das universidades envolvidas)'],
+    explicacao:'Os comentaristas leem a Teoria da Psicologia de Ribes como um esforço raro de colocar a clareza conceitual à frente do simples acúmulo de dados experimentais, um problema que atribuem a boa parte da psicologia acadêmica.',
+    fonte:'Neves Filho &amp; Magalhães (2021, cap. 20, p. 307).',
+    dica:'O ponto de Wittgenstein é sobre confundir método com solução de problemas conceituais.' },
+  { tipo:'quadro',
+    enunciado:'Os comentaristas discutem a taxonomia de contatos funcionais de Ribes, usando como exemplo o ato de ver um objeto como uma fruta, uma simples percepção. Eles argumentam que esse ato tão simples já está relacionado a convenções linguísticas do contexto social, mesmo sem ser, nos termos de Skinner, uma resposta operante verbal. Complete: para os comentaristas, isso sugere que a linguagem pode estar presente desde o tipo mais simples de contato funcional, chamado de contingências de ___.',
+    opcoes:['acoplamento (coupling)','alteração','comparação','extensão'],
+    explicacao:'Mesmo o nível mais básico da taxonomia de Ribes, as contingências de acoplamento, já pode envolver, segundo os comentaristas, alguma relação com convenções linguísticas, mesmo que a forma mais sofisticada da linguagem só apareça em contatos mais complexos.',
+    fonte:'Neves Filho &amp; Magalhães (2021, cap. 20, p. 317).',
+    dica:'É o primeiro e mais simples dos tipos de contato funcional da taxonomia de Ribes.' },
+  { tipo:'quadro',
+    enunciado:'Os comentaristas também apontam uma dificuldade na taxonomia de Ribes: o critério que separa contingências de acoplamento, contingências de alteração e contingências de comparação nem sempre é claro, porque cada uma dessas transições parece usar um critério lógico diferente da anterior. Complete: para os comentaristas, essa falta de um critério único torna difícil entender por que esses três tipos formariam uma única linha de complexidade ___.',
+    opcoes:['crescente (progressiva)','decrescente','circular','aleatória'],
+    explicacao:'É uma crítica técnica precisa: se cada transição na taxonomia segue uma lógica diferente, fica difícil justificar por que os tipos de contato formariam uma escala única, do mais simples ao mais complexo.',
+    fonte:'Neves Filho &amp; Magalhães (2021, cap. 20, p. 317.)',
+    dica:'O quadro já descreve a taxonomia como uma linha que vai do simples ao mais elaborado.' },
+  { tipo:'quadro',
+    enunciado:'No capítulo 21, ao responder aos comentaristas, Ribes começa afirmando que "comportamento psicológico" não é uma expressão redundante. Ele nota que a palavra "comportamento" também é usada na linguagem comum para julgar boas ou más condutas, sem nenhuma relação direta com a psicologia como disciplina. Complete: para Ribes, os psicólogos erram ao assumir que a palavra "comportamento" é ___ da psicologia.',
+    opcoes:['exclusiva (só usada por essa disciplina)','recente (uma invenção do século XX)','intraduzível (impossível verter para outros idiomas)','desnecessária (dispensável no vocabulário técnico)'],
+    explicacao:'Ribes começa sua resposta corrigindo um pressuposto comum: a palavra "comportamento" já existia antes da psicologia e continua sendo usada fora dela; por isso "comportamento psicológico" precisa ser definido com cuidado, não tratado como um sinônimo óbvio de "comportamento".',
+    fonte:'Ribes-Iñesta (2021, cap. 21, p. 327).',
+    dica:'A resposta certa explica por que a expressão não é redundante.' },
+  { tipo:'quadro',
+    enunciado:'Ribes organiza sua resposta aos comentaristas em torno de três questões: como conceber o objeto de estudo da psicologia e a natureza dos contatos funcionais num campo; o conceito de linguagem em sua proposta, sobretudo o comportamento referencial; e as relações entre multidisciplina, interdisciplina e o substrato ideológico das relações práticas entre indivíduos. Complete: ao organizar a resposta assim, Ribes trata as críticas dos comentaristas com ___, dizendo-se inclusive lisonjeado com a avaliação geral que fizeram da teoria.',
+    opcoes:['respeito (reconhecendo o valor delas)','indiferença total','irritação evidente','silêncio, sem responder a nenhuma'],
+    explicacao:'Ribes abre o capítulo de resposta concordando com boa parte dos comentários e reconhecendo que algumas dificuldades de compreensão vêm da novidade dos termos técnicos, um tom de diálogo típico dessa seção do livro.',
+    fonte:'Ribes-Iñesta (2021, cap. 21, p. 319).',
+    dica:'Ribes começa a resposta elogiando os comentaristas, não os atacando.' },
+  { tipo:'quadro',
+    enunciado:'Juntando os três capítulos: Ribes propõe um modelo de campo, baseado em Kantor, com três meios de contato (físico-químico, ecológico, convencional) e uma taxonomia de contatos funcionais, com a ambição de cobrir toda a psicologia, não só o comportamento; os comentaristas valorizam esse esforço conceitual, mas apontam falta de clareza nos critérios da taxonomia; Ribes responde reorganizando sua defesa em torno de três questões centrais. Complete: o fio condutor dos três capítulos é a pergunta que dá título ao capítulo 19: uma teoria do comportamento, ou uma teoria da ___?',
+    opcoes:['psicologia (inteira)','aprendizagem','linguagem','emoção'],
+    explicacao:'É a mesma pergunta que abre e fecha o debate: Ribes quer que seu modelo sirva de teoria geral da psicologia, e é essa ambição, mais do que qualquer detalhe técnico, que os comentaristas reconhecem como o valor central da proposta.',
+    fonte:'Ribes-Iñesta (2021, caps. 19–21.)',
+    dica:'É a mesma pergunta do primeiro quadro deste quiz.' },
+  { tipo:'quadro',
+    enunciado:'Vale reforçar, para fechar: os três meios de contato de Ribes (físico-químico, ecológico, convencional) não descrevem, cada um, um "mundo" empírico diferente e separado; eles descrevem condições que tornam possível, em diferentes níveis, o contato funcional entre um organismo e um objeto de estímulo. Complete: por isso, os três meios de contato não são mutuamente ___, e podem operar juntos na mesma situação psicológica.',
+    opcoes:['exclusivos (um não descarta o outro)','idênticos (a mesma coisa com nomes diferentes)','opostos (um sempre contradiz o outro)','independentes (nunca aparecem juntos)'],
+    explicacao:'É um ponto de fechamento importante: como o convencional pressupõe o ecológico, que pressupõe o físico-químico, os três meios costumam estar presentes ao mesmo tempo, em camadas, numa mesma situação psicológica real.',
+    fonte:'Ribes-Iñesta (2021, cap. 19, p. 277.)',
+    dica:'Pense na hierarquia de dependência entre os três meios, já vista antes neste quiz.' }
+  ]
+}
 
 };
 
@@ -1730,7 +3061,7 @@ function verificarSecretos(autorId, novas){
 }
 
 /* ---------- navegação ---------- */
-const TELAS = ['sTitle','sHall','sDossier','sBrief','sQuiz','sResult','sTrophies'];
+const TELAS = ['sTitle','sHall','sDossier','sBrief','sGuia','sQuiz','sResult','sTrophies'];
 let telaAnterior = 'sTitle';
 function ir(id){
   const atual = TELAS.find(t=>!$('#'+t).hidden);
@@ -1912,7 +3243,7 @@ function abrirDossie(id){
   b.quizzes.forEach(qid=>{
     const q = QUIZZES[qid]; const r = ST.quizzes[qid];
     const c = el('button',{class:'cartridge'});
-    const rot = q.tipo==='livro' ? 'LIVRO '+q.ano : 'TEORIA';
+    const rot = q.rotuloCartucho || (q.tipo==='livro' ? 'LIVRO '+q.ano : 'TEORIA');
     const slot = q.arte ? `<span class="thumb"><img src="${q.arte}" alt="" class="${q.arteFit==='contain'?'contain':''}"><span>${rot}</span></span>` : `<span class="slot">${q.tipo==='livro'?'LIVRO<br>'+q.ano:'TEORIA<br>GERAL'}</span>`;
     c.innerHTML = `${slot}
       <span><span class="t">${esc(q.titulo)}</span><br><span class="s">${esc(q.subtitulo)} · ${q.rodada} de ${q.perguntas.length} perguntas por rodada</span></span>
@@ -1935,7 +3266,7 @@ function abrirDossie(id){
   const lb = textoLivro(b);
   $('#dosBook').innerHTML = lb ? `<b>NO LIVRO-BASE</b>${esc(lb)}` : '';
   ir('sDossier');
-  $('#dosPhotoImg').src = b.retrato; $('#dosPhotoImg').alt = 'Retrato de '+b.nome;
+  $('#dosPhotoImg').src = b.retrato || IMG_SILHUETA; $('#dosPhotoImg').alt = 'Retrato de '+b.nome;
   $('#dosPhotoCap').textContent = 'ARQUIVO · '+b.curto.toUpperCase();
   const th = $('#dosThumbs'); th.innerHTML = '';
   const gal = b.galeria || [];
@@ -1962,7 +3293,7 @@ function abrirIntroducaoQuiz(qid){
   // capa em retrato fica na coluna; foto em paisagem ocupa a largura acima do texto
   img.onload = ()=>{ const land = img.naturalWidth > img.naturalHeight;
     $('#briefBox').classList.toggle('is-land', land); fig.classList.toggle('portrait-art', !land); };
-  $('#briefKind').textContent = q.tipo==='livro' ? `Livro de ${b.nome} · ${q.ano}${q.edicao?' ('+q.edicao+')':''}` : `Teoria geral · ${b.nome}`;
+  $('#briefKind').textContent = q.rotuloAbertura || (q.tipo==='livro' ? `Livro de ${b.nome} · ${q.ano}${q.edicao?' ('+q.edicao+')':''}` : `Teoria geral · ${b.nome}`);
   $('#briefTitle').textContent = q.titulo;
   $('#briefSub').textContent = q.subtitulo;
   const regras = [
@@ -1977,12 +3308,34 @@ function abrirIntroducaoQuiz(qid){
   li.innerHTML = q.leituraInicial ? `<span class="cab">ANTES DE JOGAR</span><p>${esc(q.leituraInicial)}</p>` : '';
   $('#briefNpc').src = IMG.boatOk;
   $('#briefTalk').textContent = q.intro;
+  const bonus = $('#briefBonus'); bonus.hidden = !q.guiaLeitura;
+  if (q.guiaLeitura){ $('#bonusTitle').textContent = q.guiaLeitura.titulo; $('#bonusSub').textContent = 'Trilha de leitura, glossário e comparação com Skinner.'; }
   ir('sBrief');
   $('#btnGo').focus({preventScroll:true});
 }
 
+/* ---------- guia de leitura (bônus) ---------- */
+function abrirGuia(){
+  const q = QUIZZES[quizEscolhido], g = q.guiaLeitura; if (!g) return;
+  $('#guiaTitulo').textContent = g.titulo;
+  $('#guiaSubtitulo').textContent = g.subtitulo;
+  $('#guiaIntro').textContent = g.intro;
+  $('#guiaTrilha').innerHTML = g.trilha.map(t=>`<li><span class="tt">${esc(t.titulo)}</span><span class="pg">${esc(t.paginas)}</span>${esc(t.texto)}</li>`).join('');
+  $('#guiaGlossario').innerHTML = g.glossario.map(x=>`<dt>${esc(x.termo)}</dt><dd>${esc(x.def)}</dd>`).join('');
+  $('#guiaTemas').innerHTML = g.temas.map(t=>{
+    const trecho = t.trecho ? `<blockquote class="trecho"><span class="en" lang="en">${esc(t.trecho.en)}</span><span class="pt">${esc(t.trecho.pt)}</span><span class="ref">${esc(t.trecho.ref)}</span></blockquote>` : '';
+    return `<aside class="saiba"><span class="cab">${esc(t.pp)}</span><h4>${esc(t.titulo)}</h4><p>${esc(t.texto)}</p>${trecho}</aside>`;
+  }).join('');
+  $('#guiaSkinnerTitulo').textContent = g.comparacaoSkinner.titulo;
+  $('#guiaAcordos').innerHTML = g.comparacaoSkinner.acordos.map(x=>`<li>${esc(x)}</li>`).join('');
+  $('#guiaDivergem').innerHTML = g.comparacaoSkinner.divergem.map(x=>`<li>${esc(x)}</li>`).join('');
+  $('#guiaImpacto').textContent = g.impacto;
+  $('#guiaRef').innerHTML = q.referencia ? `<b>REFERÊNCIA</b>${q.referencia}` : '';
+  ir('sGuia');
+}
+
 /* ---------- quiz ---------- */
-const ROTULO_TIPO = { obra:'QUAL OBRA?', quem:'QUEM DISSE?', capitulo:'QUAL CAPÍTULO?', conceito:'CONCEITO', caso:'PARA PENSAR' };
+const ROTULO_TIPO = { obra:'QUAL OBRA?', quem:'QUEM DISSE?', capitulo:'QUAL CAPÍTULO?', conceito:'CONCEITO', caso:'PARA PENSAR', complete:'COMPLETE A FRASE', raciocinio:'SIGA O RACIOCÍNIO', contraste:'COMPLETE O CONTRASTE', quadro:'QUADRO' };
 
 /* cartão "Para saber mais" */
 function ppLabel(pp){ return (/[–-]/.test(pp) ? 'pp. ' : 'p. ') + pp; }
@@ -2166,7 +3519,7 @@ function mostrarSecreto(liberados){
   const box = $('#resSecret'); box.innerHTML='';
   liberados.forEach(b=>{
     const card = el('div',{class:'secret-card'});
-    card.innerHTML = `<figure class="holo"><img src="${b.retrato}" alt="Retrato de ${esc(b.nome)}"></figure>
+    card.innerHTML = `<figure class="holo"><img src="${b.retrato || IMG_SILHUETA}" alt="Retrato de ${esc(b.nome)}"></figure>
       <div><span class="tag">PERSONAGEM SECRETO DESBLOQUEADO</span>
       <h3>${esc(b.nome)}</h3><p>${esc(b.secreto.texto)}</p>
       <button class="btn">Conhecer ${esc(b.curto)}</button></div>`;
@@ -2268,6 +3621,8 @@ $('#btnBackHall').addEventListener('click',()=>{ SOM.clique(); abrirSelecao(); }
 $('#btnHint').addEventListener('click',pedirDica);
 $('#btnGo').addEventListener('click',()=>{ SOM.clique(); iniciarQuiz(quizEscolhido); });
 $('#btnBriefBack').addEventListener('click',()=>{ SOM.clique(); abrirDossie(autorAtual); });
+$('#btnGuia').addEventListener('click',()=>{ SOM.clique(); abrirGuia(); });
+$('#btnGuiaBack').addEventListener('click',()=>{ SOM.clique(); ir('sBrief'); });
 $('#btnAgain').addEventListener('click',()=>{ SOM.clique(); iniciarQuiz(R.qid); });
 $('#btnToDossier').addEventListener('click',()=>{ SOM.clique(); abrirDossie(autorAtual); });
 $('#btnReset').addEventListener('click',()=>{ if(confirm('Apagar pontuações e conquistas deste navegador?')){ const som=ST.som; ST=estadoVazio(); ST.som=som; salvar(); ir('sTitle'); } });
