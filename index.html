@@ -385,11 +385,38 @@ a.btn{text-decoration:none;display:inline-block}
 
 /* ---------- tela do guia de leitura ---------- */
 .guide{max-width:920px}
-.guide-head{display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px}
+.guide-head{display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px;position:relative}
+.guide-head::before{
+  content:"";position:absolute;left:0;right:0;top:-10px;height:2px;
+  background:linear-gradient(to right,transparent,var(--ice),transparent);
+  background-size:200% 100%;animation:guiaSweep 2.6s linear infinite;
+}
+@keyframes guiaSweep{to{background-position:-200% 0}}
+.guide-head-tx{flex:1;min-width:240px}
 .guide-head h2{font-size:clamp(32px,5vw,50px);text-shadow:var(--glow)}
 .guide .lede{max-width:70ch}
 .guide section{margin-top:30px}
 .guide h3{font-size:26px;border-bottom:2px solid var(--slate);padding-bottom:5px;margin-bottom:14px}
+.guia-mascote{margin:0;flex:0 0 auto;position:relative;text-align:center}
+.guia-mascote img{
+  height:150px;image-rendering:pixelated;
+  filter:drop-shadow(0 0 1px var(--ice)) drop-shadow(0 0 6px rgba(160,205,255,.5));
+  animation:guiaBob 2.4s ease-in-out infinite;
+}
+@keyframes guiaBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.guia-mascote .mascote-fala{
+  display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  margin-bottom:10px;background:var(--ice);color:var(--void);font-size:13px;font-weight:600;
+  border-radius:10px;padding:7px 11px;width:190px;white-space:normal;
+}
+.guia-mascote .mascote-fala:not(:empty){display:block}
+.guia-mascote .mascote-fala::after{
+  content:"";position:absolute;top:100%;left:50%;margin-left:-8px;
+  border:8px solid transparent;border-bottom:0;border-top-color:var(--ice);
+}
+@media (max-width:640px){ .guide-head{flex-direction:column-reverse;align-items:center;text-align:center} }
+.guide > section,.guide-head,.guide > .lede{opacity:0;transform:translateY(22px);transition:opacity .5s ease,transform .5s ease}
+.guide > section.in,.guide-head.in,.guide > .lede.in{opacity:1;transform:none}
 .trilha{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:trilha}
 .trilha li{counter-increment:trilha;position:relative;padding-left:40px;border-left:2px solid var(--slate)}
 .trilha li::before{content:counter(trilha);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:var(--ice);color:var(--void);font-family:var(--f-disp);font-weight:800;display:grid;place-items:center;font-size:15px}
@@ -408,6 +435,14 @@ a.btn{text-decoration:none;display:inline-block}
 .skinner-box li{margin-bottom:9px;font-size:15px}
 .impacto p{max-width:74ch}
 @media (max-width:700px){ .skinner-box{grid-template-columns:1fr} }
+.guia-fotos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:14px}
+.guia-fotos figure{margin:0}
+.guia-fotos .foto-nota{margin:8px 2px 0;font-size:13px;color:var(--steel)}
+.figuras-livro{border-top:1px solid var(--slate);padding-top:12px}
+.figuras-livro .fl-cab{font-family:var(--f-pix);font-size:12px;color:var(--steel);margin:0 0 8px}
+.figuras-livro ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.figuras-livro li{font-size:14px;padding-left:14px;border-left:2px solid var(--slate)}
+.figuras-livro b{color:var(--ice);font-family:var(--f-pix);font-size:11px;display:block;margin-bottom:2px}
 
 /* ---------- Para saber mais (estímulo à leitura) ---------- */
 .saiba{position:relative;margin:26px 0 8px;max-width:64ch;border:2px solid var(--steel);background:var(--deep);padding:18px 16px 12px}
@@ -643,9 +678,15 @@ a.btn{text-decoration:none;display:inline-block}
   <!-- TELA: guia de leitura (bônus) -->
   <section class="screen guide" id="sGuia" hidden>
     <div class="guide-head">
-      <h2 id="guiaTitulo">Guia de leitura</h2>
+      <div class="guide-head-tx">
+        <h2 id="guiaTitulo">Guia de leitura</h2>
+        <p class="lede" id="guiaSubtitulo"></p>
+      </div>
+      <figure class="guia-mascote">
+        <img id="guiaMascoteImg" src="img/boatacon-livro.png" alt="Boatacon lendo">
+        <figcaption class="mascote-fala" id="guiaMascoteFala"></figcaption>
+      </figure>
     </div>
-    <p class="lede" id="guiaSubtitulo"></p>
     <p class="lede" id="guiaIntro"></p>
 
     <section>
@@ -663,7 +704,16 @@ a.btn{text-decoration:none;display:inline-block}
       <div class="temas-grid" id="guiaTemas"></div>
     </section>
 
-    <section>
+    <section class="fotos-sec" id="guiaFotosSec" hidden>
+      <h3>Fotos em destaque</h3>
+      <div class="guia-fotos" id="guiaFotos"></div>
+      <div class="figuras-livro" id="guiaFigurasLivroWrap" hidden>
+        <p class="fl-cab">No livro você também vai encontrar</p>
+        <ul id="guiaFigurasLivro"></ul>
+      </div>
+    </section>
+
+    <section id="guiaComparSec" hidden>
       <h3 id="guiaSkinnerTitulo">Tolman × Skinner</h3>
       <div class="skinner-box">
         <div class="col ok"><h4>Onde concordam</h4><ul id="guiaAcordos"></ul></div>
@@ -1643,6 +1693,71 @@ const QUIZZES = {
   leituraInicial:'O livro tem 29 capítulos em seis seções. Para ler pouco antes de jogar, comece pelos capítulos 2 e 3, que dizem o que Skinner entende por ciência e criticam as explicações por causas internas, e pelo capítulo 5, que apresenta o operante. A edição estendida traz também uma introdução pessoal de F. S. Keller (p. xxix). As páginas citadas são as desta edição.',
   intro:'Science and Human Behavior aplica a análise do comportamento a quase tudo: aprendizagem, emoção, autocontrole, grupos, governo, cultura. As perguntas daqui são de pensar, não de decorar. Depois de algumas respostas aparece um “Para saber mais”, com o trecho do livro que vale a leitura.',
   conquistas:{ aprovado:'Leitor(a) de Science and Human Behavior', perfeito:'Análise funcional' },
+  guiaLeitura:{
+    titulo:'Guia de leitura',
+    subtitulo:'Science and Human Behavior — os 29 capítulos em seis seções, do reflexo ao desenho de uma cultura',
+    intro:'É o livro mais longo da lista: 29 capítulos organizados em seis seções, cada uma um degrau da anterior — da pergunta "a ciência pode ajudar?" ao desenho deliberado de uma cultura. Este guia segue a arquitetura do livro seção por seção, e reúne o vocabulário e os trechos que mais aparecem nas perguntas.',
+    trilha:[
+      { titulo:'Seção I — A possibilidade de uma ciência do comportamento', paginas:'caps. I–III, pp. 3–43',
+        texto:'A base do livro inteiro: o que conta como ciência (cap. II) e por que explicações por "causas internas" (fome, ansiedade, vontade) não explicam nada sozinhas (cap. III). Sem esses dois capítulos, o resto do livro soa como uma lista de truques em vez de um sistema.' },
+      { titulo:'Seção II — A análise do comportamento', paginas:'caps. IV–XIV, pp. 45–225',
+        texto:'A seção mais longa e mais citada no quiz: do reflexo condicionado (cap. IV) ao operante (cap. V), passando por moldagem, discriminação, privação, emoção, controle aversivo e punição. É aqui que entra o vocabulário técnico central da análise do comportamento.' },
+      { titulo:'Seção III — O indivíduo como um todo', paginas:'caps. XV–XVIII, pp. 227–296',
+        texto:'Skinner vira a análise para dentro: autocontrole, pensamento, eventos privados (o que sentimos "por dentro da própria pele") e, no capítulo mais lido desta seção, o que resta do conceito de "eu" quando ele deixa de ser uma causa interna e passa a ser um repertório organizado.' },
+      { titulo:'Seção IV — O comportamento das pessoas em grupos', paginas:'caps. XIX–XXI, pp. 297–331',
+        texto:'Comportamento social, controle pessoal e controle de grupo: como um indivíduo passa a controlar o comportamento de outro, e como isso se generaliza em práticas de grupo.' },
+      { titulo:'Seção V — Agências controladoras', paginas:'caps. XXII–XXVI, pp. 333–414',
+        texto:'Cinco estudos de caso do mesmo processo: governo e lei, religião, psicoterapia, controle econômico e educação, cada um analisado como uma agência que usa técnicas específicas de reforço e punição para controlar comportamento em larga escala.' },
+      { titulo:'Seção VI — O controle do comportamento humano', paginas:'caps. XXVII–XXIX, pp. 415–450',
+        texto:'O fecho do livro: como maneiras e costumes se formam (cap. XXVII), o que significaria desenhar uma cultura deliberadamente usando sobrevivência como critério (cap. XXVIII) e, no capítulo final, o "problema do controle" — quem controla os controladores.' }
+    ],
+    glossario:[
+      { termo:'Reflexo condicionado', def:'Um estímulo antes neutro passa a eliciar uma resposta depois de ser seguido, repetidas vezes, pelo estímulo que já a eliciava; o processo é de substituição de estímulo, e a resposta continua vindo depois do estímulo (cap. IV).' },
+      { termo:'Operante', def:'Comportamento definido pelo efeito que produz no ambiente, não pelo estímulo que o precede; suas consequências alteram a probabilidade de ele ocorrer de novo (cap. V).' },
+      { termo:'Reforço', def:'Todo evento que, seguindo uma resposta, aumenta a probabilidade futura dessa resposta; Skinner prefere "probabilidade de resposta" a noções antigas como "força do hábito" (cap. V).' },
+      { termo:'Extinção', def:'Redução da probabilidade de uma resposta operante quando ela deixa de ser seguida pelo reforço que a mantinha.' },
+      { termo:'Controle aversivo', def:'Controle do comportamento por meio de estímulos aversivos (fuga, esquiva, punição), tratado nos caps. XI e XII e retomado nas agências controladoras (governo, religião).' },
+      { termo:'Autocontrole', def:'Quando um indivíduo manipula variáveis das quais seu próprio comportamento é função, controlando parte de si mesmo por meio de técnicas comportamentais, não de "força de vontade" (cap. XV).' },
+      { termo:'Eventos privados', def:'Estímulos e respostas acessíveis apenas ao próprio indivíduo, por estarem "dentro da própria pele"; Skinner insiste que isso não exige uma ciência diferente, só reconhece um problema extra de observação (cap. XVII).' },
+      { termo:'Agências controladoras', def:'Instituições — governo, religião, psicoterapia, controle econômico, educação — que exercem controle sistemático sobre o comportamento de grandes populações, cada uma com técnicas próprias de reforço e punição (caps. XXII–XXVI).' }
+    ],
+    temas:[
+      { titulo:'Ciência é atitude, não aparelho', pp:'pp. 11–14',
+        texto:'Logo no capítulo II, Skinner separa a ciência dos seus instrumentos: telescópios, microscópios e cálculos ajudam, mas não são a ciência em si. O que ele chama de científico é um conjunto de atitudes diante dos fatos, mesmo quando eles contrariam a expectativa.',
+        trecho:{ en:'"...they are not science itself."', pt:'"…eles não são a ciência em si." (tradução livre, sobre os instrumentos de pesquisa)', ref:'Skinner, 1953/2024, p. 12' } },
+      { titulo:'Do reflexo ao operante', pp:'pp. 59–66',
+        texto:'O capítulo V muda o centro da análise: em vez de perguntar que estímulo vem antes da resposta, Skinner pergunta o que a resposta produz no ambiente, e como essa consequência "retroalimenta" o organismo, mudando a chance de ela se repetir.',
+        trecho:{ en:'"The consequences of behavior may ‘feed back’ into the organism."', pt:'"As consequências do comportamento podem ‘retroalimentar’ o organismo." (tradução livre)', ref:'Skinner, 1953/2024, p. 59' } },
+      { titulo:'O eu como causa hipotética', pp:'pp. 283–296',
+        texto:'No capítulo XVIII, Skinner examina o que resta do "eu" quando ele deixa de ser tratado como uma entidade interna que decide e passa a ser descrito como um repertório organizado de comportamentos sob controle de variáveis externas.',
+        trecho:{ en:'"The self is most commonly used as a hypothetical cause of action."', pt:'"O ‘eu’ é mais comumente usado como uma causa hipotética da ação." (tradução livre)', ref:'Skinner, 1953/2024, p. 283' } },
+      { titulo:'Sobrevivência como critério de cultura', pp:'pp. 426–437',
+        texto:'Nos dois últimos capítulos, Skinner estende a lógica da seleção por consequências às práticas culturais inteiras: uma prática sobrevive ou desaparece conforme funciona, ou não, para a sobrevivência do grupo que a mantém — o mesmo tipo de processo que explica por que um animal aprende a fugir de um perigo.',
+        trecho:{ en:'"An individual does not choose to live or die; he behaves in ways which work toward his survival or death."', pt:'"Um indivíduo não escolhe viver ou morrer; ele se comporta de maneiras que atuam a favor da sua sobrevivência ou da sua morte." (tradução livre)', ref:'Skinner, 1953/2024, p. 433' } }
+    ],
+    fotos:[
+      { src:'img/shb-capa.png', legenda:'CAPA',
+        nota:'A capa da edição estendida (2024), usada como arte de abertura deste quiz.' },
+      { src:'img/skinner-lab-rato.png', legenda:'LABORATÓRIO',
+        nota:'Skinner com equipamento de registro cumulativo — a mesma lógica experimental que sustenta os capítulos sobre reflexo e operante.' },
+      { src:'img/skinner-mesa.png', legenda:'ESCRITÓRIO',
+        nota:'Skinner à mesa de trabalho, já em um retrato mais tardio, no período em que estendia os argumentos deste livro a Walden Two e Beyond Freedom and Dignity.' }
+    ],
+    comparacaoSkinner:{
+      titulo:'Science and Human Behavior × Beyond Freedom and Dignity: o que muda, o que permanece',
+      acordos:[
+        'Nenhum dos dois livros aceita um "agente autônomo" livre de causas ambientais como explicação do comportamento; em ambos, "liberdade" e "dignidade" são tratadas como conceitos pré-científicos, não como fatos.',
+        'Os dois usam sobrevivência da cultura, e não valores abstratos, como critério para avaliar práticas sociais.',
+        'O vocabulário básico é o mesmo: reforço, contingências, seleção por consequências, moldagem — Beyond Freedom and Dignity (1971) não troca o sistema conceitual de Science and Human Behavior (1953), apenas muda a escala de aplicação.'
+      ],
+      divergem:[
+        'Science and Human Behavior é mais cauteloso e descritivo: termina o capítulo sobre o "problema do controle" listando posições possíveis, sem propor uma solução; Beyond Freedom and Dignity é um manifesto, que defende ativamente o desenho deliberado de uma cultura.',
+        'A escala muda: em 1953, a análise cobre principalmente o indivíduo e pequenos grupos (caps. XIX–XXI); em 1971, o alvo é a sobrevivência da cultura como um todo, com a crítica à "liberdade" e à "dignidade" levada ao centro do argumento.',
+        'A recepção pública foi muito diferente: Beyond Freedom and Dignity chegou à capa da revista Time em 1971 e se tornou o alvo central das acusações de "behaviorismo totalitário" que Science and Human Behavior, quase vinte anos mais cauteloso em tom, não havia provocado na mesma escala.'
+      ]
+    },
+    impacto:'Poucos livros-texto de psicologia continuam impressos setenta anos depois de escritos. Science and Human Behavior segue em catálogo desde janeiro de 1953 porque o pequeno conjunto de princípios comportamentais que ele organiza, vindo do laboratório animal, se aplicou depois a áreas que o livro apenas anuncia: educação (Walden Two, 1948, e The Technology of Teaching, 1968), clínica e autocontrole, e o desenho deliberado de práticas culturais, radicalizado em Beyond Freedom and Dignity (1971). O capítulo final, sobre "o problema do controle", continua sendo o texto de referência de Skinner para a pergunta que a análise do comportamento nunca deixou de responder: se toda cultura já controla o comportamento de algum modo, a escolha não é entre controlar e não controlar, e sim entre fazer isso às cegas ou a partir do que a ciência já sabe sobre como o comportamento funciona.'
+  },
   perguntas:[
   { tipo:'conceito',
     enunciado:'Uma equipe diz que sua pesquisa sobre comportamento é científica porque usa equipamentos caros e modelos matemáticos sofisticados. O que Skinner diria que essa justificativa deixa de fora?',
@@ -3135,6 +3250,161 @@ const QUIZZES = {
     "aprovado": "Leitor(a) da biografia de Bori",
     "perfeito": "Registro número 1"
   },
+  "guiaLeitura": {
+    "titulo": "Guia de leitura",
+    "subtitulo": "Carolina Bori: psicologia, educação e política científica — por Gabriel Vieira Cândido (SBPC, 2025)",
+    "intro": "O livro tem oito capítulos mais uma cronologia, e segue a vida de Bori em ordem cronológica: da formação em São Paulo (anos 1940) até a Diretoria Científica do Nupes, já nos anos 1990. Este guia sugere um caminho mais curto até os dois capítulos que mais aparecem no quiz, o 6 (\"Plano Bori\") e o 7, fecha o vocabulário institucional que aparece nas perguntas e reúne as fotos convertidas para o estilo do jogo.",
+    "trilha": [
+      {
+        "titulo": "Introdução e Capítulo 1 — Família e formação acadêmica",
+        "paginas": "pp. 11–35",
+        "texto": "Comece pela introdução, onde o próprio autor explica por que organizou o livro assim: os últimos capítulos concentram a atuação institucional de Bori, e os primeiros, sua formação. O capítulo 1 cobre a infância em São Paulo, filha de um engenheiro italiano, e a graduação em Pedagogia na USP, terminada em 1947."
+      },
+      {
+        "titulo": "Capítulos 2 e 3 — De psicóloga geral a professora em Rio Claro",
+        "paginas": "pp. 36–58",
+        "texto": "O capítulo 2 mostra Bori atuando em várias cadeiras ao mesmo tempo, antes de a psicologia virar profissão regulamentada no Brasil. O capítulo 3 é a virada: convidada para chefiar a Cadeira de Psicologia Geral e Educacional da FFCL de Rio Claro, em 1959, é ali que ela integra a comissão que valida diplomas de psicólogo pela Lei 4.119/62."
+      },
+      {
+        "titulo": "Capítulos 4 e 5 — Brasília e a diáspora",
+        "paginas": "pp. 59–83",
+        "texto": "O capítulo 4 narra o convite de Darcy Ribeiro para criar o Departamento de Psicologia da UnB, em 1962, com liberdade total de currículo; é aqui que entra o curso de Análise Experimental do Comportamento organizado com Fred Keller e Rodolpho Azzi. O capítulo 5 cobre a saída de Bori da UnB em 1965 e seu retorno à USP em meio à crise do sistema de cátedras."
+      },
+      {
+        "titulo": "Capítulo 6 — Plano Bori",
+        "paginas": "pp. 84–98",
+        "texto": "O capítulo com o argumento central do livro: por que chamar de \"Plano Bori\", e não de aplicação brasileira do \"Plano Keller\", o mesmo método de ensino individualizado que os dois desenvolveram juntos. É o capítulo mais citado neste quiz."
+      },
+      {
+        "titulo": "Capítulos 7 e 8 — Ciência nacional e o fechamento de uma carreira",
+        "paginas": "pp. 99–128",
+        "texto": "O capítulo 7 acompanha décadas de atuação de Bori em sociedades científicas (SBPC, SPSP, SBP, ANPEPP). O capítulo 8 fecha o livro com a aposentadoria compulsória em 1994, o título de Professora Emérita da USP e a passagem pela direção científica do Nupes."
+      }
+    ],
+    "glossario": [
+      {
+        "termo": "FFCL",
+        "def": "Faculdade de Filosofia, Ciências e Letras: institutos isolados criados pelo governo de São Paulo a partir de 1957 para expandir o acesso ao ensino superior; Bori chefiou a Cadeira de Psicologia Geral e Educacional na unidade de Rio Claro."
+      },
+      {
+        "termo": "Cátedra",
+        "def": "Sistema em que um professor catedrático, aprovado em concurso, comandava uma disciplina e escolhia seus assistentes; foi extinto no fim dos anos 1960 em meio a protestos estudantis, abrindo caminho para os atuais departamentos."
+      },
+      {
+        "termo": "PSI (Personalized System of Instruction)",
+        "def": "Método de ensino individualizado, em pequenos passos, com aulas e demonstrações opcionais e avaliação sem provas de sala tradicionais; ficou popularmente conhecido como \"Plano Keller\", por seu criador, Fred Keller."
+      },
+      {
+        "termo": "Plano Bori",
+        "def": "Nome dado pelo autor ao capítulo 6, para não repetir o rótulo \"Plano Keller\": Bori aplicou e desenvolveu o mesmo método na UnB, mas com um objetivo diferente do de Keller — não substituir um sistema de ensino por outro, e sim programar condições para que alunos lidassem com problemas cotidianos."
+      },
+      {
+        "termo": "Lei 4.119/62",
+        "def": "Lei que regulamentou a formação e a profissão de psicólogo no Brasil; Bori integrou a comissão que avaliou e validou diplomas de acordo com seus critérios, um processo que durou cerca de dez anos."
+      },
+      {
+        "termo": "CBPE",
+        "def": "Centro Brasileiro de Pesquisas Educacionais, órgão do MEC onde Bori desenvolveu pesquisas de cunho social nos anos 1950 e trabalhou ao lado de Darcy Ribeiro, que depois a convidaria para a UnB."
+      },
+      {
+        "termo": "SBPC",
+        "def": "Sociedade Brasileira para o Progresso da Ciência, entidade que reúne todas as áreas do conhecimento em encontros anuais; Bori se associou em 1954 e, décadas depois, se tornou uma de suas figuras mais atuantes."
+      },
+      {
+        "termo": "ANPEPP",
+        "def": "Associação Nacional de Pesquisa e Pós-Graduação em Psicologia, fundada em 1983 com papel fundamental de Bori, reunindo pesquisadores da área em torno de grupos de pesquisa."
+      }
+    ],
+    "temas": [
+      {
+        "titulo": "Um \"plano\" com o nome trocado",
+        "pp": "pp. 84–86",
+        "texto": "O argumento que dá título ao capítulo 6: o método de ensino individualizado que Bori e Keller desenvolveram juntos, na prática e na troca de cartas, ficou conhecido nos Estados Unidos como \"Plano Keller\". O autor escolhe deliberadamente não repetir esse rótulo para o trabalho de Bori no Brasil.",
+        "trecho": {
+          "en": "\"Ao nomear este capítulo como 'Plano Bori', não desejo atribuir o mesmo sentido dado ao termo Plano Keller.\"",
+          "pt": "É a frase que abre a discussão: Bori não buscava substituir um sistema de ensino por outro, como Keller; seu plano era programar condições para que professores ensinassem alunos a lidar com problemas cotidianos.",
+          "ref": "Cândido, 2025, p. 84"
+        }
+      },
+      {
+        "titulo": "Ciência como projeto de país",
+        "pp": "pp. 59–72, 99–118",
+        "texto": "Da criação do Departamento de Psicologia da UnB (1962) à presidência da recém-fundada Sociedade Brasileira de Psicologia (1991) e à fundação da ANPEPP (1983), o livro trata a carreira de Bori como um projeto contínuo de construir instituições científicas no Brasil, não apenas de produzir pesquisa individual."
+      },
+      {
+        "titulo": "Uma coautoria apagada",
+        "pp": "pp. 85–86",
+        "texto": "O autor descreve como a parceria de décadas entre Bori e Keller, tão próxima que \"se torna muito difícil diferenciar suas contribuições individuais\", resultou em reconhecimento desigual: o método ficou com o nome dele. É o fio condutor que liga o \"Plano Bori\" à discussão sobre uma mulher atuando em um cenário científico dominado por homens."
+      },
+      {
+        "titulo": "Ensino programado a serviço da vida cotidiana",
+        "pp": "pp. 65–68",
+        "texto": "No curso de Análise Experimental do Comportamento da UnB, aulas e demonstrações eram opcionais e nenhum exame de sala avaliava o aprendizado; o próprio material do curso explica que cada etapa (\"passo\") podia ser vencida no ritmo do aluno, sem uso de provas como artifício de controle."
+      }
+    ],
+    "fotos": [
+      {
+        "src": "img/bori-biblioteca.png",
+        "legenda": "BIBLIOTECA",
+        "nota": "Carolina Bori entre estantes — a imagem que ilustra a abertura deste quiz, reconvertida para o visual holográfico do jogo a partir de uma foto enviada."
+      },
+      {
+        "src": "img/bori-retrato.png",
+        "legenda": "RETRATO",
+        "nota": "Retrato de Bori usado no dossiê do jogo, na mesma paleta azul-gelo aplicada a todos os outros perfis."
+      }
+    ],
+    "figurasLivro": [
+      {
+        "figura": "Figura 1 (p. 24)",
+        "legenda": "A família de Carolina Martuscelli por volta de 1930: os pais Aurélio e Maria Colombo, a avó Fiorinda Filomena e os irmãos Francesco, Wanda e a própria Carolina."
+      },
+      {
+        "figura": "Figura 2 (p. 33)",
+        "legenda": "Formatura de Carolina Martuscelli na graduação em Pedagogia da USP."
+      },
+      {
+        "figura": "Figura 3 (p. 66)",
+        "legenda": "Fred Keller e Carolina Bori na UnB, em 1964, no início do curso de Análise Experimental do Comportamento."
+      },
+      {
+        "figura": "Figura 4 (p. 105)",
+        "legenda": "Bori em sessão da Reunião Anual da SBPC, 1976."
+      },
+      {
+        "figura": "Figura 5 (p. 111)",
+        "legenda": "Franco Montoro, Renato Archer, Carolina Bori, Crodowaldo Pavan e outros em um evento da SBPC durante a redemocratização."
+      },
+      {
+        "figura": "Figura 6 (p. 116)",
+        "legenda": "Bori corta o bolo em comemoração a uma Reunião Anual da SBPC."
+      },
+      {
+        "figura": "Figura 7 (p. 120)",
+        "legenda": "Bori chega a um evento da Sociedade Brasileira de Psicologia, já no ano de sua aposentadoria compulsória, 1994."
+      },
+      {
+        "figura": "Figura 8 (p. 124)",
+        "legenda": "Gabriel Cândido, Ricardo Paranhos, Carolina Bori e Luciano Cunha, num encontro mais recente ligado à pesquisa que resultou neste livro."
+      }
+    ],
+    "comparacaoSkinner": {
+      "titulo": "Bori × Keller: dois \"planos\", um mesmo método?",
+      "acordos": [
+        "Ensino individualizado, no ritmo do próprio aluno, dividido em pequenos passos avaliados um a um.",
+        "Aulas e demonstrações como atividades opcionais, nunca pré-requisito nem matéria de prova.",
+        "Uso direto da análise experimental do comportamento como base teórica do desenho do curso, aplicada por ambos desde o curso da UnB em 1964.",
+        "Uma amizade e parceria de trabalho tão próximas que, segundo o autor, é difícil separar as contribuições individuais de cada um."
+      ],
+      "divergem": [
+        "Keller via o método como substituto do sistema tradicional de ensino; Bori considerava que trocar um sistema por outro seria apenas trocar um problema por outro.",
+        "O objetivo de Bori, segundo o autor, não era um novo sistema de ensino em si, e sim programar condições para que professores ensinassem alunos a lidar com problemas cotidianos.",
+        "O método ficou popularmente associado ao nome de Keller (\"Plano Keller\") nos Estados Unidos, enquanto a autoria conjunta de Bori foi historicamente menos reconhecida.",
+        "Depois da UnB, Keller seguiu formalizando e exportando o PSI para os Estados Unidos; Bori redirecionou boa parte de sua energia para construir instituições científicas brasileiras (SBPC, SBP, ANPEPP)."
+      ]
+    },
+    "impacto": "Bori se tornou a primeira presidente da Sociedade Brasileira de Psicologia quando esta se tornou uma entidade nacional, em 1991, e teve papel central na fundação da ANPEPP, em 1983 — duas instituições que ainda organizam a psicologia brasileira. Em 1994, ano de sua aposentadoria compulsória pela USP, recebeu o título de Professora Emérita. O livro de Gabriel Cândido é, em boa medida, um esforço para tirar essa trajetória da sombra do nome de Fred Keller e situá-la como um projeto próprio, ligado à ideia de que ciência e educação deveriam servir ao desenvolvimento do país."
+  },
   "perguntas": [
     {
       "tipo": "raciocinio",
@@ -3762,7 +4032,7 @@ function abrirIntroducaoQuiz(qid){
   $('#briefNpc').src = IMG.boatOk;
   $('#briefTalk').textContent = q.intro;
   const bonus = $('#briefBonus'); bonus.hidden = !q.guiaLeitura;
-  if (q.guiaLeitura){ $('#bonusTitle').textContent = q.guiaLeitura.titulo; $('#bonusSub').textContent = 'Trilha de leitura, glossário e comparação com Skinner.'; }
+  if (q.guiaLeitura){ $('#bonusTitle').textContent = q.guiaLeitura.titulo; $('#bonusSub').textContent = q.guiaLeitura.fotos ? 'Capítulos, resumos, principais argumentos e fotos em destaque.' : 'Trilha de leitura, glossário e comparação com Skinner.'; }
   ir('sBrief');
   $('#btnGo').focus({preventScroll:true});
 }
@@ -3779,12 +4049,34 @@ function abrirGuia(){
     const trecho = t.trecho ? `<blockquote class="trecho"><span class="en" lang="en">${esc(t.trecho.en)}</span><span class="pt">${esc(t.trecho.pt)}</span><span class="ref">${esc(t.trecho.ref)}</span></blockquote>` : '';
     return `<aside class="saiba"><span class="cab">${esc(t.pp)}</span><h4>${esc(t.titulo)}</h4><p>${esc(t.texto)}</p>${trecho}</aside>`;
   }).join('');
-  $('#guiaSkinnerTitulo').textContent = g.comparacaoSkinner.titulo;
-  $('#guiaAcordos').innerHTML = g.comparacaoSkinner.acordos.map(x=>`<li>${esc(x)}</li>`).join('');
-  $('#guiaDivergem').innerHTML = g.comparacaoSkinner.divergem.map(x=>`<li>${esc(x)}</li>`).join('');
+  const fotosSec = $('#guiaFotosSec');
+  if (g.fotos && g.fotos.length){
+    fotosSec.hidden = false;
+    $('#guiaFotos').innerHTML = g.fotos.map(f=>`<div><figure class="holo"><img src="${esc(f.src)}" alt="${esc(f.legenda)}"><figcaption>${esc(f.legenda)}</figcaption></figure><p class="foto-nota">${esc(f.nota)}</p></div>`).join('');
+    const flWrap = $('#guiaFigurasLivroWrap');
+    if (g.figurasLivro && g.figurasLivro.length){
+      flWrap.hidden = false;
+      $('#guiaFigurasLivro').innerHTML = g.figurasLivro.map(x=>`<li><b>${esc(x.figura)}</b>${esc(x.legenda)}</li>`).join('');
+    } else { flWrap.hidden = true; }
+  } else { fotosSec.hidden = true; }
+  const comparSec = $('#guiaComparSec');
+  if (g.comparacaoSkinner){
+    comparSec.hidden = false;
+    $('#guiaSkinnerTitulo').textContent = g.comparacaoSkinner.titulo;
+    $('#guiaAcordos').innerHTML = g.comparacaoSkinner.acordos.map(x=>`<li>${esc(x)}</li>`).join('');
+    $('#guiaDivergem').innerHTML = g.comparacaoSkinner.divergem.map(x=>`<li>${esc(x)}</li>`).join('');
+  } else { comparSec.hidden = true; }
   $('#guiaImpacto').textContent = g.impacto;
   $('#guiaRef').innerHTML = q.referencia ? `<b>REFERÊNCIA</b>${q.referencia}` : '';
+  $('#guiaMascoteFala').textContent = g.mascoteFala || 'Vamos com calma: capítulo por capítulo.';
   ir('sGuia');
+  const secs = [...document.querySelectorAll('#sGuia > .guide-head, #sGuia > .lede, #sGuia > section:not([hidden])')];
+  secs.forEach((s,i)=>{
+    s.classList.remove('in');
+    s.style.transitionDelay = (i*80)+'ms';
+    void s.offsetWidth;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>s.classList.add('in')));
+  });
 }
 
 /* ---------- quiz ---------- */
